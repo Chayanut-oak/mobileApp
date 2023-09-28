@@ -45,6 +45,7 @@ return (
         onChangeText={(text) => setDisplayName(text)}
       />
       <Button title="Sign Up" onPress={handleSignUp} />
+      <Button title="Sign in" onPress={() => navigation.navigate("Login")}/>
     </View>
   );
 };
