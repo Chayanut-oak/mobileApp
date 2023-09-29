@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { View, Button, TextInput, Text, StyleSheet } from 'react-native';
+import { View, Button, TextInput, Text, StyleSheet,Image } from 'react-native';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { NavigationProp, Route } from '@react-navigation/native';
 import { FIREBASE_AUTH } from '../../Firebaseconfig';
+import { TouchableOpacity } from "react-native";
+import { LinearGradient } from 'expo-linear-gradient';
 
 const auth = FIREBASE_AUTH
 
@@ -10,14 +12,11 @@ const auth = FIREBASE_AUTH
 const Register = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [displayName, setDisplayName] = useState('');
 
   const handleSignUp = async () => {
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
-      await updateProfile(res.user, {
-        displayName: displayName,
-      });
+      console.log(res.user)
       alert("success")
       navigation.navigate('Register')
     } catch (error) {
@@ -27,8 +26,14 @@ const Register = ({navigation}) => {
 };
 return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sign Up</Text>
-      <TextInput
+        <View style={styles.imageContainer}>
+        <Image
+          style={styles.image}
+          source={require('../../picture/logo.png')}
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <TextInput
         style={styles.input}
         placeholder="Email"
         onChangeText={(text) => setEmail(text)}
@@ -39,13 +44,19 @@ return (
         secureTextEntry
         onChangeText={(text) => setPassword(text)}
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Name"
-        onChangeText={(text) => setDisplayName(text)}
-      />
-      <Button title="Sign Up" onPress={handleSignUp} />
-      <Button title="Sign in" onPress={() => navigation.navigate("Login")}/>
+      </View>
+      
+      <TouchableOpacity onPress={handleSignUp}>
+        <LinearGradient
+          colors={['#DD2572', '#F02E5D']}
+          style={styles.TouchableOpacity} >
+          <Text style={styles.Font}>SIGN UP</Text>
+        </LinearGradient>
+      </TouchableOpacity>
+      <View style={{ flexDirection: 'row' }}>
+        <Text style={{ margin: 10, color: '#ffff', }}>Alredy has an account ? Try</Text>
+        <Text style={styles.forgotPasswordText} onPress={() => navigation.navigate("Login")}>Sign in</Text>
+      </View>
     </View>
   );
 };
@@ -53,24 +64,54 @@ return (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#2F2C2C',
     padding: 20,
   },
   title: {
     fontSize: 24,
     marginBottom: 20,
     fontWeight: 'bold',
+  }, inputContainer: {
+    width: '100%',
+    alignItems: 'center', // Center the input fields horizontally
   },
   input: {
     width: '100%',
     height: 40,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#D9D9D9',
     borderWidth: 1,
     borderColor: '#ccc',
     marginBottom: 10,
     paddingLeft: 10,
+    borderRadius: 50,
+  },
+  TouchableOpacity: {
+    borderColor: 'rgba(0,0,0,0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 150,
+    height: 40,
+    backgroundColor: '#fff',
+    borderRadius: 50,
+  },forgotPasswordText: {
+    marginTop: 10,
+    color: '#E57373',
+    textDecorationLine: 'underline',
+  },
+  Font: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: "white"
+  },
+  imageContainer: {
+    alignItems: 'center',
+    marginBottom: 0,
+  },
+  image: {
+    width: 250,
+    height: 250,
   },
 });
 
