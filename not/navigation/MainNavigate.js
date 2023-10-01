@@ -9,7 +9,11 @@ import React, { useState, useEffect } from 'react';
 import { TouchableOpacity } from "react-native-gesture-handler";
 import CustomHeaderButton from '../src/components/CustomHeaderButton';
 import { HeaderButtons } from 'react-navigation-header-buttons';
+import Home from '../src/screen/Home';
+import { getAuth } from "firebase/auth";
+import BottomTabNav from './BottomTabNav';
 const MainNavigate = () => {
+    const auth = getAuth();
     const Mainnavigate = createNativeStackNavigator();
     const [user, setUserToken] = useState(null)
 
@@ -19,16 +23,12 @@ const MainNavigate = () => {
         })
     }, [])
     return (
+
         <NavigationContainer>
             <Mainnavigate.Navigator>
-                {!user ? <Mainnavigate.Screen name="Authen" component={Authentication} options={{headerStyle:{backgroundColor:"#E27E8A"}}}/> : <Mainnavigate.Screen name="Name" component={Name} options={{
-                    headerStyle:{backgroundColor:"#E27E8A"} ,headerRight: () => (
-                        <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-                            <Text onPress={() => FIREBASE_AUTH.signOut()}>
-                                Exit
-                            </Text>
-                        </HeaderButtons>),
-                }} />}
+                {!user ? <Mainnavigate.Screen name="Authen" component={Authentication} options={{ headerStyle: { backgroundColor: "#E27E8A" } }} /> : !auth.currentUser.displayName ? <Mainnavigate.Screen name="Name" component={Name} options={{
+                    headerStyle: { backgroundColor: "#E27E8A" }
+                }} /> : <Mainnavigate.Screen name="homeWithBottom" component={BottomTabNav}  options={{headerShown : false}}/>}
             </Mainnavigate.Navigator>
         </NavigationContainer>
     )
@@ -37,3 +37,5 @@ const MainNavigate = () => {
 export default MainNavigate
 
 const styles = StyleSheet.create({})
+
+

@@ -9,10 +9,7 @@ import { getAuth } from "firebase/auth";
 const Name = (props, navigation) => {
 
   const auth = FIREBASE_AUTH
-  const handleImagePress = () => {
-    // Handle the press of the second image here
-    alert('Second image pressed');
-  };
+
   const [displayName, setDisplayName] = useState('');
 
   const handleDisplayName = async (navigation) => {
@@ -22,6 +19,7 @@ const Name = (props, navigation) => {
       await updateProfile(res, {
         displayName: displayName,
       });
+      console.log(res)
       alert("success")
       navigation.navigate('Home')
     } catch (error) {
@@ -29,6 +27,7 @@ const Name = (props, navigation) => {
       alert(errorMessage);
     }
   };
+
   return (
     <View>
       <LinearGradient
@@ -39,7 +38,7 @@ const Name = (props, navigation) => {
               style={styles.image}
               source={require('../../picture/image.png')}
             />
-            <TouchableOpacity onPress={handleImagePress}>
+            <TouchableOpacity >
               <Image
                 style={styles.imagemini}
                 source={require('../../picture/addimage.png')}
