@@ -10,6 +10,7 @@ import CustomHeaderButton from '../src/components/CustomHeaderButton';
 import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth } from "firebase/auth";
 import { FIREBASE_AUTH } from '../Firebaseconfig';
+import HomeNav from './HomeNav';
 const MenuTab = createBottomTabNavigator();
 const BottomTabNav = () => {
   const auth = getAuth();
@@ -22,7 +23,7 @@ const BottomTabNav = () => {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
-          if (route.name === 'Home') {
+          if (route.name === 'MainHome') {
             iconName = focused ? 'home' : 'home-outline';
           } else if (route.name === 'New') {
             iconName = focused ? 'add-circle' : 'add-circle-outline';
@@ -35,15 +36,7 @@ const BottomTabNav = () => {
         },
       })}
     >
-      <MenuTab.Screen name="Home" component={Home} options={{
-        headerStyle: { backgroundColor: "#E27E8A" }, headerRight: () => (
-          <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-            <Text onPress={() => FIREBASE_AUTH.signOut()}>
-              Exit
-            </Text>
-          </HeaderButtons>)
-      }
-      } />
+      <MenuTab.Screen name="MainHome" component={HomeNav}  options={{headerShown : false}}/>
       <MenuTab.Screen name="New" component={Home} />
       <MenuTab.Screen name="Notification" component={Home} />
       <MenuTab.Screen name={auth.currentUser.displayName} component={Home} />

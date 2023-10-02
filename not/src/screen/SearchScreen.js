@@ -3,12 +3,21 @@ import React from 'react'
 
 const SearchScreen = () => {
   return (
-    <View>
-      <Text>SearchScreen</Text>
+    <View style={styles.container}>
+      
     </View>
   )
 }
 
 export default SearchScreen
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'flex-start', // Align content to the top
+    backgroundColor: '#2F2C2C',
+    padding: 20,
+    paddingTop: 30, // Add padding/margin to the top
+  },
+
+})
