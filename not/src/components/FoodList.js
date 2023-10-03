@@ -5,20 +5,20 @@ import { useState } from 'react';
 const FoodList = () => {
   const [images, setImages] = useState([
     {
-      source: require('../../picture/crab.jpg'),
-      title: 'ปู',
+      mealImage: require('../../picture/crab.jpg'),
+      mealName: 'ปู',
     },
     {
-      source: require('../../picture/crab.jpg'),
-      title: 'ปู',
+      mealImage: require('../../picture/crab.jpg'),
+      mealName: 'ปู',
     },
     {
-      source: require('../../picture/crab.jpg'),
-      title: 'ปู',
+      mealImage: require('../../picture/crab.jpg'),
+      mealName: 'ปู',
     },
     {
-      source: require('../../picture/crab.jpg'),
-      title: 'ปู',
+      mealImage: require('../../picture/crab.jpg'),
+      mealName: 'ปู',
     },
   ]);
 
@@ -42,9 +42,9 @@ const FoodList = () => {
             <View key={itemIndex} style={styles.item}>
               <Image
                 style={styles.image}
-                source={item.source}
+                source={item.mealImage}
               />
-              <Text style={styles.title}>{item.title}</Text>
+              <Text style={styles.title}>{item.mealName}</Text>
             </View>
           ))}
         </View>

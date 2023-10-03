@@ -4,9 +4,9 @@ import { useState } from 'react';
 const Recommend = ({ navigation }) => {
   const [Recommend, setRecommend] = useState([
     {
-      source: require('../../picture/taohu.png'),
-      title: 'เต้าหู้ผัดเสฉวน',
-      by:'เชฟโอ็ค ทะลุแม่ครัว'
+      mealImage: require('../../picture/taohu.png'),
+      mealName: 'เต้าหู้ผัดเสฉวน',
+      createdBy:'เชฟโอ็ค ทะลุแม่ครัว'
     },
   ]);
   return (
@@ -19,10 +19,10 @@ const Recommend = ({ navigation }) => {
               resizeMode: 'contain',
               padding: 0,
             }}
-            source={item.source}
+            source={item.mealImage}
           />
-          <Text style={{ color: 'white', fontSize: 25, alignSelf:'flex-start', color: '#E27E8A' }}>{item.title}</Text>
-          <Text style={{ color: 'white', fontSize: 16, paddingRight: 50, color: '#FFFF' }}>{item.by}</Text>
+          <Text style={{ color: 'white', fontSize: 25, alignSelf:'flex-start', color: '#E27E8A' }}>{item.mealName}</Text>
+          <Text style={{ color: 'white', fontSize: 16, paddingRight: 50, color: '#FFFF' }}>{item.createdBy}</Text>
         </View>
       ))}
     </View>

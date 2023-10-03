@@ -5,18 +5,18 @@ import React from 'react'
 const Category = ({navigation}) => {
     const [images, setimages] = useState([
         {
-            source: require('../../picture/image.png'),
-            title: 'First Item',
+            mealImage: require('../../picture/image.png'),
+            mealName: 'Second Item',
           },
           {
-            source: require('../../picture/image.png'),
-            title: 'First Item',
+            mealImage: require('../../picture/image.png'),
+            mealName: 'First Item',
           },{
-            source: require('../../picture/image.png'),
-            title: 'First Item',
+            mealImage: require('../../picture/image.png'),
+            mealName: 'First Item',
           },{
-            source: require('../../picture/image.png'),
-            title: 'First Item',
+            mealImage: require('../../picture/image.png'),
+            mealName: 'First Item',
           },
       ]);
     return (
@@ -26,11 +26,11 @@ const Category = ({navigation}) => {
              horizontal={true} 
              showsHorizontalScrollIndicator={false} 
                 renderItem={({ item }) => {return(<View style={{alignItems: 'center',}}>
-                    <TouchableOpacity onPress={() => navigation.navigate('mealCategories')} style={{alignItems: 'center',}}>
+                    <TouchableOpacity onPress={() => navigation.navigate('mealCategories',{Category:item.mealName})} style={{alignItems: 'center',}}>
                         <Image
                            style={{ flex: 1, width: 100, height: 100, margin:5,resizeMode: 'contain', }}
-                          source={item.source}
-                       /><Text style={{color:"#D1D1D1"}}>{item.title}</Text>
+                          source={item.mealImage}
+                       /><Text style={{color:"#D1D1D1"}}>{item.mealName}</Text>
                     </TouchableOpacity>
                 </View>)}}
                />
