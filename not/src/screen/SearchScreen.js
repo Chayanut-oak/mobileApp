@@ -1,10 +1,13 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-
+import {
+  SelectMultipleButton,
+  SelectMultipleGroupButton
+} from "react-native-selectmultiple-button";
 const SearchScreen = () => {
   return (
     <View style={styles.container}>
-      
+
     </View>
   )
 }

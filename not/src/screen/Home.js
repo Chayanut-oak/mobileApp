@@ -1,12 +1,14 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
-import { MultipleSelectList } from 'react-native-dropdown-select-list'
-import { useState } from 'react'
-import { FontAwesome } from '@expo/vector-icons'
-import { ScrollView } from 'react-native'
-import Category from '../components/Category'
-import Recommend from '../components/Recommend'
-const Home = ({navigation}) => {
+import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput } from 'react-native';
+import React from 'react';
+import { MultipleSelectList } from 'react-native-dropdown-select-list';
+import { useState } from 'react';
+import { FontAwesome } from '@expo/vector-icons';
+import { ScrollView } from 'react-native';
+import Category from '../components/Category';
+import Recommend from '../components/Recommend';
+import FoodList from '../components/FoodList';
+
+const Home = ({ navigation }) => {
   const [selected, setSelected] = React.useState([]);
   const data = [
     { key: '1', value: 'Mobiles' },
@@ -14,41 +16,37 @@ const Home = ({navigation}) => {
     { key: '3', value: 'Cameras' },
     { key: '4', value: 'Computers' },
     { key: '5', value: 'Vegetables' },
-    { key: '6', value: 'Diary Products' },
+    { key: '6', value: 'Dairy Products' },
     { key: '7', value: 'Drinks' },
-  ]
-  console.log(selected)
+  ];
+  console.log(selected);
+
   return (
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.search}>
-          <TouchableOpacity onPress={() => navigation.navigate('SearchScreen')}>
-            <MultipleSelectList
-              setSelected={(val) => setSelected(val)}
-              data={data}
-              save="value"
-              label="Categories"
-              boxStyles={{ borderColor: '#D1D1D1' }}
-              dropdownStyles={{ borderColor: '#D1D1D1' }}
-              inputStyles={{ color: '#FFFFFF' }} // Change the font color to white
-              dropdownTextStyles={{ color: '#FFFFFF' }} // Change the font color to white
-              labelStyles={{ color: '#FFFFFF' }} // Change the font color to white
-              searchicon={<FontAwesome name="search" size={12} color={'#FFFFFF'} />} // Change the icon color to white
-              arrowicon={<FontAwesome name="chevron-down" size={12} color={'#FFFFFF'} />} // Change the icon color to white
-              placeholder='Search through here'
-            />
+          <TouchableOpacity onPress={() => navigation.navigate('SearchScreen')} style={{ width: '100%' }}>
+            <View style={styles.searchButton}>
+           
+                <FontAwesome name="search" size={24} color="#D1D1D1" style={{ transform: [{ scaleX: -1 }], marginLeft:5 }} />
+           
+            
+                <Text style={styles.searchText}>ค้นหา</Text>
+                <Text>         </Text>
+
+            </View>
           </TouchableOpacity>
         </View>
-        <View>
-        </View>
-        <Category></Category>
-        <Recommend></Recommend>
+
+        <Category />
+        <Recommend />
+        <FoodList />
       </ScrollView>
     </View>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
 
 const styles = StyleSheet.create({
   container: {
@@ -57,7 +55,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#2F2C2C',
     padding: 20,
     paddingTop: 30, // Add padding/margin to the top
-  }, search: {
-    width: '100%'
-  }
-})
+  },
+  search: {
+    width: '100%',
+    alignItems: 'center', // Center align the button horizontally
+  },
+  searchButton: {
+    borderWidth: 1, // Add border
+    borderColor: '#ccc', // Border color
+    padding: 10, // Add padding around the text
+    borderRadius: 20,
+    flexDirection: 'row',
+    justifyContent:'space-between'
+  },
+  searchText: {
+    fontSize: 16,
+    color: '#707070',
+  
+  },
+});
