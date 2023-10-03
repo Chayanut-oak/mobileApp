@@ -12,6 +12,7 @@ import java.util.List;
 public class Meal implements Serializable {
     @Id
     private String _id;
+    private Object createdBy;
     private String mealImage;
     private String mealName;
     private String mealCategory;

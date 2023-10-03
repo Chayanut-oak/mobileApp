@@ -28,8 +28,8 @@ const MainNavigate = () => {
             <Mainnavigate.Navigator>
                 {!user ? <Mainnavigate.Screen name="Authen" component={Authentication} options={{ headerStyle: { backgroundColor: "#E27E8A" } }} /> : !auth.currentUser.displayName ? <Mainnavigate.Screen name="Name" component={Name} options={{
                     headerStyle: { backgroundColor: "#E27E8A" }
-                }} /> : <Mainnavigate.Screen name="homeWithBottom" component={BottomTabNav}  options={{headerShown : false}}/>}
-              
+                }} /> : <Mainnavigate.Screen name="homeWithBottom" component={BottomTabNav} options={{ headerShown: false }} />}
+
             </Mainnavigate.Navigator>
         </NavigationContainer>
     )

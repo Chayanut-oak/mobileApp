@@ -15,8 +15,7 @@ public class User implements Serializable {
     private String userImage;
     private String email;
     private String userFullName;
-    private List<Meal> meals;
-    private List<Meal> favoriteMeals;
+    private List<String> favoriteMeals;
     private List<User> followed;
     private List<User> follower;
 }

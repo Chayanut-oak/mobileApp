@@ -6,11 +6,12 @@ import Home from '../src/screen/Home'
 import { HeaderButtons } from 'react-navigation-header-buttons'
 import CustomHeaderButton from '../src/components/CustomHeaderButton'
 import Food from '../src/screen/Food'
+import MealDetail from '../src/screen/MealDetail'
 const HomeNav = (navigate) => {
-    const HomeNavigate = createNativeStackNavigator()
+  const HomeNavigate = createNativeStackNavigator()
   return (
     <HomeNavigate.Navigator >
-         <HomeNavigate.Screen name="Home" component={Home}options={{
+      <HomeNavigate.Screen name="Home" component={Home} options={{
         headerStyle: { backgroundColor: "#E27E8A" }, headerRight: () => (
           <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
             <Text onPress={() => FIREBASE_AUTH.signOut()}>
@@ -18,9 +19,10 @@ const HomeNav = (navigate) => {
             </Text>
           </HeaderButtons>)
       }
-      } ></HomeNavigate.Screen>
-        <HomeNavigate.Screen name="SearchScreen" component={SearchScreen}  options={{headerShown : false}}></HomeNavigate.Screen>
-        <HomeNavigate.Screen name="mealCategories" component={Food}  options={{headerShown : false}}></HomeNavigate.Screen>
+      } />
+      <HomeNavigate.Screen name="SearchScreen" component={SearchScreen} options={{ headerShown: false }} />
+      <HomeNavigate.Screen name="mealCategories" component={Food} options={{ headerShown: false }} />
+      <HomeNavigate.Screen name="mealDetail" component={MealDetail} options={{ headerShown: false }} />
     </HomeNavigate.Navigator>
   )
 }
