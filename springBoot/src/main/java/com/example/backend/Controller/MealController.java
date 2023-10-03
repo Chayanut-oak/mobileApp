@@ -21,10 +21,10 @@ public class MealController {
     public String addMeal(@RequestBody Meal meal) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         meal.setTimestamp(LocalDate.now().format(formatter));
-        Meal newMeal = new Meal();
-        BeanUtils.copyProperties(meal, newMeal);
-        mealService.addMeal(newMeal);
-        return newMeal.toString();
+//        Meal newMeal = new Meal();
+//        BeanUtils.copyProperties(meal, newMeal);
+        mealService.addMeal(meal);
+        return meal.toString();
     }
     @GetMapping(value = "/getAllMealsForShow")
     public List<Meal> getAllMealsForShow(){
