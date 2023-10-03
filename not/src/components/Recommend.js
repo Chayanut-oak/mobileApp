@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Image } from 'react-native';
 import React from 'react';
 import { useState } from 'react';
-const Recommend = () => {
+const Recommend = ({ navigation }) => {
   const [Recommend, setRecommend] = useState([
     {
       source: require('../../picture/taohu.png'),

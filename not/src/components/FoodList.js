@@ -35,19 +35,21 @@ const FoodList = () => {
   const imagePairs = splitImagesIntoPairs(images);
 
   return (
-
-    <View>
-      <FlatList data={image} renderItem={({ item }) => {
-        <View key={itemIndex} style={styles.item}>
-          <Image
-            style={styles.image}
-            source={item.source}
-          />
-          <Text style={styles.title}>{item.title}</Text>
+    <View style={styles.container}>
+      {imagePairs.map((pair, pairIndex) => (
+        <View key={pairIndex} style={styles.row}>
+          {pair.map((item, itemIndex) => (
+            <View key={itemIndex} style={styles.item}>
+              <Image
+                style={styles.image}
+                source={item.source}
+              />
+              <Text style={styles.title}>{item.title}</Text>
+            </View>
+          ))}
         </View>
-      }} />
+      ))}
     </View>
-
   );
 };
 
@@ -62,6 +64,7 @@ const styles = StyleSheet.create({
   },
   item: {
     alignItems: 'center',
+  
   },
   image: {
     width: 150,

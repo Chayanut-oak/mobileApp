@@ -5,6 +5,7 @@ import SearchScreen from '../src/screen/SearchScreen'
 import Home from '../src/screen/Home'
 import { HeaderButtons } from 'react-navigation-header-buttons'
 import CustomHeaderButton from '../src/components/CustomHeaderButton'
+import Food from '../src/screen/Food'
 const HomeNav = (navigate) => {
     const HomeNavigate = createNativeStackNavigator()
   return (
@@ -19,6 +20,7 @@ const HomeNav = (navigate) => {
       }
       } ></HomeNavigate.Screen>
         <HomeNavigate.Screen name="SearchScreen" component={SearchScreen}  options={{headerShown : false}}></HomeNavigate.Screen>
+        <HomeNavigate.Screen name="mealCategories" component={Food}  options={{headerShown : false}}></HomeNavigate.Screen>
     </HomeNavigate.Navigator>
   )
 }

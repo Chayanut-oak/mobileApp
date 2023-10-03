@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View, Image, FlatList } from 'react-native'
+import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from 'react-native'
 import { useState } from 'react';
 import React from 'react'
 
-const Category = () => {
+const Category = ({navigation}) => {
     const [images, setimages] = useState([
         {
             source: require('../../picture/image.png'),
@@ -25,10 +25,14 @@ const Category = () => {
                  <FlatList data={images}
              horizontal={true} 
              showsHorizontalScrollIndicator={false} 
-                renderItem={({ item }) => {return(<View style={{alignItems: 'center',}}><Image
-                           style={{ flex: 1, width: 100, height: 100, margin:5,resizeMode: 'cover' }}
+                renderItem={({ item }) => {return(<View style={{alignItems: 'center',}}>
+                    <TouchableOpacity onPress={() => navigation.navigate('mealCategories')} style={{alignItems: 'center',}}>
+                        <Image
+                           style={{ flex: 1, width: 100, height: 100, margin:5,resizeMode: 'contain', }}
                           source={item.source}
-                       /><Text style={{color:"#D1D1D1"}}>{item.title}</Text></View>)}}
+                       /><Text style={{color:"#D1D1D1"}}>{item.title}</Text>
+                    </TouchableOpacity>
+                </View>)}}
                />
         </View>
 

@@ -38,7 +38,7 @@ const Home = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-        <Category />
+        <Category navigation={navigation}/>
         <Recommend />
         <FoodList />
       </ScrollView>
