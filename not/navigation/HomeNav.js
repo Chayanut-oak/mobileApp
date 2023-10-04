@@ -23,7 +23,7 @@ const HomeNav = (navigate) => {
       <HomeNavigate.Screen name="SearchScreen" component={SearchScreen} options={{ headerShown: false }} />
       <HomeNavigate.Screen name="mealCategories" component={Food} options={
           ({ route }) => ({
-            title: route.params.Category,
+            title: route.params.mealCategory,
           })} />
       <HomeNavigate.Screen name="mealDetail" component={MealDetail} options={{ headerShown: false }} />
     </HomeNavigate.Navigator>

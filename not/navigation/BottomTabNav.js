@@ -11,6 +11,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth } from "firebase/auth";
 import { FIREBASE_AUTH } from '../Firebaseconfig';
 import HomeNav from './HomeNav';
+import Profile from '../src/screen/Profile'
+import CreateMeal from '../src/screen/CreateMeal';
+import Notification from '../src/screen/Notification'
 const MenuTab = createBottomTabNavigator();
 const BottomTabNav = () => {
   const auth = getAuth();
@@ -37,9 +40,9 @@ const BottomTabNav = () => {
       })}
     >
       <MenuTab.Screen name="MainHome" component={HomeNav}  options={{headerShown : false}}/>
-      <MenuTab.Screen name="New" component={Home} />
-      <MenuTab.Screen name="Notification" component={Home} />
-      <MenuTab.Screen name={auth.currentUser.displayName} component={Home} />
+      <MenuTab.Screen name="New" component={CreateMeal} />
+      <MenuTab.Screen name="Notification" component={Notification} />
+      <MenuTab.Screen name={auth.currentUser.displayName} component={Profile} options={{headerShown : false}} />
     </MenuTab.Navigator>
   )
 }

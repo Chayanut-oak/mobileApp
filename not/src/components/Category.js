@@ -6,17 +6,17 @@ const Category = ({navigation}) => {
     const [images, setimages] = useState([
         {
             mealImage: require('../../picture/image.png'),
-            mealName: 'Second Item',
+            mealCategory: 'Second Item',
           },
           {
             mealImage: require('../../picture/image.png'),
-            mealName: 'First Item',
+            mealCategory: 'First Item',
           },{
             mealImage: require('../../picture/image.png'),
-            mealName: 'First Item',
+            mealCategory: 'First Item',
           },{
             mealImage: require('../../picture/image.png'),
-            mealName: 'First Item',
+            mealCategory: 'First Item',
           },
       ]);
     return (
@@ -26,7 +26,7 @@ const Category = ({navigation}) => {
              horizontal={true} 
              showsHorizontalScrollIndicator={false} 
                 renderItem={({ item }) => {return(<View style={{alignItems: 'center',}}>
-                    <TouchableOpacity onPress={() => navigation.navigate('mealCategories',{Category:item.mealName})} style={{alignItems: 'center',}}>
+                    <TouchableOpacity onPress={() => navigation.navigate('mealCategories',{Category:item.mealCategory})} style={{alignItems: 'center',}}>
                         <Image
                            style={{ flex: 1, width: 100, height: 100, margin:5,resizeMode: 'contain', }}
                           source={item.mealImage}

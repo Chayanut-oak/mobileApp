@@ -5,20 +5,38 @@ import { useState } from 'react';
 const MealCategories = () => {
     const [mealCategories, setmealCategories] = useState([
         {
-          source: require('../../picture/crab.jpg'),
-          title: 'ปู',
+          mealImage: require('../../picture/crab.jpg'),
+          mealName: 'ปู',
         },
         {
-          source: require('../../picture/crab.jpg'),
-          title: 'ปู',
+          mealImage: require('../../picture/crab.jpg'),
+          mealName: 'ปู',
         },
         {
-          source: require('../../picture/crab.jpg'),
-          title: 'ปู',
+          mealImage: require('../../picture/crab.jpg'),
+          mealName: 'ปู',
         },
         {
-          source: require('../../picture/crab.jpg'),
-          title: 'ปู',
+          mealImage: require('../../picture/crab.jpg'),
+          mealName: 'ปู',
+        },{
+          mealImage: require('../../picture/crab.jpg'),
+          mealName: 'ปู',
+        },{
+          mealImage: require('../../picture/crab.jpg'),
+          mealName: 'ปู',
+        },{
+          mealImage: require('../../picture/crab.jpg'),
+          mealName: 'ปู',
+        },{
+          mealImage: require('../../picture/crab.jpg'),
+          mealName: 'ปู',
+        },{
+          mealImage: require('../../picture/crab.jpg'),
+          mealName: 'ปู',
+        },{
+          mealImage: require('../../picture/crab.jpg'),
+          mealName: 'ปู',
         },
       ]);
       return (
@@ -33,9 +51,9 @@ const MealCategories = () => {
                 <View key={index} style={styles.item}>
                   <Image
                     style={styles.image}
-                    source={item.source}
+                    source={item.mealImage}
                   />
-                  <Text style={styles.title}>{item.title}</Text>
+                  <Text style={styles.title}>{item.mealName}</Text>
                 </View>
               )}
             
