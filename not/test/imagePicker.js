@@ -16,10 +16,6 @@ import localIP from '../LocalIP'
 
 
 const ImgPicker = () => {
-    const axiosInstance = axios.create({ baseURL: "http://localhost:8080" })
-    useEffect(()=>{
-        axios.get("http://localhost:8082/getMealById").then(res => console.log(res.data))
-      },[])
     const [selectedImage, setSelectedImage] = useState(null);
     // useEffect(() => {
     //     (async () => {
@@ -31,7 +27,6 @@ const ImgPicker = () => {
     //         }
     //     })();
     // }, []);
-
     const pickImage = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -40,11 +35,11 @@ const ImgPicker = () => {
             quality: 1,
         });
 
-        if (!result.cancelled) {
-            console.log(result)
-            setSelectedImage(result.uri);
+        if (!result.canceled) {
+            console.log(result.assets[0])
+            setSelectedImage(result.assets[0].uri);
             // Send the image to the Spring Boot server using Axios
-            sendImageToServer(result.uri);
+            sendImageToServer(result.assets[0].uri);
         }
     };
     const sendImageToServer = async (imageUri) => {
@@ -56,7 +51,7 @@ const ImgPicker = () => {
                 name: 'image.jpg',
             });
 
-            const response = await axiosInstance.post("/api/images/upload", formData, {
+            const response = await axios.post(`http://${localIP}/images/upload`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -68,18 +63,30 @@ const ImgPicker = () => {
         }
     };
     const getMeals = async () => {
-       await axios.get(`http://${localIP}/getAllMealsForShow`).then((res) => {
+        await axios.get(`http://${localIP}/getAllMealsForShow`).then((res) => {
             console.log(res)
-        }) .catch((error) => {
+        }).catch((error) => {
             console.error(error);
-          });
+        });
+    }
+    const getImage = async (name) => {
+        await axios.get(`http://${localIP}/images/get/${name}`).then((response) => {
 
+            setSelectedImage(`data:image/jpeg;base64,${response.data}`);
+        })
+            .catch((error) => {
+                console.error('Error fetching image:', error);
+            });
     }
     return (
         <View style={styles.container}>
             <Button title={"Upload"} onPress={pickImage} />
             <Button title={"getMeals"} onPress={getMeals} />
+            <Button title={"getImage"} onPress={() => {
+                getImage("image.jpg")
+            }} />
             <Image style={styles.image} source={{ uri: selectedImage }} />
+
 
         </View>
     );
