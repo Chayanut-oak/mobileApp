@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, Button, Image } from 'react-native';
 import axios from 'axios';
 import Constants from 'expo-constants';
 import { async } from '@firebase/util';
+import localIP from '../LocalIP'
 // const ImageViewer = (selectedImage ) => {
 
 //     const imageSource = selectedImage ? { uri: selectedImage } : null;
@@ -16,18 +17,20 @@ import { async } from '@firebase/util';
 
 const ImgPicker = () => {
     const axiosInstance = axios.create({ baseURL: "http://localhost:8080" })
-
+    useEffect(()=>{
+        axios.get("http://localhost:8082/getMealById").then(res => console.log(res.data))
+      },[])
     const [selectedImage, setSelectedImage] = useState(null);
-    useEffect(() => {
-        (async () => {
-            if (Constants.platform.ios) {
-                const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-                if (status !== 'granted') {
-                    alert('Permission to access media library is required!');
-                }
-            }
-        })();
-    }, []);
+    // useEffect(() => {
+    //     (async () => {
+    //         if (Constants.platform.ios) {
+    //             const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    //             if (status !== 'granted') {
+    //                 alert('Permission to access media library is required!');
+    //             }
+    //         }
+    //     })();
+    // }, []);
 
     const pickImage = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
@@ -65,10 +68,10 @@ const ImgPicker = () => {
         }
     };
     const getMeals = async () => {
-       await axios.get('http://localhost:8080/getAllMealsForShow').then((res) => {
+       await axios.get(`http://${localIP}/getAllMealsForShow`).then((res) => {
             console.log(res)
         }) .catch((error) => {
-            console.error(error.data);
+            console.error(error);
           });
 
     }
