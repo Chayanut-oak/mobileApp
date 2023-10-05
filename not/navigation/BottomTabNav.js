@@ -15,10 +15,10 @@ import Profile from '../src/screen/Profile'
 import CreateMeal from '../src/screen/CreateMeal';
 import Notification from '../src/screen/Notification'
 const MenuTab = createBottomTabNavigator();
-const BottomTabNav = () => {
+const BottomTabNav = (props) => {
   const auth = getAuth();
   return (
-    <MenuTab.Navigator
+<MenuTab.Navigator
       screenOptions={({ route }) => ({
         tabBarActiveTintColor: 'white', // Change the color for active tab
         tabBarInactiveTintColor: 'black', // Change the color for inactive tabs
@@ -40,10 +40,12 @@ const BottomTabNav = () => {
       })}
     >
       <MenuTab.Screen name="MainHome" component={HomeNav}  options={{headerShown : false}}/>
-      <MenuTab.Screen name="New" component={CreateMeal} />
+      <MenuTab.Screen name="New" component={CreateMeal} initialParams={{ customProp: 'Another custom prop' }}/>
       <MenuTab.Screen name="Notification" component={Notification} />
       <MenuTab.Screen name={auth.currentUser.displayName} component={Profile} options={{headerShown : false}} />
     </MenuTab.Navigator>
+
+   
   )
 }
 

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, Image } from 'react-native';
 import axios from 'axios';
 import Constants from 'expo-constants';
+import { async } from '@firebase/util';
 // const ImageViewer = (selectedImage ) => {
 
 //     const imageSource = selectedImage ? { uri: selectedImage } : null;
@@ -63,12 +64,12 @@ const ImgPicker = () => {
             console.error('Error uploading image', error);
         }
     };
-    const getMeals = () => {
-        axios.get('http://localhost8080/getAllMealsForShow').then((res) => {
+    const getMeals = async () => {
+       await axios.get('http://localhost:8080/getAllMealsForShow').then((res) => {
             console.log(res)
-        }).catch((err) => {
-            console.log(err)
-        })
+        }) .catch((error) => {
+            console.error(error.data);
+          });
 
     }
     return (

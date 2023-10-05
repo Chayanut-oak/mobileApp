@@ -26,8 +26,10 @@ public class MealController {
         mealService.addMeal(meal);
         return meal.toString();
     }
+    @CrossOrigin
     @GetMapping(value = "/getAllMealsForShow")
     public List<Meal> getAllMealsForShow(){
+        System.out.println(mealService.getAllMealsForShow());
         return mealService.getAllMealsForShow();
     }
     @GetMapping(value = "/getMealById/{id}")

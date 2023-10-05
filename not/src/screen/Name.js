@@ -6,22 +6,28 @@ import { HeaderButton } from "react-navigation-header-buttons";
 import { LinearGradient } from 'expo-linear-gradient';
 import { TouchableOpacity } from "react-native";
 import { getAuth } from "firebase/auth";
-const Name = (props, navigation) => {
+import { useDispatch } from 'react-redux';
+import { saveUserData } from '../../redux/userSlice';
+const Name = ({navigation}) => {
+  const dispatch = useDispatch();
 
   const auth = FIREBASE_AUTH
 
   const [displayName, setDisplayName] = useState('');
 
-  const handleDisplayName = async (navigation) => {
+  const handleDisplayName = async () => {
     try {
       const auth = getAuth();
       const res = auth.currentUser;
       await updateProfile(res, {
         displayName: displayName,
+       
       });
-      console.log(res)
-      alert("success")
-      navigation.navigate('Home')
+      const user = {
+        displayName: displayName
+      }
+      dispatch(saveUserData(user));
+    
     } catch (error) {
       const errorMessage = error.message;
       alert(errorMessage);

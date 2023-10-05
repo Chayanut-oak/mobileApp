@@ -1,11 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-
+import Filter from '../components/Filter'
 const CreateMeal = ({route,navigation}) => {
   return (
-    <View>
-      <Text>CreateMeal</Text>
-    </View>
+   <Filter New='New'></Filter>
   )
 }
 

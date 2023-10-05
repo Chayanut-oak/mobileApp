@@ -7,7 +7,9 @@ import { HeaderButtons } from 'react-navigation-header-buttons'
 import CustomHeaderButton from '../src/components/CustomHeaderButton'
 import Food from '../src/screen/Food'
 import MealDetail from '../src/screen/MealDetail'
-const HomeNav = (navigate) => {
+import { FIREBASE_AUTH } from '../Firebaseconfig'
+
+const HomeNav = () => {
   const HomeNavigate = createNativeStackNavigator()
   return (
     <HomeNavigate.Navigator >

@@ -5,7 +5,7 @@ import { NavigationProp, Route } from '@react-navigation/native';
 import { FIREBASE_AUTH } from '../../Firebaseconfig';
 import { TouchableOpacity } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
-
+import { saveuser } from '../../asyncStorage/asyncStorage';
 const auth = FIREBASE_AUTH
 
 
@@ -16,9 +16,10 @@ const Register = ({navigation}) => {
   const handleSignUp = async () => {
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
-      console.log(res.user)
+      console.log(res.user.uid)
+      saveuser(res.user.uid)
       alert("success")
-      navigation.navigate('Register')
+
     } catch (error) {
       const errorMessage = error.message;
       alert(errorMessage);

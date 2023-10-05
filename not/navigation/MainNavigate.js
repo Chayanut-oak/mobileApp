@@ -12,7 +12,11 @@ import { HeaderButtons } from 'react-navigation-header-buttons';
 import Home from '../src/screen/Home';
 import { getAuth } from "firebase/auth";
 import BottomTabNav from './BottomTabNav';
+import { useDispatch, useSelector } from 'react-redux';
+import { saveUserData } from '../redux/userSlice';
 const MainNavigate = () => {
+    const dispatch = useDispatch();
+    const displayname = useSelector((state) => state.user.displayName)
     const auth = getAuth();
     const Mainnavigate = createNativeStackNavigator();
     const [user, setUserToken] = useState(null)
@@ -20,13 +24,16 @@ const MainNavigate = () => {
     useEffect(() => {
         onAuthStateChanged(FIREBASE_AUTH, (user) => {
             setUserToken(user ? user.stsTokenManager : null)
+            //query database 
+
         })
-    }, [])
+    }, [displayname])
+
     return (
 
         <NavigationContainer>
             <Mainnavigate.Navigator>
-                {!user ? <Mainnavigate.Screen name="Authen" component={Authentication} options={{ headerStyle: { backgroundColor: "#E27E8A" } }} /> : !auth.currentUser.displayName ? <Mainnavigate.Screen name="Name" component={Name} options={{
+                {!user ? <Mainnavigate.Screen name="Authen" component={Authentication} options={{ headerStyle: { backgroundColor: "#E27E8A" } }} /> : displayname == "" && !auth.currentUser.displayName ? <Mainnavigate.Screen name="Name" component={Name} options={{
                     headerStyle: { backgroundColor: "#E27E8A" }
                 }} /> : <Mainnavigate.Screen name="homeWithBottom" component={BottomTabNav} options={{ headerShown: false }} />}
 

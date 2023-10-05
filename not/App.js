@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import MainNavigate from './navigation/MainNavigate';
-import ImgPicker from './test/imagePicker';
-export default function App() {
 
+import ImgPicker from './test/imagePicker';
+
+import { Provider } from 'react-redux';
+import store from './redux/strore';
+export default function App() {
   return (
-    <ImgPicker />
+    <Provider store={store}>
+      <ImgPicker></ImgPicker>
+      <MainNavigate></MainNavigate>
+    </Provider>
   );
 }
 
