@@ -9,7 +9,7 @@ import store from './redux/strore';
 export default function App() {
   return (
     <Provider store={store}>
-      <ImgPicker></ImgPicker>
+      {/* <ImgPicker></ImgPicker> */}
       <MainNavigate></MainNavigate>
     </Provider>
   );

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, FlatList ,Button, TextInput} from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, Button, TextInput, ScrollView } from 'react-native'
 import React from 'react'
 import { useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -6,27 +6,28 @@ import Modal from "react-native-modal";
 const Filter = (props) => {
     const [selectedButtons, setSelectedButtons] = useState([]);
     const [isModalVisible, setModalVisible] = useState(false);
-    const [categoryButton, setCategoryButton] = useState([{
-        mealCategory: 'Clean',
-    }, {
-        mealCategory: 'Soup',
-    },]);
-    const [mainIngredientButton, setMainIngredientButton] = useState([{
-        mainIngredient: 'Pork Belly',
-    }, {
-        mainIngredient: 'Teen Chicken',
-    },]);
-    const [veggieButton, setVeggieButton] = useState([{
-        veggieAndFruit: 'pukchi',
-    }, {
-        veggieAndFruit: 'tonhom',
-    },]);
+    const [modalName, setModalName] = useState('');
+    const [seasoningInput, setSeasoningInput] = useState('');
+    const [categoryInput, setCategoryInput] = useState('');
+    const [veggieInput, setVeggieInput] = useState('');
+    const [mainInput, setMainInput] = useState('');
+    const [categoryButton, setCategoryButton] = useState([
+        'Clean',
+        'Soup',
+    ]);
+    const [mainIngredientButton, setMainIngredientButton] = useState([
+        'Pork Belly',
+
+        'Teen Chicken',
+    ]);
+    const [veggieButton, setVeggieButton] = useState(['pukchi',
+
+        'tonhom',
+    ]);
     const [seasoningButton, setSeasoningButton] = useState([
-        {
-            seasoning: 'numpra',
-        }, {
-            seasoning: 'numprik',
-        },
+        'numpra',
+        'numprik', 'numprik',
+
     ]);
     const handleButtonPress = (buttonText) => {
         if (selectedButtons.includes(buttonText)) {
@@ -42,146 +43,218 @@ const Filter = (props) => {
 
     };
     const handelModal = () => {
-        setModalVisible(!isModalVisible)
+        setModalVisible(!isModalVisible);
+        setModalName('');
+
     }
+
+    const handleInputChange = (text) => {
+        if (modalName == 'Add Seasoning') {
+            setSeasoningInput(text);
+        }
+        if (modalName == 'Add Main Ingredient') {
+            setMainInput(text)
+        }
+        if (modalName == 'New Category') {
+            setCategoryInput(text);
+        }
+        if (modalName == 'Add Vegetable or Fruit') {
+            setVeggieInput(text);
+        }
+    };
+
+    const handleAdd = () => {
+        if (seasoningInput.trim() !== '') {
+            setSeasoningButton([...seasoningButton, seasoningInput]);
+            setSeasoningInput('');
+        } if (mainInput.trim() !== '') {
+            setMainIngredientButton([...mainIngredientButton, mainInput]);
+            setMainInput('');
+        } if (veggieInput.trim() !== '') {
+            setVeggieButton([...veggieButton, veggieInput]);
+            setVeggieInput('');
+        } if (categoryInput.trim() !== '') {
+
+            setCategoryButton([...categoryButton, categoryInput]);
+            setCategoryInput('');
+
+        }
+    };
+    const splitButtonIntoPairs = (button) => {
+        const pairs = [];
+        for (let i = 0; i < button.length; i += 3) {
+            const pair = button.slice(i, i + 3);
+            pairs.push(pair);
+        }
+        return pairs;
+    };
+    const selectPairs = splitButtonIntoPairs(selectedButtons);
+    const categoryPairs = splitButtonIntoPairs(categoryButton);
+    const mainIngredientPairs = splitButtonIntoPairs(mainIngredientButton)
+    const veggiePairs = splitButtonIntoPairs(veggieButton)
+    const seasoningPairs = splitButtonIntoPairs(seasoningButton)
     return (
         <View style={styles.container}>
-            <FlatList
-                data={selectedButtons}
-                numColumns={3}
-                showsVerticalScrollIndicator={false}
-                renderItem={({ item, index }) => (
-                    <View key={index} style={styles.item}>
-                        <TouchableOpacity
+            <ScrollView>
+                {selectPairs.map((pair, pairIndex) => (
+                    <View key={pairIndex} style={styles.row} >
+                        {pair.map((item, itemIndex) => (
+                            <View style={styles.item}
+                                key={itemIndex}>
+                                <TouchableOpacity
 
-                            onPress={() => handleButtonUnpress(item)}>
-                            <LinearGradient
-                                colors={['#DD2572', '#F02E5D']}
-                                style={[styles.TouchableOpacity]}>
-                                <Text style={styles.centeredText}>{item}</Text>
-                            </LinearGradient>
+                                    onPress={() => handleButtonUnpress(item)}>
+                                    <LinearGradient
+                                        colors={['#DD2572', '#F02E5D']}
+                                        style={[styles.TouchableOpacity]}>
+                                        <Text style={styles.centeredText}>{item}</Text>
+                                    </LinearGradient>
 
-                        </TouchableOpacity>
+                                </TouchableOpacity>
+                            </View>
+
+                        ))}
                     </View>
-                )}
-            />
+                ))}
+             <View style={{
+                    height: 1,
+                    backgroundColor: '#D1D1D1',
+                    
+                    width: "auto"
+                }} />
+                <View style={styles.buttonContainer}>
+                
+                    <Text style={{color:'#F3F3F3',margin:5}}>Category</Text>
+                    {categoryPairs.map((pair, pairIndex) => (
+                        <View key={pairIndex} style={styles.row} >
+                            {pair.map((item, itemIndex) => (
+                                <View style={styles.item}
+                                    key={itemIndex}>
+                                    <TouchableOpacity
 
-            <View style={styles.buttonContainer}>
-                <Text>Category</Text>
-                <FlatList
-                    data={categoryButton}
-                    numColumns={3}
+                                        onPress={() => handleButtonPress(item)}>
+                                        <LinearGradient
+                                            colors={['#DD2572', '#F02E5D']}
+                                            style={[selectedButtons.includes(item) && styles.selectedButton, styles.TouchableOpacity]}>
+                                            <Text  style={{color:'#F3F3F3'}}>{item}</Text>
+                                        </LinearGradient>
 
-                    showsVerticalScrollIndicator={false}
-                    renderItem={({ item, index }) => (
-                        <View key={index} style={styles.item}>
-                            <TouchableOpacity
+                                    </TouchableOpacity>
+                                </View>
 
-                                onPress={() => handleButtonPress(item.mealCategory)}>
-                                <LinearGradient
-                                    colors={['#DD2572', '#F02E5D']}
-                                    style={[selectedButtons.includes(item.mealCategory) && styles.selectedButton, styles.TouchableOpacity]}>
-                                    <Text>{item.mealCategory}</Text>
-                                </LinearGradient>
-
-                            </TouchableOpacity>
+                            ))}
                         </View>
-                    )}
-                />
+                    ))}
 
-                {props.New == 'New' ? <TouchableOpacity>
-                    <LinearGradient
-                        colors={['#DD2572', '#F02E5D']}
-                        style={[styles.TouchableOpacity]}>
-                        <Text>+</Text>
-                    </LinearGradient>
-                </TouchableOpacity> : null}
+                    {props.New == 'New' ? <TouchableOpacity onPress={() => { handelModal(), setModalName('New Category') }}>
+                        <LinearGradient
+                            colors={['#DD2572', '#F02E5D']}
+                            style={[styles.TouchableOpacity]}>
+                            <Text  style={{color:'#F3F3F3'}}>+</Text>
+                        </LinearGradient>
+                    </TouchableOpacity> : null}
 
 
-                <Text>Main Ingredient</Text>
-                <FlatList
-                    data={mainIngredientButton}
-                    numColumns={3}
+                    <Text  style={{color:'#F3F3F3',margin:5}}>Main Ingredient</Text>
+                    {mainIngredientPairs.map((pair, pairIndex) => (
+                        <View key={pairIndex} style={styles.row} >
+                            {pair.map((item, itemIndex) => (
+                                <View style={styles.item}
+                                    key={itemIndex}>
+                                    <TouchableOpacity
 
-                    showsVerticalScrollIndicator={false}
-                    renderItem={({ item, index }) => (
-                        <View key={index} style={styles.item}>
-                            <TouchableOpacity onPress={() => handleButtonPress(item.mainIngredient)}>
-                                <LinearGradient
-                                    colors={['#DD2572', '#F02E5D']}
-                                    style={[selectedButtons.includes(item.mainIngredient) && styles.selectedButton, styles.TouchableOpacity]}>
-                                    <Text>{item.mainIngredient}</Text>
-                                </LinearGradient>
+                                        onPress={() => handleButtonPress(item)}>
+                                        <LinearGradient
+                                            colors={['#DD2572', '#F02E5D']}
+                                            style={[selectedButtons.includes(item) && styles.selectedButton, styles.TouchableOpacity]}>
+                                            <Text  style={{color:'#F3F3F3'}}>{item}</Text>
+                                        </LinearGradient>
 
-                            </TouchableOpacity>
+                                    </TouchableOpacity>
+                                </View>
+
+                            ))}
                         </View>
-                    )}
-                />
-                {props.New == 'New' ? <TouchableOpacity>
-                    <LinearGradient
-                        colors={['#DD2572', '#F02E5D']}
-                        style={[styles.TouchableOpacity]}>
-                        <Text>+</Text>
-                    </LinearGradient>
-                </TouchableOpacity> : null}
-                <Text>Vegetable and Fruit</Text>
-                <FlatList
-                    data={veggieButton}
-                    numColumns={3}
+                    ))}
+                    {props.New == 'New' ? <TouchableOpacity onPress={() => { handelModal(), setModalName('Add Main Ingredient') }}>
+                        <LinearGradient
+                            colors={['#DD2572', '#F02E5D']}
+                            style={[styles.TouchableOpacity]}>
+                            <Text  style={{color:'#F3F3F3'}}>+</Text>
+                        </LinearGradient>
+                    </TouchableOpacity> : null}
+                    <Text  style={{color:'#F3F3F3',margin:5}}>Vegetable and Fruit</Text>
+                    {veggiePairs.map((pair, pairIndex) => (
+                        <View key={pairIndex} style={styles.row} >
+                            {pair.map((item, itemIndex) => (
+                                <View style={styles.item}
+                                    key={itemIndex}>
+                                    <TouchableOpacity
 
-                    showsVerticalScrollIndicator={false}
-                    renderItem={({ item, index }) => (
-                        <View key={index} style={styles.item}>
-                            <TouchableOpacity
+                                        onPress={() => handleButtonPress(item)}>
+                                        <LinearGradient
+                                            colors={['#DD2572', '#F02E5D']}
+                                            style={[selectedButtons.includes(item) && styles.selectedButton, styles.TouchableOpacity]}>
+                                            <Text  style={{color:'#F3F3F3'}}>{item}</Text>
+                                        </LinearGradient>
 
-                                onPress={() => handleButtonPress(item.veggieAndFruit)}>
-                                <LinearGradient
-                                    colors={['#DD2572', '#F02E5D']}
-                                    style={[selectedButtons.includes(item.veggieAndFruit) && styles.selectedButton, styles.TouchableOpacity]}>
-                                    <Text>{item.veggieAndFruit}</Text>
-                                </LinearGradient>
-                            </TouchableOpacity>
+                                    </TouchableOpacity>
+                                </View>
+                            ))}
                         </View>
-                    )}
-                />
-                {props.New == 'New' ? <TouchableOpacity>
-                    <LinearGradient
-                        colors={['#DD2572', '#F02E5D']}
-                        style={[styles.TouchableOpacity]}>
-                        <Text>+</Text>
-                    </LinearGradient>
-                </TouchableOpacity> : null}
-                <Text>Seasoning</Text>
-                <FlatList
-                    data={seasoningButton}
-                    numColumns={3}
-                    showsVerticalScrollIndicator={false}
-                    renderItem={({ item, index }) => (
-                        <View key={index} style={styles.item}>
-                            <TouchableOpacity onPress={() => handleButtonPress(item.seasoning)}>
-                                <LinearGradient
-                                    colors={['#DD2572', '#F02E5D']}
-                                    style={[selectedButtons.includes(item.seasoning) && styles.selectedButton, styles.TouchableOpacity]}>
-                                    <Text>{item.seasoning}</Text>
-                                </LinearGradient>
-                            </TouchableOpacity>
+                    ))}
+                    {props.New == 'New' ? <TouchableOpacity onPress={() => { handelModal(), setModalName('Add Vegetable or Fruit') }}>
+                        <LinearGradient
+                            colors={['#DD2572', '#F02E5D']}
+                            style={[styles.TouchableOpacity]}>
+                            <Text  style={{color:'#F3F3F3'}}>+</Text>
+                        </LinearGradient>
+                    </TouchableOpacity> : null}
+                    <Text  style={{color:'#F3F3F3',margin:5}}>Seasoning</Text>
+                    {seasoningPairs.map((pair, pairIndex) => (
+                        <View key={pairIndex} style={styles.row} >
+                            {pair.map((item, itemIndex) => (
+                                <View style={styles.item}
+                                    key={itemIndex}>
+                                    <TouchableOpacity
+
+                                        onPress={() => handleButtonPress(item)}>
+                                        <LinearGradient
+                                            colors={['#DD2572', '#F02E5D']}
+                                            style={[selectedButtons.includes(item) && styles.selectedButton, styles.TouchableOpacity]}>
+                                            <Text  style={{color:'#F3F3F3'}}>{item}</Text>
+                                        </LinearGradient>
+
+                                    </TouchableOpacity>
+                                </View>
+
+                            ))}
                         </View>
-                    )}
-                />
-                {props.New == 'New' ? <TouchableOpacity onPress={handelModal}>
-                    <LinearGradient
-                        colors={['#DD2572', '#F02E5D']}
-                        style={[styles.TouchableOpacity]}>
-                        <Text>+</Text>
-                    </LinearGradient>
-                </TouchableOpacity> : null}
-                <Modal isVisible={isModalVisible} style={{}}>
-                    <View style={{width:200 , height: 200 , backgroundColor:'#ffff',justifyContent:'center',alignSelf:'center' ,alignItems:'center'}}>
-                        <TextInput></TextInput>
-                        <Button title="Hide modal" onPress={handelModal} />
-                    </View>
-                </Modal>
-            </View>
+                    ))}
+                    {props.New == 'New' ? <TouchableOpacity onPress={() => { handelModal(), setModalName('Add Seasoning') }}>
+                        <LinearGradient
+                            colors={['#DD2572', '#F02E5D']}
+                            style={[styles.TouchableOpacity]}>
+                            <Text  style={{color:'#F3F3F3'}}>+</Text>
+                        </LinearGradient>
+                    </TouchableOpacity> : null}
+
+                    <Modal isVisible={isModalVisible}>
+                        <View style={{ width: 200, height: 200, backgroundColor: '#ffff', justifyContent: 'center', alignSelf: 'center', alignItems: 'center' }}>
+                            <View style={styles.inputContainer}>
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Name"
+                                    onChangeText={handleInputChange} // Step 2: Update the seasoningInput state
+                                    ref={(input) => { this.textInputRef = input; }}
+                                />
+                            </View>
+                            <Button title={modalName} onPress={() => { handleAdd(), this.textInputRef.clear(); }} />
+                            <Button title="Hide modal" onPress={handelModal} />
+                        </View>
+                    </Modal>
+                </View>
+            </ScrollView>
         </View>
     );
 }
@@ -190,9 +263,14 @@ export default Filter
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 100,
-        marginLeft: 20
-    },
+
+        justifyContent: 'flex-start', // Align content to the top
+   
+        backgroundColor: '#2F2C2C',
+        padding: 20,
+        paddingTop: 50,
+        height:660
+      },
     buttonContainer: {
         alignItems: 'flex-start',
     },
@@ -209,6 +287,7 @@ const styles = StyleSheet.create({
         marginBottom: 5
     }, centeredText: {
         textAlign: 'center', // Add this style to center the text horizontally
+        color:'white'
     }, TouchableOpacity: {
         borderColor: 'rgba(0,0,0,0.2)',
         alignItems: 'center',
@@ -219,5 +298,22 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         width: 'auto', // Allow the width to adjust based on content
         marginRight: 5
+    }, inputContainer: {
+        width: '100%',
+        alignItems: 'center', // Center the input fields horizontally
+        padding: 10
+    },
+    input: {
+        width: '100%',
+        height: 40,
+        backgroundColor: '#D9D9D9',
+        borderWidth: 1,
+        borderColor: '#ccc',
+        marginBottom: 10,
+        borderRadius: 50,
+        textAlign: 'center'
+    }, row: {
+        flexDirection: 'row',
+
     },
 })

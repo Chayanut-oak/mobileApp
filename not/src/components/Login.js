@@ -5,7 +5,7 @@ import { FIREBASE_AUTH } from '../../Firebaseconfig';
 import { TouchableOpacity } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import axios from 'axios';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 const auth = FIREBASE_AUTH;
 
 const Login = ({ navigation }) => {
@@ -31,8 +31,8 @@ const Login = ({ navigation }) => {
   };
 
   return (
-
-    <View style={styles.container}>
+<KeyboardAwareScrollView >
+  <View style={styles.container}>
       <View style={styles.imageContainer}>
         <Image
           style={styles.image}
@@ -71,6 +71,8 @@ const Login = ({ navigation }) => {
       </View>
 
     </View>
+  </KeyboardAwareScrollView>
+    
   );
 };
 
@@ -81,7 +83,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#2F2C2C',
     padding: 20,
-    paddingTop: 50, // Add padding/margin to the top
+    paddingTop: 50,
+    height:660
   },
   inputContainer: {
     width: '100%',
