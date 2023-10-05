@@ -1,10 +1,11 @@
-import React ,{ useState , useEffect}from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, Button } from 'react-native';
 import MainNavigate from './navigation/MainNavigate';
+import ImgPicker from './test/imagePicker';
 export default function App() {
 
   return (
-    <MainNavigate></MainNavigate>
+    <ImgPicker />
   );
 }
 
