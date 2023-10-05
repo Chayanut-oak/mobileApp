@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Button, TextInput, Text, StyleSheet, Image } from 'react-native';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../../Firebaseconfig';
 import { TouchableOpacity } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
+import axios from 'axios';
 
 const auth = FIREBASE_AUTH;
 
@@ -11,6 +12,11 @@ const Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  
+  useEffect(()=>{
+    axios.get("http://localhost:8082/getMealById").then(res => console.log(res.data))
+  },[])
+
 
   const handleSignIn = async () => {
     setLoading(true);

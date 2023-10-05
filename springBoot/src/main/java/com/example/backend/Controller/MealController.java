@@ -32,8 +32,8 @@ public class MealController {
         System.out.println(mealService.getAllMealsForShow());
         return mealService.getAllMealsForShow();
     }
-    @GetMapping(value = "/getMealById/{id}")
-    public Meal getMealById(@PathVariable String id){
-        return mealService.getMealById(id);
+    @GetMapping(value = "/getMealById")
+    public String getMealById(){
+        return "success";
     }
 }
