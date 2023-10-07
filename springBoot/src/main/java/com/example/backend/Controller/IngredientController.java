@@ -14,6 +14,6 @@ public class IngredientController {
 
     @PostMapping(value = "/addIngredient")
     public void addIngredient(@RequestBody Ingredient ingredient){
-        ingredientService.addIngredient(new Ingredient(null, ingredient.getIngredientCategory(), ingredient.getIngredientName() ));
+        ingredientService.addIngredient(ingredient);
     }
 }

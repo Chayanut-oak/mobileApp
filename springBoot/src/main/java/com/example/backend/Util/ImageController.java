@@ -1,9 +1,5 @@
 package com.example.backend.Util;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
@@ -11,7 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
-import java.util.List;
 
 @RestController
 public class ImageController {
@@ -23,8 +18,7 @@ public class ImageController {
         }
         try {
             byte[] bytes = image.getBytes();
-
-//            System.out.println(uploadPath);
+            System.out.println(uploadPath);
             Path path = Paths.get(uploadPath +  image.getOriginalFilename());
             Files.write(path, bytes);
             return "Image uploaded successfully!";
@@ -39,11 +33,15 @@ public class ImageController {
             // Read the image file and return it as a byte array
             byte[] imageBytes = Files.readAllBytes(Paths.get(uploadPath + name));
             String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+            System.out.println("Start: "+base64Image);
             return base64Image;
         } catch (IOException e) {
             // Handle the exception if the image file is not found
             return "Failed";
         }
     }
-
+//    @GetMapping(value = "/images/getAll")
+//    public void getAllImage(){
+//
+//    }
 }

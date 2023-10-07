@@ -26,14 +26,19 @@ public class MealController {
         mealService.addMeal(meal);
         return meal.toString();
     }
-    @CrossOrigin
     @GetMapping(value = "/getAllMealsForShow")
     public List<Meal> getAllMealsForShow(){
         System.out.println(mealService.getAllMealsForShow());
         return mealService.getAllMealsForShow();
     }
-    @GetMapping(value = "/getMealById")
-    public String getMealById(){
-        return "success";
+    @GetMapping(value = "/getMealById/{id}")
+    public Meal getMealById(@PathVariable String id){
+        return mealService.getMealById(id);
+    }
+
+    @GetMapping(value = "/getMealDetail/{id}")
+    public Meal getMealDetail(@PathVariable String id){
+        System.out.println("From controller");
+        return mealService.findMealsWithIngredients(id);
     }
 }

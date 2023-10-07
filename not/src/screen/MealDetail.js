@@ -1,14 +1,30 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
+import React, { useState, useCallback } from 'react'
+import YoutubeIframe from 'react-native-youtube-iframe'
 
 const MealDetail = ({ route }) => {
+  const [playing, setPlaying] = useState(false);
+
+  const onStateChange = useCallback((state) => {
+    if (state === "ended") {
+      setPlaying(false);
+      Alert.alert("video has finished playing!");
+    }
+  }, []);
+
+  const togglePlaying = useCallback(() => {
+    setPlaying((prev) => !prev);
+  }, []);
   const meal = {
-    "mealImage": "image1.png",
+    "mealImage": 
+    "iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAA2BJREFUaEPtmj9o6kAcx3+li0ih4FLq2HZ2bgeduruJFEeplEoLDtXFyamLOBQK6iK0Ih0K3bvo5ODk0kUEoUR0ECwi7eTjd4/kXWKSu1wurSkvk+clv/t+fv9O4m31er1VKBSCQCAAfrw+Pz9hNpvB1nA4XOGHo6Mj2N3d9RXLfD6HwWAAGIgtRVFWwWCQfOEnGBUCNS+Xy78g+/v7QE9semSMWsfj8T8QzCk/wJhpXAPZdBgrR5uCbCqMXbZYgmwaDCvlbUE2BYYFgTqZID8NwwPBDfJTMLwQjkC+G8YJhGOQ74JxCiEE4jWMCIQwiFcwohCuQGTDuIFwDSILxi2EFBC3MDIgpIGIwsiCkAriFEYmhHQQXhjZEJ6AsGC8gPAMxArGKwhPQYwwOPby5QbXz3gUIXqpUcDnvXxD8x+EJ0J0Tfg2tcwK23fFbifYKxjpNcIjlOcentSl75EK4kSgk3t5oKSBiAgTecYKSgqIG0FunpWaWjKEyLDhKiIyBKhedWtLGMTtwma57samEIibBVkdSNS2YxDRhVgA9LzIGo5A6AW2t7fh4uICHh4eNA03Nzdwe3tLxv1+H5LJJLy9vUEqlYL7+3vY2dmx5VksFms2r6+voVKpMG1ygxi9NJlM4Pz8HEqlEkQiEZ1AVVA0GoWzszMiDj/j/XaX0aaZ46xscoGYhRo9XiwWoVqtwt7enk4fzmWzWbi7uyOQr6+v0Gg0mFExs6mu/fX1BYVCwdImE8QqX+3E4RxG6unpiUDS43K5DN1uVzd3dXUFrVYLptOpKTBqaDabJI2fn5/XbOIawn+9YSQymYwWiVgsphNHR8Do6Xw+T57L5XKQSCRIZE9PT0l0rWy+vLyQ+VqtBuFwmNQgnRHCf4aiGEVRtHShx+hxOxCsBQTodDpANwiWzXq9DpeXlyRdR6MRG0Sk/dF1gSlilVpqPaF3Hx8ftSiaNQEzmwjz8fEB7+/vgGmqpq+0AwN0qNHjdNiN9aQKRPEnJydayzbCWNnEwz9YM+12GxAM27oOhDcSdHvFlqqOMXdxH7Frv/RcPB7XauT4+FjXplk20+k0HB4ektTE4yYaiNNDNcbNy7jpmW2I6HHcU/BSN0iMltq1Dg4OdBsiyyY6DQG0QzW/5pjTbzl49gfcxOo1RgS8SgAAAABJRU5ErkJggg=="
+    ,    
+    "mealYoutube": "dQw4w9WgXcQ",
     "mealName": "MealTest",
     "createdBy": {
       "_id": "1",
-      "userName": "Nut2",
-      "userImage": "image1.png"
+      "userName": "createBYGu",
+      "userImage": "iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAA2BJREFUaEPtmj9o6kAcx3+li0ih4FLq2HZ2bgeduruJFEeplEoLDtXFyamLOBQK6iK0Ih0K3bvo5ODk0kUEoUR0ECwi7eTjd4/kXWKSu1wurSkvk+clv/t+fv9O4m31er1VKBSCQCAAfrw+Pz9hNpvB1nA4XOGHo6Mj2N3d9RXLfD6HwWAAGIgtRVFWwWCQfOEnGBUCNS+Xy78g+/v7QE9semSMWsfj8T8QzCk/wJhpXAPZdBgrR5uCbCqMXbZYgmwaDCvlbUE2BYYFgTqZID8NwwPBDfJTMLwQjkC+G8YJhGOQ74JxCiEE4jWMCIQwiFcwohCuQGTDuIFwDSILxi2EFBC3MDIgpIGIwsiCkAriFEYmhHQQXhjZEJ6AsGC8gPAMxArGKwhPQYwwOPby5QbXz3gUIXqpUcDnvXxD8x+EJ0J0Tfg2tcwK23fFbifYKxjpNcIjlOcentSl75EK4kSgk3t5oKSBiAgTecYKSgqIG0FunpWaWjKEyLDhKiIyBKhedWtLGMTtwma57samEIibBVkdSNS2YxDRhVgA9LzIGo5A6AW2t7fh4uICHh4eNA03Nzdwe3tLxv1+H5LJJLy9vUEqlYL7+3vY2dmx5VksFms2r6+voVKpMG1ygxi9NJlM4Pz8HEqlEkQiEZ1AVVA0GoWzszMiDj/j/XaX0aaZ46xscoGYhRo9XiwWoVqtwt7enk4fzmWzWbi7uyOQr6+v0Gg0mFExs6mu/fX1BYVCwdImE8QqX+3E4RxG6unpiUDS43K5DN1uVzd3dXUFrVYLptOpKTBqaDabJI2fn5/XbOIawn+9YSQymYwWiVgsphNHR8Do6Xw+T57L5XKQSCRIZE9PT0l0rWy+vLyQ+VqtBuFwmNQgnRHCf4aiGEVRtHShx+hxOxCsBQTodDpANwiWzXq9DpeXlyRdR6MRG0Sk/dF1gSlilVpqPaF3Hx8ftSiaNQEzmwjz8fEB7+/vgGmqpq+0AwN0qNHjdNiN9aQKRPEnJydayzbCWNnEwz9YM+12GxAM27oOhDcSdHvFlqqOMXdxH7Frv/RcPB7XauT4+FjXplk20+k0HB4ektTE4yYaiNNDNcbNy7jpmW2I6HHcU/BSN0iMltq1Dg4OdBsiyyY6DQG0QzW/5pjTbzl49gfcxOo1RgS8SgAAAABJRU5ErkJggg=="
     },
     "like": 23,
     "mealCategory": "Clean",
@@ -16,14 +32,12 @@ const MealDetail = ({ route }) => {
       {
         "_id": "6519b019be2ffb1449701923",
         "ingredientCategory": "Test",
-        "ingredientName": "Nut",
-        "_class": "com.example.backend.Pojo.Ingredient"
+        "ingredientName": "MEAT",
       },
       {
         "_id": "6519b398dda6c520a813dcaf",
         "ingredientCategory": "Test2",
-        "ingredientName": "Nut2",
-        "_class": "com.example.backend.Pojo.Ingredient"
+        "ingredientName": "PORK",
       }
     ],
     "steps": [
@@ -53,14 +67,62 @@ const MealDetail = ({ route }) => {
     "timestamp": "03-10-2023"
   }
 
-
+  const UserCard = () => {
+    return (
+      <View>
+        <Text>
+          {meal.createdBy.userName}
+        </Text>
+        <Text>
+          สร้างเมื่อ {meal.timestamp}
+        </Text>
+        <Image style={styles.image} source={{ uri: `data:image/jpeg;base64,${meal.createdBy.userImage}` }} />
+        <TouchableOpacity >
+          <Image
+            style={styles.imagemini}
+            source={require('../../picture/commentIcon.png')}
+          />
+        </TouchableOpacity>
+      </View>
+    )
+  }
   return (
     <View style={styles.container}>
       <ScrollView>
         <Image
           style={styles.image}
-          source={item.source || require('../../picture/crab.jpg')}
+          source={{ uri: `data:image/jpeg;base64,${meal.mealImage}` }}
         />
+        <Text>
+          {meal.mealName}
+        </Text>
+        <UserCard />
+        <View>
+          {meal.tags.map((tag, index) => (
+            <Text key={index}>
+              {tag.ingredientName}
+            </Text>
+          ))}
+        </View>
+        <View>
+          <TouchableOpacity onPress={togglePlaying}>
+            <YoutubeIframe
+              height={300}
+              play={playing}
+              videoId={meal.mealYoutube}
+              onChangeState={onStateChange}
+            />
+          </TouchableOpacity>
+          <Text>
+            ขั้นตอนการทำ
+          </Text>
+          {meal.steps.map((step, index) => (
+            <Text key={index}>
+              {step.text}
+            </Text>
+          ))}
+        </View>
+
       </ScrollView>
     </View>
   )
@@ -92,5 +154,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#707070',
 
+  },
+  image: {
+    width: 80,
+    height: 80,
+    borderRadius: 18,
   },
 });

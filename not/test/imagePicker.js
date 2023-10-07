@@ -16,6 +16,7 @@ import localIP from '../LocalIP'
 
 
 const ImgPicker = () => {
+
     const [selectedImage, setSelectedImage] = useState(null);
     // useEffect(() => {
     //     (async () => {
@@ -42,6 +43,7 @@ const ImgPicker = () => {
             sendImageToServer(result.assets[0].uri);
         }
     };
+
     const sendImageToServer = async (imageUri) => {
         try {
             const formData = new FormData();
@@ -71,13 +73,15 @@ const ImgPicker = () => {
     }
     const getImage = async (name) => {
         await axios.get(`http://${localIP}/images/get/${name}`).then((response) => {
-
+            console.log(response.data);
             setSelectedImage(`data:image/jpeg;base64,${response.data}`);
+            // setSelectedImage();
         })
             .catch((error) => {
                 console.error('Error fetching image:', error);
             });
     }
+
     return (
         <View style={styles.container}>
             <Button title={"Upload"} onPress={pickImage} />
@@ -85,8 +89,8 @@ const ImgPicker = () => {
             <Button title={"getImage"} onPress={() => {
                 getImage("image.jpg")
             }} />
-            <Image style={styles.image} source={{ uri: selectedImage }} />
-
+            {/* <Image style={styles.image} source={{ uri: `http://${localIP}/image.jpg` }} /> */}
+            <Image style={styles.image} source={{ uri:  selectedImage}} /> 
 
         </View>
     );
