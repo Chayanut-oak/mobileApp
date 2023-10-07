@@ -37,11 +37,12 @@ const MealDetail = ({ route }) => {
     ],
     steps: [
       {
-        image: "image1.png",
+        image:
+          "iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAA2BJREFUaEPtmj9o6kAcx3+li0ih4FLq2HZ2bgeduruJFEeplEoLDtXFyamLOBQK6iK0Ih0K3bvo5ODk0kUEoUR0ECwi7eTjd4/kXWKSu1wurSkvk+clv/t+fv9O4m31er1VKBSCQCAAfrw+Pz9hNpvB1nA4XOGHo6Mj2N3d9RXLfD6HwWAAGIgtRVFWwWCQfOEnGBUCNS+Xy78g+/v7QE9semSMWsfj8T8QzCk/wJhpXAPZdBgrR5uCbCqMXbZYgmwaDCvlbUE2BYYFgTqZID8NwwPBDfJTMLwQjkC+G8YJhGOQ74JxCiEE4jWMCIQwiFcwohCuQGTDuIFwDSILxi2EFBC3MDIgpIGIwsiCkAriFEYmhHQQXhjZEJ6AsGC8gPAMxArGKwhPQYwwOPby5QbXz3gUIXqpUcDnvXxD8x+EJ0J0Tfg2tcwK23fFbifYKxjpNcIjlOcentSl75EK4kSgk3t5oKSBiAgTecYKSgqIG0FunpWaWjKEyLDhKiIyBKhedWtLGMTtwma57samEIibBVkdSNS2YxDRhVgA9LzIGo5A6AW2t7fh4uICHh4eNA03Nzdwe3tLxv1+H5LJJLy9vUEqlYL7+3vY2dmx5VksFms2r6+voVKpMG1ygxi9NJlM4Pz8HEqlEkQiEZ1AVVA0GoWzszMiDj/j/XaX0aaZ46xscoGYhRo9XiwWoVqtwt7enk4fzmWzWbi7uyOQr6+v0Gg0mFExs6mu/fX1BYVCwdImE8QqX+3E4RxG6unpiUDS43K5DN1uVzd3dXUFrVYLptOpKTBqaDabJI2fn5/XbOIawn+9YSQymYwWiVgsphNHR8Do6Xw+T57L5XKQSCRIZE9PT0l0rWy+vLyQ+VqtBuFwmNQgnRHCf4aiGEVRtHShx+hxOxCsBQTodDpANwiWzXq9DpeXlyRdR6MRG0Sk/dF1gSlilVpqPaF3Hx8ftSiaNQEzmwjz8fEB7+/vgGmqpq+0AwN0qNHjdNiN9aQKRPEnJydayzbCWNnEwz9YM+12GxAM27oOhDcSdHvFlqqOMXdxH7Frv/RcPB7XauT4+FjXplk20+k0HB4ektTE4yYaiNNDNcbNy7jpmW2I6HHcU/BSN0iMltq1Dg4OdBsiyyY6DQG0QzW/5pjTbzl49gfcxOo1RgS8SgAAAABJRU5ErkJggg==",
         text: "dnlgdlsngls;dnfglsjndfglkjndfg;ll;'dl;nl;nsdvldnfln;sg;ldnfgjlkdsn;rennd;l",
       },
       {
-        image: "image2.png",
+        image: null,
         text: "step2",
       },
     ],
@@ -121,18 +122,20 @@ const MealDetail = ({ route }) => {
             <YoutubeIframe height={200} videoId={meal.mealYoutube} />
           ) : null}
           {meal.steps.map((step, index) => (
-            <View style={styles.stepCard}>
-              <LinearGradient style={styles.stepNo} colors={['#DD2572', '#F02E5D']}>
-                <Text>
-                  {index}
-                </Text>
-              </LinearGradient>
-              <View style={styles.stepDetail}>
-                <Text key={index} style={styles.stepText}>
-                  {step.text}
-                </Text>
+            <View key={index} style={{ alignItems: "flex-end", }}>
+              <View style={styles.stepCard}>
+                <LinearGradient style={styles.stepNo} colors={['#DD2572', '#F02E5D']}>
+                  <Text>
+                    {index}
+                  </Text>
+                </LinearGradient>
+                <View style={styles.stepDetail}>
+                  <Text style={styles.stepText}>
+                    {step.text}
+                  </Text>
+                </View>
               </View>
-
+              {step.image ? <Image style={styles.stepImage} source={{ uri: `data:image/jpeg;base64,${step.image}` }} /> : null}
             </View>
           ))}
         </View>
@@ -246,7 +249,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginTop:15
+    marginTop: 15
   },
   stepNo: {
     width: 40,
@@ -258,13 +261,20 @@ const styles = StyleSheet.create({
   },
   stepDetail: {
     flex: 4,
-    paddingTop:10,
+    paddingTop: 10,
     padding: 15,
-    paddingLeft:20,
-    marginLeft:-10,
-    zIndex:-2,
+    paddingLeft: 20,
+    marginLeft: -10,
+    zIndex: -2,
     borderRadius: 20,
     backgroundColor: "#fff"
+  },
+  stepImage: {
+    marginTop: 10,
+    width: "90%",
+    height: 150,
+    marginRight: 10,
+    resizeMode: "stretch",
   }
 });
 // const styles = StyleSheet.create({
