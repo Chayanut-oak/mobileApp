@@ -107,9 +107,9 @@ const MealDetail = ({ route }) => {
         {/* Tags */}
         <View style={styles.tags}>
           {meal.tags.map((tag, index) => (
-            <LinearGradient style={styles.tag}
+            <LinearGradient key={index} style={styles.tag}
               colors={['#DD2572', '#F02E5D']}>
-              <Text key={index} style={{ color: "#fff" }}>
+              <Text style={{ color: "#fff" }}>
                 {tag.ingredientName}
               </Text>
             </LinearGradient>
@@ -126,7 +126,7 @@ const MealDetail = ({ route }) => {
               <View style={styles.stepCard}>
                 <LinearGradient style={styles.stepNo} colors={['#DD2572', '#F02E5D']}>
                   <Text>
-                    {index}
+                    {index+1}
                   </Text>
                 </LinearGradient>
                 <View style={styles.stepDetail}>
