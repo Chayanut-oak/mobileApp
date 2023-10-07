@@ -20,6 +20,6 @@ public interface MealRepository extends MongoRepository<Meal, String> {
 
     @Query(value = "{}",fields = "{_id: 1, mealImage: 1, mealName: 1, mealCategory: 1, like: 1}")
     List<Meal> getAllMealsForShow();
-    @Query(value = "{_id:'?0'}")
+    @Query(value = "{mealId:'?0'}")
     Meal getMealById(String id);
 }
