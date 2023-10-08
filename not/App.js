@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import MainNavigate from './navigation/MainNavigate';
-
+import MealDetail from './src/screen/MealDetail';
 import ImgPicker from './test/imagePicker';
 
 import { Provider } from 'react-redux';

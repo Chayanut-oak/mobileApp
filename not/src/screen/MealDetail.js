@@ -9,6 +9,7 @@ import {
 import React, { useState, useCallback } from "react";
 import YoutubeIframe from "react-native-youtube-iframe";
 import { LinearGradient } from 'expo-linear-gradient';
+import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 const MealDetail = ({ navigation }) => {
   const meal = {
     mealImage:
@@ -98,10 +99,7 @@ const MealDetail = ({ navigation }) => {
             <TouchableOpacity onPress={() =>{
               navigation.navigate("mealReview")
             }}>
-              <Image
-                style={styles.commentIcon}
-                source={require("../../picture/commentIcon.png")}
-              />
+             <MaterialCommunityIcons name="comment-text-multiple-outline" size={24} color="white" />
             </TouchableOpacity>
           </View>
         </LinearGradient>

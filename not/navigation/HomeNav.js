@@ -27,13 +27,15 @@ const HomeNav = () => {
         headerStyle: { backgroundColor: "#E27E8A" }
       }} />
       <HomeNavigate.Screen name="mealCategories" component={Food} options={
+
         ({ route }) => ({
-          title: route.params.mealCategory, headerStyle: { backgroundColor: "#E27E8A" }
+          title: route.params.Category, headerStyle: { backgroundColor: "#E27E8A" }
         })} />
       <HomeNavigate.Screen name="mealDetail" component={MealDetail} options={{ title: "", headerStyle: { backgroundColor: "#E27E8A" } }} />
       <HomeNavigate.Screen name="mealReview" component={Review} options={{
         headerStyle: { backgroundColor: "#E27E8A" }
       }} />
+
     </HomeNavigate.Navigator>
   )
 }

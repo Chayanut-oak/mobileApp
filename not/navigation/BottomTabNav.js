@@ -14,8 +14,9 @@ import HomeNav from './HomeNav';
 import Profile from '../src/screen/Profile'
 import CreateMeal from '../src/screen/CreateMeal';
 import Notification from '../src/screen/Notification'
+import CookingNav from './CookingNav';
 const MenuTab = createBottomTabNavigator();
-const BottomTabNav = (props) => {
+const BottomTabNav = ({route , navigation}) => {
   const auth = getAuth();
   return (
     <MenuTab.Navigator
@@ -40,8 +41,8 @@ const BottomTabNav = (props) => {
       })}
     >
       <MenuTab.Screen name="MainHome" component={HomeNav} options={{ headerShown: false }} />
-      <MenuTab.Screen name="New" component={CreateMeal} initialParams={{ customProp: 'Another custom prop' }} options={{
-        headerStyle: { backgroundColor: "#E27E8A" }
+      <MenuTab.Screen name="New" component={CookingNav} initialParams={{ customProp: 'Another custom prop' }} options={{
+        headerStyle: { backgroundColor: "#E27E8A" },  headerShown: false 
       }} />
       <MenuTab.Screen name="Notification" component={Notification} options={{
         headerStyle: { backgroundColor: "#E27E8A" }
@@ -49,6 +50,8 @@ const BottomTabNav = (props) => {
       <MenuTab.Screen name={auth.currentUser.displayName} component={Profile} options={{
         headerStyle: { backgroundColor: "#E27E8A" }
       }} />
+
+
     </MenuTab.Navigator>
 
 
