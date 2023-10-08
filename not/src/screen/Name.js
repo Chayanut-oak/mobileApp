@@ -1,5 +1,5 @@
 import { Button, StyleSheet, Text, View, Image, TextInput } from 'react-native'
-import React,{ useState } from 'react'
+import React, { useState } from 'react'
 import { updateProfile } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../../Firebaseconfig'
 import { HeaderButton } from "react-navigation-header-buttons";
@@ -8,7 +8,7 @@ import { TouchableOpacity } from "react-native";
 import { getAuth } from "firebase/auth";
 import { useDispatch } from 'react-redux';
 import { saveUserData } from '../../redux/userSlice';
-const Name = ({navigation}) => {
+const Name = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const auth = FIREBASE_AUTH
@@ -21,13 +21,13 @@ const Name = ({navigation}) => {
       const res = auth.currentUser;
       await updateProfile(res, {
         displayName: displayName,
-       
+
       });
       const user = {
         displayName: displayName
       }
       dispatch(saveUserData(user));
-    
+
     } catch (error) {
       const errorMessage = error.message;
       alert(errorMessage);

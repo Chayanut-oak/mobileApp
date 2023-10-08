@@ -94,7 +94,7 @@ const Filter = (props) => {
     const veggiePairs = splitButtonIntoPairs(veggieButton)
     const seasoningPairs = splitButtonIntoPairs(seasoningButton)
     return (
-        <View style={styles.container}>
+        <View style={styles.container }>
             <ScrollView>
                 {selectPairs.map((pair, pairIndex) => (
                     <View key={pairIndex} style={styles.row} >
@@ -116,27 +116,26 @@ const Filter = (props) => {
                         ))}
                     </View>
                 ))}
-             <View style={{
+                <View style={{
                     height: 1,
                     backgroundColor: '#D1D1D1',
-                    
+
                     width: "auto"
                 }} />
                 <View style={styles.buttonContainer}>
-                
-                    <Text style={{color:'#F3F3F3',margin:5}}>Category</Text>
+
+                    <Text style={{ color: '#F3F3F3', margin: 5 }}>Category</Text>
                     {categoryPairs.map((pair, pairIndex) => (
                         <View key={pairIndex} style={styles.row} >
                             {pair.map((item, itemIndex) => (
                                 <View style={styles.item}
                                     key={itemIndex}>
                                     <TouchableOpacity
-
                                         onPress={() => handleButtonPress(item)}>
                                         <LinearGradient
                                             colors={['#DD2572', '#F02E5D']}
                                             style={[selectedButtons.includes(item) && styles.selectedButton, styles.TouchableOpacity]}>
-                                            <Text  style={{color:'#F3F3F3'}}>{item}</Text>
+                                            <Text style={{ color: '#F3F3F3' }}>{item}</Text>
                                         </LinearGradient>
 
                                     </TouchableOpacity>
@@ -150,12 +149,12 @@ const Filter = (props) => {
                         <LinearGradient
                             colors={['#DD2572', '#F02E5D']}
                             style={[styles.TouchableOpacity]}>
-                            <Text  style={{color:'#F3F3F3'}}>+</Text>
+                            <Text style={{ color: '#F3F3F3' }}>+</Text>
                         </LinearGradient>
                     </TouchableOpacity> : null}
 
 
-                    <Text  style={{color:'#F3F3F3',margin:5}}>Main Ingredient</Text>
+                    <Text style={{ color: '#F3F3F3', margin: 5 }}>Main Ingredient</Text>
                     {mainIngredientPairs.map((pair, pairIndex) => (
                         <View key={pairIndex} style={styles.row} >
                             {pair.map((item, itemIndex) => (
@@ -167,7 +166,7 @@ const Filter = (props) => {
                                         <LinearGradient
                                             colors={['#DD2572', '#F02E5D']}
                                             style={[selectedButtons.includes(item) && styles.selectedButton, styles.TouchableOpacity]}>
-                                            <Text  style={{color:'#F3F3F3'}}>{item}</Text>
+                                            <Text style={{ color: '#F3F3F3' }}>{item}</Text>
                                         </LinearGradient>
 
                                     </TouchableOpacity>
@@ -180,10 +179,10 @@ const Filter = (props) => {
                         <LinearGradient
                             colors={['#DD2572', '#F02E5D']}
                             style={[styles.TouchableOpacity]}>
-                            <Text  style={{color:'#F3F3F3'}}>+</Text>
+                            <Text style={{ color: '#F3F3F3' }}>+</Text>
                         </LinearGradient>
                     </TouchableOpacity> : null}
-                    <Text  style={{color:'#F3F3F3',margin:5}}>Vegetable and Fruit</Text>
+                    <Text style={{ color: '#F3F3F3', margin: 5 }}>Vegetable and Fruit</Text>
                     {veggiePairs.map((pair, pairIndex) => (
                         <View key={pairIndex} style={styles.row} >
                             {pair.map((item, itemIndex) => (
@@ -195,7 +194,7 @@ const Filter = (props) => {
                                         <LinearGradient
                                             colors={['#DD2572', '#F02E5D']}
                                             style={[selectedButtons.includes(item) && styles.selectedButton, styles.TouchableOpacity]}>
-                                            <Text  style={{color:'#F3F3F3'}}>{item}</Text>
+                                            <Text style={{ color: '#F3F3F3' }}>{item}</Text>
                                         </LinearGradient>
 
                                     </TouchableOpacity>
@@ -207,10 +206,10 @@ const Filter = (props) => {
                         <LinearGradient
                             colors={['#DD2572', '#F02E5D']}
                             style={[styles.TouchableOpacity]}>
-                            <Text  style={{color:'#F3F3F3'}}>+</Text>
+                            <Text style={{ color: '#F3F3F3' }}>+</Text>
                         </LinearGradient>
                     </TouchableOpacity> : null}
-                    <Text  style={{color:'#F3F3F3',margin:5}}>Seasoning</Text>
+                    <Text style={{ color: '#F3F3F3', margin: 5 }}>Seasoning</Text>
                     {seasoningPairs.map((pair, pairIndex) => (
                         <View key={pairIndex} style={styles.row} >
                             {pair.map((item, itemIndex) => (
@@ -222,7 +221,7 @@ const Filter = (props) => {
                                         <LinearGradient
                                             colors={['#DD2572', '#F02E5D']}
                                             style={[selectedButtons.includes(item) && styles.selectedButton, styles.TouchableOpacity]}>
-                                            <Text  style={{color:'#F3F3F3'}}>{item}</Text>
+                                            <Text style={{ color: '#F3F3F3' }}>{item}</Text>
                                         </LinearGradient>
 
                                     </TouchableOpacity>
@@ -235,7 +234,7 @@ const Filter = (props) => {
                         <LinearGradient
                             colors={['#DD2572', '#F02E5D']}
                             style={[styles.TouchableOpacity]}>
-                            <Text  style={{color:'#F3F3F3'}}>+</Text>
+                            <Text style={{ color: '#F3F3F3' }}>+</Text>
                         </LinearGradient>
                     </TouchableOpacity> : null}
 
@@ -265,12 +264,11 @@ const styles = StyleSheet.create({
     container: {
 
         justifyContent: 'flex-start', // Align content to the top
-   
+        height:"100%",
         backgroundColor: '#2F2C2C',
         padding: 20,
         paddingTop: 50,
-        height:660
-      },
+    },
     buttonContainer: {
         alignItems: 'flex-start',
     },
@@ -287,7 +285,7 @@ const styles = StyleSheet.create({
         marginBottom: 5
     }, centeredText: {
         textAlign: 'center', // Add this style to center the text horizontally
-        color:'white'
+        color: 'white'
     }, TouchableOpacity: {
         borderColor: 'rgba(0,0,0,0.2)',
         alignItems: 'center',

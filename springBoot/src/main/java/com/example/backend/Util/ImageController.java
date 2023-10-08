@@ -18,6 +18,9 @@ public class ImageController {
         }
         try {
             byte[] bytes = image.getBytes();
+            String base64Image = Base64.getEncoder().encodeToString(bytes);
+
+
             System.out.println(uploadPath);
             Path path = Paths.get(uploadPath +  image.getOriginalFilename());
             Files.write(path, bytes);

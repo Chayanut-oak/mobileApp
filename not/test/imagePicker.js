@@ -91,7 +91,7 @@ const ImgPicker = () => {
             }} />
             {/* <Image style={styles.image} source={{ uri: `http://${localIP}/image.jpg` }} /> */}
             <Image style={styles.image} source={{ uri:  selectedImage}} /> 
-
+            
         </View>
     );
     // ...rest of the code remains same

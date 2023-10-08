@@ -14,9 +14,10 @@ public interface MealRepository extends MongoRepository<Meal, String> {
     Meal getMealByName(String name);
     @Aggregation(pipeline = {
             "{'$match': { mealId : '?0' }}",
-            "{'$lookup': { 'from' : 'Ingredient', 'localField' : 'tags.ingredientId', 'foreignField': 'ingredientId', 'as' : 'tags' } }",
+            "{'$lookup': { 'from' : 'Ingredient', 'localField' : 'tags', 'foreignField': 'ingredientId', 'as' : 'tags' } }",
     })
     Meal findMealsWithIngredients(String id);
+
 
     @Query(value = "{}",fields = "{_id: 1, mealImage: 1, mealName: 1, mealCategory: 1, like: 1}")
     List<Meal> getAllMealsForShow();

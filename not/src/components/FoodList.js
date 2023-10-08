@@ -55,7 +55,6 @@ const FoodList = () => {
 
 const styles = StyleSheet.create({
   container: {
-
     marginTop: 10,
   },
   row: {
@@ -64,7 +63,7 @@ const styles = StyleSheet.create({
   },
   item: {
     alignItems: 'center',
-  
+
   },
   image: {
     width: 150,

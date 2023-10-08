@@ -12,10 +12,10 @@ const Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  
-  useEffect(()=>{
+
+  useEffect(() => {
     axios.get("http://localhost:8082/getMealById").then(res => console.log(res.data))
-  },[])
+  }, [])
 
 
   const handleSignIn = async () => {
@@ -31,48 +31,48 @@ const Login = ({ navigation }) => {
   };
 
   return (
-<KeyboardAwareScrollView >
-  <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        <Image
-          style={styles.image}
-          source={require('../../picture/logo.png')}
-        />
-        
+    <KeyboardAwareScrollView style={{ backgroundColor: "#2F2C2C" }}>
+      <View style={styles.container}>
+        <View style={styles.imageContainer}>
+          <Image
+            style={styles.image}
+            source={require('../../picture/logo.png')}
+          />
+
+        </View>
+
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            onChangeText={(text) => setEmail(text)}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            secureTextEntry
+            onChangeText={(text) => setPassword(text)}
+          />
+        </View>
+
+        <TouchableOpacity onPress={handleSignIn}>
+          <LinearGradient
+            colors={['#DD2572', '#F02E5D']}
+            style={styles.TouchableOpacity} >
+            <Text style={styles.Font}>SIGN IN</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+
+        <View style={{ flexDirection: 'row' }}>
+          <Text style={{ margin: 10, color: '#ffff', }}>Not a Member ?</Text>
+          <Text style={styles.forgotPasswordText} onPress={() => navigation.navigate("Register")}>
+            Sign up
+          </Text>
+        </View>
+
       </View>
+    </KeyboardAwareScrollView>
 
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          onChangeText={(text) => setEmail(text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          secureTextEntry
-          onChangeText={(text) => setPassword(text)}
-        />
-      </View>
-
-      <TouchableOpacity onPress={handleSignIn}>
-        <LinearGradient
-          colors={['#DD2572', '#F02E5D']}
-          style={styles.TouchableOpacity} >
-          <Text style={styles.Font}>SIGN IN</Text>
-        </LinearGradient>
-      </TouchableOpacity>
-
-      <View style={{ flexDirection: 'row' }}>
-        <Text style={{ margin: 10, color: '#ffff', }}>Not a Member ?</Text>
-        <Text style={styles.forgotPasswordText} onPress={() => navigation.navigate("Register")}>
-          Sign up
-        </Text>
-      </View>
-
-    </View>
-  </KeyboardAwareScrollView>
-    
   );
 };
 
@@ -84,7 +84,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#2F2C2C',
     padding: 20,
     paddingTop: 50,
-    height:660
   },
   inputContainer: {
     width: '100%',

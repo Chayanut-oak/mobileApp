@@ -6,8 +6,9 @@ import Home from '../src/screen/Home'
 import { HeaderButtons } from 'react-navigation-header-buttons'
 import CustomHeaderButton from '../src/components/CustomHeaderButton'
 import Food from '../src/screen/Food'
-import MealDetail from '../src/screen/MealDetail'
 import { FIREBASE_AUTH } from '../Firebaseconfig'
+import MealDetail from '../src/screen/MealDetail'
+import Review from '../src/screen/Review'
 
 const HomeNav = () => {
   const HomeNavigate = createNativeStackNavigator()
@@ -22,12 +23,17 @@ const HomeNav = () => {
           </HeaderButtons>)
       }
       } />
-      <HomeNavigate.Screen name="SearchScreen" component={SearchScreen} options={{ headerShown: false }} />
+      <HomeNavigate.Screen name="SearchScreen" component={SearchScreen} options={{
+        headerStyle: { backgroundColor: "#E27E8A" }
+      }} />
       <HomeNavigate.Screen name="mealCategories" component={Food} options={
-          ({ route }) => ({
-            title: route.params.mealCategory,
-          })} />
-      <HomeNavigate.Screen name="mealDetail" component={MealDetail} options={{ headerShown: false }} />
+        ({ route }) => ({
+          title: route.params.mealCategory, headerStyle: { backgroundColor: "#E27E8A" }
+        })} />
+      <HomeNavigate.Screen name="mealDetail" component={MealDetail} options={{ title: "", headerStyle: { backgroundColor: "#E27E8A" } }} />
+      <HomeNavigate.Screen name="mealReview" component={Review} options={{
+        headerStyle: { backgroundColor: "#E27E8A" }
+      }} />
     </HomeNavigate.Navigator>
   )
 }

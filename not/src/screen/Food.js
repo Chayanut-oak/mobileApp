@@ -2,15 +2,15 @@ import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import MealCategories from '../components/MealCategories'
 import SearchBar from '../components/SearchBar'
-const Food = ({route,navigation}) => {
+const Food = ({ route, navigation }) => {
   return (
     <View style={styles.container}>
-     <View style={styles.search}>
-          <SearchBar navigation={navigation}/>
-        </View>
-      <MealCategories/>
-     
-     
+      <View style={styles.search}>
+        <SearchBar navigation={navigation} />
+      </View>
+      <MealCategories navigation={navigation}/>
+      
+
     </View>
   )
 }
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   search: {
     width: '100%',
     alignItems: 'center', // Center align the button horizontally
-  },container: {
+  }, container: {
     flex: 1,
     justifyContent: 'flex-start', // Align content to the top
     backgroundColor: '#2F2C2C',
