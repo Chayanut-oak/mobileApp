@@ -12,9 +12,9 @@ import java.util.List;
 public interface MealRepository extends MongoRepository<Meal, String> {
     @Query(value = "{mealName: '?0'}")
     Meal getMealByName(String name);
-    @Aggregation(pipeline = {
-            "{'$match': { mealId : '?0' }}",
-            "{'$lookup': { 'from' : 'Ingredient', 'localField' : 'tags', 'foreignField': 'ingredientId', 'as' : 'tags' } }",
+    @Aggregation({
+            "{$match: { mealId : '?0' }}",
+            "{$lookup: { from : 'Ingredient', 'localField' : 'tags', 'foreignField': 'ingredientId', 'as' : 'tags' } }",
     })
     Meal findMealsWithIngredients(String id);
 

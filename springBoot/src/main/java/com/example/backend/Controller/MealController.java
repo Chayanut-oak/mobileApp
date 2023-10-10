@@ -38,7 +38,7 @@ public class MealController {
 
     @GetMapping(value = "/getMealDetail/{id}")
     public Meal getMealDetail(@PathVariable String id){
-        System.out.println("From controller");
+
         return mealService.findMealsWithIngredients(id);
     }
 }

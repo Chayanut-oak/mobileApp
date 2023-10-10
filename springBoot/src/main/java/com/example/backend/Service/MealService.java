@@ -33,7 +33,6 @@ public class MealService {
     }
 
     public Meal findMealsWithIngredients(String id) {
-        System.out.println("From service");
         return mealRepository.findMealsWithIngredients(id);
     }
 }

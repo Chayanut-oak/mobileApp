@@ -25,8 +25,10 @@ public class Meal implements Serializable {
 
     public Meal(){}
 
-    public Meal(String _id, String mealImage, String mealName, String mealCategory, Long like, List<Ingredient> tags, List<Object> steps, List<Object> reviews, String timestamp) {
+    public Meal(String _id, String mealId, String createdBy, String mealImage, String mealName, String mealCategory, Long like, List<Ingredient> tags, List<Object> steps, List<Object> reviews, String timestamp) {
         this._id = _id;
+        this.mealId = mealId;
+        this.createdBy = createdBy;
         this.mealImage = mealImage;
         this.mealName = mealName;
         this.mealCategory = mealCategory;
