@@ -5,7 +5,10 @@ export const userSlice = createSlice( {
   name:'user',
   initialState: {
     id:"",
-    userFullName:"" ,
+    firstName:"" ,
+    lastName:"" ,
+    userImage:"",
+    userImageName:"",
     email: "",
     displayName:"",
     favoriteMeals:[],
@@ -13,7 +16,7 @@ export const userSlice = createSlice( {
     follower:[]
 },reducers:{
   saveUserData: (state, action) => {
-    state.displayName = action.payload.displayName
+    return action.payload;
   }
 }
 })

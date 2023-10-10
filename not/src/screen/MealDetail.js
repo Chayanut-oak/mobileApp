@@ -6,139 +6,100 @@ import {
   View,
   Image,
 } from "react-native";
-import React, { useState, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import YoutubeIframe from "react-native-youtube-iframe";
 import { LinearGradient } from 'expo-linear-gradient';
-import { MaterialCommunityIcons } from '@expo/vector-icons'; 
-const MealDetail = ({ navigation }) => {
-  const meal = {
-    mealImage:null,
-    mealYoutube: "dQw4w9WgXcQ",
-    mealName: "MealTest",
-    createdBy: {
-      userId: "1",
-      userName: "createBYGu",
-      userImage:null
-    },
-    like: 23,
-    mealCategory: "Clean",
-    tags: [
-      {
-        _id: "6519b019be2ffb1449701923",
-        ingredientId:"in000",
-        ingredientCategory: "Test",
-        ingredientName: "MEAT",
-      },
-      {
-        _id: "6519b398dda6c520a813dcaf",
-        ingredientId:"in001",
-        ingredientCategory: "Test2",
-        ingredientName: "PORK",
-      },
-    ],
-    steps: [
-      {
-        image:"null",
-        text: "dnlgdlsngls;dnfglsjndfglkjndfg;ll;'dl;nl;nsdvldnfln;sg;ldnfgjlkdsn;rennd;l",
-      },
-      {
-        image: null,
-        text: "step2",
-      },
-    ],
-    reviews: [
-      {
-        userName: "Nut2",
-        userImage: "image1.png",
-        userReview: "reviews",
-      },
-      {
-        userName: "Nut0000",
-        userImage: "image1.png",
-        userReview: "re",
-      },
-    ],
-    timestamp: "03-10-2023",
-  };
-  return (
-    <View style={styles.container}>
-      <ScrollView >
-        {/* รูปข้างบน */}
-        <View style={styles.imageContainer}>
-          <Image
-            style={styles.image}
-            source={{ uri: `data:image/jpeg;base64,${meal.mealImage}` }}
-          />
-          <TouchableOpacity style={styles.favoriteIconContainer}>
-            <Image
-              style={styles.favoriteIcon}
-              source={require("../../picture/favoriteIcon.png")}
-            />
-          </TouchableOpacity>
-        </View>
-        {/* ชื่ออาหาร */}
-        <Text style={styles.mealName}>{meal.mealName}</Text>
-        {/* รายละเอียด */}
-        <LinearGradient style={styles.userCard} colors={['#707070', '#464646']}>
-          <View style={styles.userLeft}>
-            <Text style={styles.userName}>{meal.createdBy.userName}</Text>
-            <Text style={styles.timestamp}>สร้างเมื่อ {meal.timestamp}</Text>
-          </View>
-          <View style={styles.userRight}>
-            <TouchableOpacity>
-              <Image
-                style={styles.userImage}
-                source={{
-                  uri: `data:image/jpeg;base64,${meal.createdBy.userImage}`,
-                }}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() =>{
-              navigation.navigate("mealReview")
-            }}>
-             <MaterialCommunityIcons name="comment-text-multiple-outline" size={24} color="white" />
-            </TouchableOpacity>
-          </View>
-        </LinearGradient>
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useSelector } from 'react-redux';
 
-        {/* Tags */}
-        <View style={styles.tags}>
-          {meal.tags.map((tag, index) => (
-            <LinearGradient key={index} style={styles.tag}
-              colors={['#DD2572', '#F02E5D']}>
-              <Text style={{ color: "#fff" }}>
-                {tag.ingredientName}
-              </Text>
-            </LinearGradient>
-          ))}
-        </View>
-        {/* Step */}
-        <View style={styles.youtubeContainer}>
-          <Text style={styles.stepsHeader}>ขั้นตอนการทำ</Text>
-          {meal.mealYoutube ? (
-            <YoutubeIframe height={200} videoId={meal.mealYoutube} />
-          ) : null}
-          {meal.steps.map((step, index) => (
-            <View key={index} style={{ alignItems: "flex-end", }}>
-              <View style={styles.stepCard}>
-                <LinearGradient style={styles.stepNo} colors={['#DD2572', '#F02E5D']}>
-                  <Text>
-                    {index + 1}
-                  </Text>
-                </LinearGradient>
-                <View style={styles.stepDetail}>
-                  <Text style={styles.stepText}>
-                    {step.text}
-                  </Text>
-                </View>
-              </View>
-              {step.image ? <Image style={styles.stepImage} source={{ uri: `data:image/jpeg;base64,${step.image}` }} /> : null}
-            </View>
-          ))}
-        </View>
-      </ScrollView>
-    </View>
-  );
+const MealDetail = ({ navigation }) => {
+  const mealId = "VT4Xy0x1sgJiImzgo4n6"
+  const storeUser = useSelector((state) => state.user)
+  const storeMeal = useSelector((state) => state.meal)
+  const storeIngredient = useSelector((state) => state.ingredient)
+
+  console.log(storeUser)
+  console.log(storeMeal)
+  console.log(storeIngredient)
+
+  // return (
+  //   <View style={styles.container}>
+  //     <ScrollView >
+  //       {/* รูปข้างบน */}
+  //       <View style={styles.imageContainer}>
+  //         <Image
+  //           style={styles.image}
+  //           source={{ uri: meal.mealImage }}
+  //         />
+  //         <TouchableOpacity style={styles.favoriteIconContainer}>
+  //           <Image
+  //             style={styles.favoriteIcon}
+  //             source={require("../../picture/favoriteIcon.png")}
+  //           />
+  //         </TouchableOpacity>
+  //       </View>
+  //       {/* ชื่ออาหาร */}
+  //       <Text style={styles.mealName}>{meal.mealName}</Text>
+  //       {/* รายละเอียด */}
+  //       <LinearGradient style={styles.userCard} colors={['#707070', '#464646']}>
+  //         <View style={styles.userLeft}>
+  //           <Text style={styles.userName}>{meal.createdBy.userName}</Text>
+  //         </View>
+  //         <View style={styles.userRight}>
+  //           <TouchableOpacity>
+  //             <Image
+  //               style={styles.userImage}
+  //               source={{
+  //                 uri: meal.createdBy.userImage,
+  //               }}
+  //             />
+  //           </TouchableOpacity>
+  //           <TouchableOpacity onPress={() => {
+  //             navigation.navigate("mealReview")
+  //           }}>
+  //             <MaterialCommunityIcons name="comment-text-multiple-outline" size={24} color="white" />
+  //           </TouchableOpacity>
+  //         </View>
+  //       </LinearGradient>
+
+  //       {/* Tags */}
+  //       <View style={styles.tags}>
+  //         {meal.tags.map((tag, index) => (
+  //           <LinearGradient key={index} style={styles.tag}
+  //             colors={['#DD2572', '#F02E5D']}>
+  //             <Text style={{ color: "#fff" }}>
+  //               {tag.ingredientName}
+  //             </Text>
+  //           </LinearGradient>
+  //         ))}
+  //       </View>
+  //       {/* Step */}
+  //       <View style={styles.youtubeContainer}>
+  //         <Text style={styles.stepsHeader}>ขั้นตอนการทำ</Text>
+  //         {meal.mealYoutube ? (
+  //           <YoutubeIframe height={200} videoId={meal.mealYoutube} />
+  //         ) : null}
+  //         {meal.steps.map((step, index) => (
+  //           <View key={index} style={{ alignItems: "flex-end", }}>
+  //             <View style={styles.stepCard}>
+  //               <LinearGradient style={styles.stepNo} colors={['#DD2572', '#F02E5D']}>
+  //                 <Text>
+  //                   {index + 1}
+  //                 </Text>
+  //               </LinearGradient>
+  //               <View style={styles.stepDetail}>
+  //                 <Text style={styles.stepText}>
+  //                   {step.text}
+  //                 </Text>
+  //               </View>
+  //             </View>
+  //             {step.image ? <Image style={styles.stepImage} source={{ uri: step.image }} /> : null}
+  //           </View>
+  //         ))}
+  //       </View>
+  //     </ScrollView>
+  //   </View>
+  // );
 };
 
 export default MealDetail;

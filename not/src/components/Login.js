@@ -13,11 +13,6 @@ const Login = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    axios.get("http://localhost:8082/getMealById").then(res => console.log(res.data))
-  }, [])
-
-
   const handleSignIn = async () => {
     setLoading(true);
     try {

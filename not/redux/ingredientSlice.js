@@ -5,16 +5,16 @@ const ingredientSlice = createSlice( {
   name:'ingredient',
   initialState: {
     id:"",
-    ingredientId:"" ,
     ingredientCategory: "",
     ingredientName:"",
 },reducers:{
-  saveUserData: (state, action) => {
-    state.ingredientId = action.payload.ingredientId
+  saveIngredientData: (state, action) => {
+    return action.payload;
   }
 }
 })
 
-export default ingredientSlice
+export const { saveIngredientData } = ingredientSlice.actions
+export default ingredientSlice.reducer
 
 const styles = StyleSheet.create({})
