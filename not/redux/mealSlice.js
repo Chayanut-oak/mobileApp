@@ -4,12 +4,11 @@ import { createSlice } from "@reduxjs/toolkit";
 const mealSlice = createSlice({
     name: 'meal',
     initialState: {
-        id: "",
+        mealId: "",
         mealName: "",
         mealCategory: "",
-        createBy: "",
-        mealImage: "",
-        mealImageName: "",
+        createdBy: "",
+        mealImage: {},
         like: 0,
         mealYoutube: "",
         reviews: [],

@@ -19,7 +19,7 @@ const MealDetail = ({ navigation }) => {
   const storeIngredient = useSelector((state) => state.ingredient)
 
   console.log(storeUser)
-  console.log(storeMeal)
+  console.log(JSON.stringify(storeMeal))
   console.log(storeIngredient)
 
   // return (

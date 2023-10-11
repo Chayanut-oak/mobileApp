@@ -4,11 +4,10 @@ import { createSlice } from "@reduxjs/toolkit";
 export const userSlice = createSlice( {
   name:'user',
   initialState: {
-    id:"",
+    userId:"",
     firstName:"" ,
     lastName:"" ,
-    userImage:"",
-    userImageName:"",
+    userImage:{},
     email: "",
     displayName:"",
     favoriteMeals:[],

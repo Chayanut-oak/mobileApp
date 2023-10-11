@@ -4,7 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const ingredientSlice = createSlice( {
   name:'ingredient',
   initialState: {
-    id:"",
+    ingredientId:"",
     ingredientCategory: "",
     ingredientName:"",
 },reducers:{

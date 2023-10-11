@@ -26,49 +26,52 @@ const MainNavigate = () => {
     const storeUser = useSelector((state) => state.user)
     const storeMeal = useSelector((state) => state.meal)
     const storeIngredient = useSelector((state) => state.ingredient)
-    const [meals, setMeals] = useState(null)
-    const [users, setUsers] = useState(null)
-    const [ingredients, setIngredients] = useState(null)
+    const [meals, setMeals] = useState([])
+    const [users, setUsers] = useState([])
+    const [ingredients, setIngredients] = useState([])
     useEffect(() => {
         onAuthStateChanged(FIREBASE_AUTH, (user) => {
             try {
                 setUserToken(user ? user.stsTokenManager : null);
+                const allIngredientSnapshot = onSnapshot(collection(FIRE_STORE, 'ingredients'), (collect) => {
+                    const allIngredients = collect.docs.map((doc) => ({ ingredientId: doc.id, ...doc.data() }));
+                    setIngredients(allIngredients);
+                    dispatch(saveIngredientData(allIngredients))
+                }, (error) => {
+                    console.log(error);
+                });
+                const allUserSnapshot = onSnapshot(collection(FIRE_STORE, 'users'), (collect) => {
+                    const allUsers = collect.docs.map((doc) => ({ userId: doc.id, ...doc.data() }));
+                    setUsers(allUsers);
+                    dispatch(saveUserData(allUsers))
+                }, (error) => {
+                    console.log(error);
+                });
 
                 const allMealSnapshot = onSnapshot(collection(FIRE_STORE, 'meals'), (collect) => {
-                    const allMeals = collect.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-
+                    const allMeals = collect.docs.map((doc) => ({ mealId: doc.id, ...doc.data() }));
                     // Link ingredients to meals
                     const linkedMeals = allMeals.map((meal) => {
                         const linkedIngredients = meal.tags.map((ingredientId) => {
-                            return ingredients.find((ingredient) => ingredient.id === ingredientId);
+                            return ingredients.find((ingredient) => ingredient.ingredientId === ingredientId);
                         });
-                        return { ...meal, ingredients: linkedIngredients };
+                        return { ...meal, tags: linkedIngredients };
                     });
 
                     // Link createdBy to user
                     const linkedMealsWithUsers = linkedMeals.map((meal) => {
-                        const createdByUser = users.find((user) => user.id === meal.createdBy);
+                        const createdByUser = users.find((user) => user.userId === meal.createdBy);
                         return { ...meal, createdBy: createdByUser };
                     });
-
                     setMeals(linkedMealsWithUsers);
+                    dispatch(saveMealData(linkedMealsWithUsers))
                 }, (error) => {
                     console.log(error);
                 });
 
-                const allIngredientSnapshot = onSnapshot(collection(FIRE_STORE, 'ingredients'), (collect) => {
-                    const allIngredients = collect.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-                    setIngredients(allIngredients);
-                }, (error) => {
-                    console.log(error);
-                });
 
-                const allUserSnapshot = onSnapshot(collection(FIRE_STORE, 'users'), (collect) => {
-                    const allUsers = collect.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-                    setUsers(allUsers);
-                }, (error) => {
-                    console.log(error);
-                });
+
+
             } catch (e) {
                 console.log(e);
             }
@@ -76,9 +79,7 @@ const MainNavigate = () => {
 
         })
     }, [displayname])
-    console.log(meals)
-    console.log(users)
-    console.log(ingredients)
+    
     return (
 
         <NavigationContainer>
