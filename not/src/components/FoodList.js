@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
 
 const FoodList = () => {
@@ -40,11 +40,13 @@ const FoodList = () => {
         <View key={pairIndex} style={styles.row}>
           {pair.map((item, itemIndex) => (
             <View key={itemIndex} style={styles.item}>
-              <Image
-                style={styles.image}
-                source={item.mealImage}
-              />
-              <Text style={styles.title}>{item.mealName}</Text>
+              <TouchableOpacity>
+                <Image
+                  style={styles.image}
+                  source={item.mealImage}
+                />
+                <Text style={styles.title}>{item.mealName}</Text>
+              </TouchableOpacity>
             </View>
           ))}
         </View>

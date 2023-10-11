@@ -10,95 +10,95 @@ import React, { useState, useEffect } from "react";
 import YoutubeIframe from "react-native-youtube-iframe";
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 const MealDetail = ({ navigation }) => {
   const mealId = "VT4Xy0x1sgJiImzgo4n6"
-  const storeUser = useSelector((state) => state.user)
   const storeMeal = useSelector((state) => state.meal)
-  const storeIngredient = useSelector((state) => state.ingredient)
-  const [meal, setMeal] = useState({})
-  useEffect(()=>{
-    setMeal(storeMeal.find(meal=> meal.mealId == mealId))
-  },[])
-  // return (
-  //   <View style={styles.container}>
-  //     <ScrollView >
-  //       {/* รูปข้างบน */}
-  //       <View style={styles.imageContainer}>
-  //         <Image
-  //           style={styles.image}
-  //           source={{ uri: meal.mealImage }}
-  //         />
-  //         <TouchableOpacity style={styles.favoriteIconContainer}>
-  //           <Image
-  //             style={styles.favoriteIcon}
-  //             source={require("../../picture/favoriteIcon.png")}
-  //           />
-  //         </TouchableOpacity>
-  //       </View>
-  //       {/* ชื่ออาหาร */}
-  //       <Text style={styles.mealName}>{meal.mealName}</Text>
-  //       {/* รายละเอียด */}
-  //       <LinearGradient style={styles.userCard} colors={['#707070', '#464646']}>
-  //         <View style={styles.userLeft}>
-  //           <Text style={styles.userName}>{meal.createdBy.userName}</Text>
-  //         </View>
-  //         <View style={styles.userRight}>
-  //           <TouchableOpacity>
-  //             <Image
-  //               style={styles.userImage}
-  //               source={{
-  //                 uri: meal.createdBy.userImage,
-  //               }}
-  //             />
-  //           </TouchableOpacity>
-  //           <TouchableOpacity onPress={() => {
-  //             navigation.navigate("mealReview")
-  //           }}>
-  //             <MaterialCommunityIcons name="comment-text-multiple-outline" size={24} color="white" />
-  //           </TouchableOpacity>
-  //         </View>
-  //       </LinearGradient>
+  const dispatch = useDispatch();
+  const [meal, setMeal] = useState(null)
+  useEffect(() => {
+    const selectedMeal = storeMeal.find(item => item.mealId === mealId);
+    setMeal(selectedMeal)
+    console.log(meal)
+  }, [meal])
+  
+  if(!meal){
+    return(
+      <Text>Loading</Text>
+    )
+  }
+  return (
+    <View style={styles.container}>
+      <ScrollView >
+        <View style={styles.imageContainer}>
+          <Image
+            style={styles.image}
+            source={meal.mealImage.imagePath ? { uri: meal.mealImage.imagePath } : require("../../picture/image.png")}
+          />
+          <TouchableOpacity style={styles.favoriteIconContainer}>
+            <Image
+              style={styles.favoriteIcon}
+              source={require("../../picture/favoriteIcon.png")}
+            />
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.mealName}>{meal.mealName}</Text>
+        <LinearGradient style={styles.userCard} colors={['#707070', '#464646']}>
+          <View style={styles.userLeft}>
+            <Text style={styles.userName}>{meal.createdBy.displayName}</Text>
+          </View>
+          <View style={styles.userRight}>
+            <TouchableOpacity>
+              <Image
+                style={styles.userImage}
+                source={meal.createdBy.userImage.imagePath ? { uri: meal.createdBy.userImage.imagePath } : require("../../picture/image.png")}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+              navigation.navigate("mealReview")
+            }}>
+              <MaterialCommunityIcons name="comment-text-multiple-outline" size={24} color="white" />
+            </TouchableOpacity>
+          </View>
+        </LinearGradient>
 
-  //       {/* Tags */}
-  //       <View style={styles.tags}>
-  //         {meal.tags.map((tag, index) => (
-  //           <LinearGradient key={index} style={styles.tag}
-  //             colors={['#DD2572', '#F02E5D']}>
-  //             <Text style={{ color: "#fff" }}>
-  //               {tag.ingredientName}
-  //             </Text>
-  //           </LinearGradient>
-  //         ))}
-  //       </View>
-  //       {/* Step */}
-  //       <View style={styles.youtubeContainer}>
-  //         <Text style={styles.stepsHeader}>ขั้นตอนการทำ</Text>
-  //         {meal.mealYoutube ? (
-  //           <YoutubeIframe height={200} videoId={meal.mealYoutube} />
-  //         ) : null}
-  //         {meal.steps.map((step, index) => (
-  //           <View key={index} style={{ alignItems: "flex-end", }}>
-  //             <View style={styles.stepCard}>
-  //               <LinearGradient style={styles.stepNo} colors={['#DD2572', '#F02E5D']}>
-  //                 <Text>
-  //                   {index + 1}
-  //                 </Text>
-  //               </LinearGradient>
-  //               <View style={styles.stepDetail}>
-  //                 <Text style={styles.stepText}>
-  //                   {step.text}
-  //                 </Text>
-  //               </View>
-  //             </View>
-  //             {step.image ? <Image style={styles.stepImage} source={{ uri: step.image }} /> : null}
-  //           </View>
-  //         ))}
-  //       </View>
-  //     </ScrollView>
-  //   </View>
-  // );
+        <View style={styles.tags}>
+          {meal.tags.map((tag, index) => (
+            <LinearGradient key={index} style={styles.tag}
+              colors={['#DD2572', '#F02E5D']}>
+              <Text style={{ color: "#fff" }}>
+                {tag.ingredientName}
+              </Text>
+            </LinearGradient>
+          ))}
+        </View>
+        <View style={styles.youtubeContainer}>
+          <Text style={styles.stepsHeader}>ขั้นตอนการทำ</Text>
+          {meal.mealYoutube ? (
+            <YoutubeIframe height={200} videoId={meal.mealYoutube} />
+          ) : null}
+          {meal.steps.map((step, index) => (
+            <View key={index} style={{ alignItems: "flex-end", }}>
+              <View style={styles.stepCard}>
+                <LinearGradient style={styles.stepNo} colors={['#DD2572', '#F02E5D']}>
+                  <Text>
+                    {index + 1}
+                  </Text>
+                </LinearGradient>
+                <View style={styles.stepDetail}>
+                  <Text style={styles.stepText}>
+                    {step.text}
+                  </Text>
+                </View>
+              </View>
+              {step.image ? <Image style={styles.stepImage} source={{ uri: step.stepImage }} /> : null}
+            </View>
+          ))}
+        </View>
+      </ScrollView>
+    </View>
+  );
 };
 
 export default MealDetail;

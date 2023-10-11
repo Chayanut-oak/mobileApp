@@ -49,7 +49,7 @@ const MealCategories = ({ navigation }) => {
           showsHorizontalScrollIndicator={false}
           renderItem={({ item, index }) => (
             <TouchableOpacity onPress={() => {
-              navigation.navigate("mealDetail")
+              navigation.navigate("mealDetail", {mealId:""})
             }}>
               <View key={index} style={styles.item}>
                 <Image
