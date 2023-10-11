@@ -17,11 +17,10 @@ const MealDetail = ({ navigation }) => {
   const storeUser = useSelector((state) => state.user)
   const storeMeal = useSelector((state) => state.meal)
   const storeIngredient = useSelector((state) => state.ingredient)
-
-  console.log(storeUser)
-  console.log(JSON.stringify(storeMeal))
-  console.log(storeIngredient)
-
+  const [meal, setMeal] = useState({})
+  useEffect(()=>{
+    setMeal(storeMeal.find(meal=> meal.mealId == mealId))
+  },[])
   // return (
   //   <View style={styles.container}>
   //     <ScrollView >
