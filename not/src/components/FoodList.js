@@ -4,17 +4,30 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 const FoodList = () => {
   const storeMeal = useSelector((state) => state.meal)
+  const [imagePairs, setImagePairs] = useState([])
+  useEffect(() => {
+    if (storeMeal.length != 0) {
+      let array = [...storeMeal]
+      setImagePairs(splitImagesIntoPairs(shuffle(array)))
+    }
+  }, [storeMeal])
+
+  const shuffle = (array) => {
+    return array.sort(() => Math.random() - 0.5);
+  };
+
+
+
   const splitImagesIntoPairs = (images) => {
     const pairs = [];
     for (let i = 0; i < 4; i += 2) {
       const pair = images.slice(i, i + 2);
       pairs.push(pair);
     }
+    console.log(JSON.stringify(pairs))
     return pairs;
   };
 
-
-  const imagePairs = splitImagesIntoPairs(storeMeal);
 
   return (
     <View style={styles.container}>
@@ -36,6 +49,8 @@ const FoodList = () => {
     </View>
   );
 };
+
+
 
 const styles = StyleSheet.create({
   container: {
