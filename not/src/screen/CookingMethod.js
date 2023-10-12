@@ -1,5 +1,5 @@
 import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View, Image, Button } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
 import { MaterialIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
@@ -8,6 +8,8 @@ import { FIRE_STORE, FIRE_STORAGE } from '../../Firebaseconfig';
 import { collection, onSnapshot } from 'firebase/firestore';
 import Modal from "react-native-modal";
 import { getDownloadURL, ref, uploadBytes, deleteObject } from 'firebase/storage';
+import { useDispatch, useSelector } from 'react-redux';
+import { saveMethodData } from '../../redux/cookingMethodSlice';
 const CookingMethod = () => {
   const mealsCollection = collection(FIRE_STORE, "meals")
   const [step, setStep] = useState([])
@@ -16,16 +18,28 @@ const CookingMethod = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);
   const [Result, setResult] = useState();
+  const [link, setLink] = useState('');
+  const methodStore = useSelector((state) => state.cook)
+  const cookingMethod = useSelector((state) => state.cook.cookingMethod)
+  const dispatch = useDispatch()
+  console.log(methodStore)
   const handleRemoveItem = (stepDetail) => {
 
     setStep(step.filter((item, index) => index !== stepDetail));
 
   };
-  const handleSetStep = () => {
 
+  useEffect(() => {
+    dispatch(saveMethodData(step))
+  }, [step]);
+  console.log(step)
+  console.log(detail)
+  const handleSetStep = () => {
     { setStep([...step, { image: selectedImage, stepDetail: detail }]) }
+    dispatch(saveMethodData(step))
     setDetail('')
     setSelectedImage(null)
+
   };
 
   const handleUpdateStep = (stepIndex) => {
@@ -91,7 +105,6 @@ const CookingMethod = () => {
 
   const uploadImage = async (imageIndex) => {
     if (selectedImage != null) {
-      console.log('ทำงานนนนนนนนนนนนน')
       const blob = await new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.onload = function () {
@@ -117,10 +130,18 @@ const CookingMethod = () => {
 
 
   return (
+
     <View style={styles.container}>
       <Text style={{ color: 'white' }}>ขั้นตอนการทำ</Text>
+      <View style={styles.stepCard2}>
+        <View style={styles.stepDetail2}>
+          <TextInput style={styles.stepText} placeholder='แนบลิ้งที่เกี่ยวข้อง' onChangeText={setLink} >
+          </TextInput>
+        </View>
+
+      </View>
       <FlatList
-        data={step}
+        data={cookingMethod}
         renderItem={({ item, index }) => (
           <View key={index} style={{ alignItems: "flex-end", }}>
             {item.image != null ? <TouchableOpacity onPress={() => { newImage(index) }} style={{ alignSelf: 'center' }}>
@@ -210,11 +231,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 15
-  }, stepCard1: {
+  },
+  stepCard1: {
     display: "flex",
     flexDirection: "row",
 
-    alignItems: "center",
+
+    justifyContent: "center",
+    marginTop: 15
+  },
+  stepCard2: {
+    display: "flex",
+    flexDirection: "row",
+
+
     justifyContent: "center",
     marginTop: 15
   },
@@ -261,6 +291,13 @@ const styles = StyleSheet.create({
     marginLeft: -20,
 
     zIndex: -2,
+    borderRadius: 20,
+    backgroundColor: "#fff"
+  }, stepDetail2: {
+    width: '100%',
+    paddingTop: 10,
+    padding: 15,
+    paddingLeft: 20,
     borderRadius: 20,
     backgroundColor: "#fff"
   },

@@ -35,6 +35,7 @@ const MainNavigate = () => {
                 setUserToken(user ? user.stsTokenManager : null);
                 const allIngredientSnapshot = onSnapshot(collection(FIRE_STORE, 'ingredients'), (collect) => {
                     const allIngredients = collect.docs.map((doc) => ({ ingredientId: doc.id, ...doc.data() }));
+            
                     setIngredients(allIngredients);
                     dispatch(saveIngredientData(allIngredients))
                 }, (error) => {

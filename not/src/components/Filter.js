@@ -1,10 +1,18 @@
-import { StyleSheet, Text, View, TouchableOpacity, FlatList, Button, TextInput, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, Button, TextInput, ScrollView, Image } from 'react-native'
 import React from 'react'
 import { useState, useEffect } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import Modal from "react-native-modal";
 import axios from 'axios';
+import { FIRE_STORE } from '../../Firebaseconfig';
+import { collection, addDoc } from "firebase/firestore";
+import * as ImagePicker from 'expo-image-picker';
+import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { saveMethodData } from '../../redux/cookingMethodSlice';
+import { saveMethodImageData } from '../../redux/cookingMethodSlice';
 const Filter = (props) => {
+    const dispatch = useDispatch();
     const [selectedButtons, setSelectedButtons] = useState([]);
     const [isModalVisible, setModalVisible] = useState(false);
     const [modalName, setModalName] = useState('');
@@ -13,24 +21,30 @@ const Filter = (props) => {
     const [categoryInput, setCategoryInput] = useState('');
     const [veggieInput, setVeggieInput] = useState('');
     const [mainInput, setMainInput] = useState('');
+    const [storeIngredient, setStoreIngredient] = useState(useSelector((state) => state.ingredient));
+    const [selectedImage, setSelectedImage] = useState(null);
+    useEffect(() => {
+        if (storeIngredient) {
+            const arra = storeIngredient.filter((item) => item.ingredientCategory == "วัถุดิบหลัก");
+            setMainIngredientButton(arra.map(item => item.ingredientName));
+            const arra2 = storeIngredient.filter((item) => item.ingredientCategory == "ผักและผลไม้");
+            setVeggieButton(arra2.map(item => item.ingredientName));
+            const arra3 = storeIngredient.filter((item) => item.ingredientCategory == "หมวดหมู่");
+            setCategoryButton(arra3.map(item => item.ingredientName));
+            const arra4 = storeIngredient.filter((item) => item.ingredientCategory == "เครื่องปรุง");
+            setSeasoningButton(arra4.map(item => item.ingredientName));
+        }
+    }, [storeIngredient]);
+    useEffect(() => {
+        dispatch(saveMethodImageData({ mainImage: selectedImage, tag: selectedButtons }))
+    }, [selectedImage, selectedButtons]);
     const [categoryButton, setCategoryButton] = useState([
         'Clean',
         'Soup',
     ]);
-    const [mainIngredientButton, setMainIngredientButton] = useState([
-        'Pork Belly',
-
-        'Teen Chicken',
-    ]);
-    const [veggieButton, setVeggieButton] = useState(['pukchi',
-
-        'tonhom',
-    ]);
-    const [seasoningButton, setSeasoningButton] = useState([
-        'numpra',
-        'numprik'
-
-    ]);
+    const [mainIngredientButton, setMainIngredientButton] = useState([]);
+    const [veggieButton, setVeggieButton] = useState([]);
+    const [seasoningButton, setSeasoningButton] = useState([]);
 
     const handleButtonPress = (buttonText) => {
         if (selectedButtons.includes(buttonText)) {
@@ -39,7 +53,7 @@ const Filter = (props) => {
         } else {
             setSelectedButtons([...selectedButtons, buttonText]);
         }
-        console.log(props.filter)
+
     };
     const handleButtonUnpress = (buttonText) => {
         setSelectedButtons(selectedButtons.filter((text) => text !== buttonText));
@@ -66,7 +80,7 @@ const Filter = (props) => {
         }
     };
 
-    const handleAdd = () => {
+    const handleAdd = async () => {
         if (seasoningInput.trim() !== '') {
             setSeasoningButton([...seasoningButton, seasoningInput]);
             setSeasoningInput('');
@@ -82,22 +96,14 @@ const Filter = (props) => {
         }
         const data = {
             ingredientId: null,
-            ingredientCategory: categoryInput ? 'category' : mainInput ? 'mainIngredient' : veggieInput ? "veggie&Fruit" : seasoningInput ? 'seasoning' : null,
+            ingredientCategory: categoryInput ? 'หมวดหมู่' : mainInput ? 'วัถุดิบหลัก' : veggieInput ? "ผักและผลไม้" : seasoningInput ? 'เครื่องปรุง' : null,
             ingredientName: categoryInput ? categoryInput : mainInput ? mainInput : veggieInput ? veggieInput : seasoningInput ? seasoningInput : null,
         }
+        await addDoc(collection(FIRE_STORE, "ingredients"), {
+            ingredientCategory: data.ingredientCategory,
+            ingredientName: data.ingredientName,
 
-        axios
-            .post("http://192.168.1.130:8080/addIngredient", data, {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            })
-            .then((response) => {
-                console.log(response)
-            })
-            .catch((error) => {
-                alert(error.response.data)
-            });
+        });
     };
     const splitButtonIntoPairs = (button) => {
         const pairs = [];
@@ -107,6 +113,22 @@ const Filter = (props) => {
         }
         return pairs;
     };
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1
+        });
+        if (!result.canceled) {
+            setSelectedImage(result.assets[0].uri);
+
+        }
+    };
+    const navigation = useNavigation();
+    const navigateToTargetScreen = () => {
+        navigation.navigate('TargetScreen', { selectedImage });
+    };
     const selectPairs = splitButtonIntoPairs(selectedButtons);
     const categoryPairs = splitButtonIntoPairs(categoryButton);
     const mainIngredientPairs = splitButtonIntoPairs(mainIngredientButton)
@@ -115,7 +137,15 @@ const Filter = (props) => {
     return (
         <ScrollView style={{ backgroundColor: '#2F2C2C' }}>
             <View style={styles.container}>
-                <View style={{ flexDirection: 'row' }}>
+
+                <TouchableOpacity onPress={() => pickImage()}>
+                    <View style={{ width: 300, height: 200, backgroundColor: '#888888', alignSelf: 'center', marginBottom: 15 }}>
+                        <Image style={{ width: '100%', height: '100%', resizeMode: 'contain', borderRadius: 20 }} source={{ uri: selectedImage }} ></Image>
+                    </View>
+                </TouchableOpacity>
+
+                {props.New == 'New' ? <View style={{ flexDirection: 'row' }}>
+
                     <Text style={{ color: 'white', flex: 1, alignSelf: 'center' }}>ชื่อเมนู:</Text>
                     <TextInput
                         style={styles.input2}
@@ -123,7 +153,7 @@ const Filter = (props) => {
 
                         onChangeText={(text) => setMealName(text)}
                     />
-                </View>
+                </View> : null}
                 {selectPairs.map((pair, pairIndex) => (
                     <View key={pairIndex} style={styles.row} >
                         {pair.map((item, itemIndex) => (
@@ -262,9 +292,8 @@ const Filter = (props) => {
                             <Text style={{ color: '#F3F3F3' }}>+</Text>
                         </LinearGradient>
                     </TouchableOpacity> : null}
-
                     <Modal isVisible={isModalVisible}>
-                        <View style={{ width: 200, height: 200, backgroundColor: '#ffff', justifyContent: 'center', alignSelf: 'center', alignItems: 'center' }}>
+                        <View style={{ width: 200, height: 200, backgroundColor: '#2F2C2C', justifyContent: 'center', alignSelf: 'center', alignItems: 'center' }}>
                             <View style={styles.inputContainer}>
                                 <TextInput
                                     style={styles.input}
@@ -273,8 +302,12 @@ const Filter = (props) => {
                                     ref={(input) => { this.textInputRef = input; }}
                                 />
                             </View>
-                            <Button title={modalName} onPress={() => { handleAdd(), this.textInputRef.clear(); }} />
-                            <Button title="Hide modal" onPress={handelModal} />
+                            <View style={styles.buttonModal}>
+                                <Button color="#DD2572" title={modalName} onPress={() => { handleAdd(), this.textInputRef.clear(); }} />
+                            </View>
+                            <View style={styles.buttonModal}>
+                                <Button color="#DD2572" title="Cancel" onPress={handelModal} />
+                            </View>
                         </View>
                     </Modal>
                 </View>
@@ -348,5 +381,8 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         borderRadius: 50,
         textAlign: 'center'
-    },
+    },buttonModal: {
+        width: "80%",
+        marginTop: 10
+    }
 })
