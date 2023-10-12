@@ -1,24 +1,85 @@
 import { Button, StyleSheet, Text, View, Image, TextInput } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { updateProfile } from 'firebase/auth';
-import { FIREBASE_AUTH } from '../../Firebaseconfig'
+import { FIREBASE_AUTH, FIRE_STORE, FIRE_STORAGE } from '../../Firebaseconfig'
 import { HeaderButton } from "react-navigation-header-buttons";
 import { LinearGradient } from 'expo-linear-gradient';
 import { TouchableOpacity } from "react-native";
 import { getAuth } from "firebase/auth";
 import { useDispatch } from 'react-redux';
 import { saveUserData } from '../../redux/userSlice';
+import { collection, doc, setDoc, updateDoc } from 'firebase/firestore';
+import * as ImagePicker from 'expo-image-picker';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 const Name = ({ navigation }) => {
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
   const auth = FIREBASE_AUTH
 
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [imageObj, setImageObj] = useState({});
   const [displayName, setDisplayName] = useState('');
+  const [userId, setUserId] = useState("")
+  useEffect(() => {
+    if (Object.keys(imageObj).length != 0) {
+      const collectRef = collection(FIRE_STORE, "users")
+      const userRef = doc(collectRef, userId)
+      updateDoc(userRef, {
+        "displayName": displayName,
+        "userImage": imageObj,
+      });
+    }
+  }, [imageObj])
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1
+    });
+    if (!result.canceled) {
+      setSelectedImage(result.assets[0].uri);
+    }
+  };
+  const fetchImage = async (filename) => {
+    try {
+      const reference = ref(FIRE_STORAGE, `/userImages/${filename}`);
+      const imageUrl = await getDownloadURL(reference);
+      setImageObj({ imageName: filename, imagePath: imageUrl })
+    } catch (error) {
+      console.error('Error fetching image:', error);
+    }
+  };
+  const uploadImage = async () => {
+    if (selectedImage != null) {
+      const blob = await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+          resolve(xhr.response);
+        };
+        xhr.onerror = function () {
+          reject(new TypeError('Network request failed'));
+        };
+        xhr.responseType = 'blob';
+        xhr.open('GET', selectedImage, true);
+        xhr.send(null);
+      });
+      const filename = selectedImage.substring(selectedImage.lastIndexOf('/') + 1);
+      const imageStorageRef = ref(FIRE_STORAGE, 'userImages/' + filename);
+      await uploadBytes(imageStorageRef, blob, {
+        contentType: 'image/jpeg',
+      });
+      fetchImage(filename)
+    }
 
+
+  };
   const handleDisplayName = async () => {
     try {
       const auth = getAuth();
       const res = auth.currentUser;
+      setUserId(res.uid)
+
       await updateProfile(res, {
         displayName: displayName,
 
@@ -26,11 +87,21 @@ const Name = ({ navigation }) => {
       const user = {
         displayName: displayName
       }
+      // dispatch(saveUserData(user));
       dispatch(saveUserData(user));
+      if (displayName != '' && selectedImage != null) {
+        await uploadImage()
+      } else if (displayName != '') {
+        const collectRef = collection(FIRE_STORE, "users")
+        const userRef = doc(collectRef, userId)
+        updateDoc(userRef, {
+          "displayName": displayName,
+        });
+      }
 
     } catch (error) {
       const errorMessage = error.message;
-      alert(errorMessage);
+      // alert(errorMessage);
     }
   };
 
@@ -42,9 +113,9 @@ const Name = ({ navigation }) => {
           <View style={styles.imageContainer}>
             <Image
               style={styles.image}
-              source={require('../../picture/image.png')}
+              source={selectedImage ? { uri: selectedImage } : require('../../picture/image.png')}
             />
-            <TouchableOpacity >
+            <TouchableOpacity onPress={pickImage}>
               <Image
                 style={styles.imagemini}
                 source={require('../../picture/addimage.png')}
@@ -97,7 +168,8 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 175,
-    height: 170,
+    height: 175,
+    borderRadius: 100
   },
   imagemini: {
     position: 'absolute',

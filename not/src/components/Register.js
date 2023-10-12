@@ -1,33 +1,46 @@
 import React, { useState } from 'react';
-import { View, Button, TextInput, Text, StyleSheet,Image } from 'react-native';
+import { View, Button, TextInput, Text, StyleSheet, Image } from 'react-native';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { NavigationProp, Route } from '@react-navigation/native';
-import { FIREBASE_AUTH } from '../../Firebaseconfig';
+import { FIREBASE_AUTH, FIRE_STORE } from '../../Firebaseconfig';
 import { TouchableOpacity } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import { saveuser } from '../../asyncStorage/asyncStorage';
+import { doc, setDoc, collection } from 'firebase/firestore';
+
 const auth = FIREBASE_AUTH
 
 
-const Register = ({navigation}) => {
+const Register = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSignUp = async () => {
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
-      console.log(res.user.uid)
-      saveuser(res.user.uid)
+      const userData = {
+        userId: res.user.uid,
+        firstName: "",
+        lastName: "",
+        userImage: {},
+        email: email,
+        displayName: "",
+        favoriteMeals: [],
+        followed: [],
+        follower: []
+      }
+      await setDoc(doc(FIRE_STORE, 'users', res.user.uid), userData);
+
       alert("success")
 
     } catch (error) {
       const errorMessage = error.message;
       alert(errorMessage);
     }
-};
-return (
+  };
+  return (
     <View style={styles.container}>
-        <View style={styles.imageContainer}>
+      <View style={styles.imageContainer}>
         <Image
           style={styles.image}
           source={require('../../picture/logo.png')}
@@ -35,18 +48,18 @@ return (
       </View>
       <View style={styles.inputContainer}>
         <TextInput
-        style={styles.input}
-        placeholder="Email"
-        onChangeText={(text) => setEmail(text)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry
-        onChangeText={(text) => setPassword(text)}
-      />
+          style={styles.input}
+          placeholder="Email"
+          onChangeText={(text) => setEmail(text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          secureTextEntry
+          onChangeText={(text) => setPassword(text)}
+        />
       </View>
-      
+
       <TouchableOpacity onPress={handleSignUp}>
         <LinearGradient
           colors={['#DD2572', '#F02E5D']}
@@ -96,7 +109,7 @@ const styles = StyleSheet.create({
     height: 40,
     backgroundColor: '#fff',
     borderRadius: 50,
-  },forgotPasswordText: {
+  }, forgotPasswordText: {
     marginTop: 10,
     color: '#E57373',
     textDecorationLine: 'underline',

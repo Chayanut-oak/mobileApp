@@ -17,38 +17,49 @@ import { collection, doc, onSnapshot, query } from "firebase/firestore";
 import { saveMealData } from '../redux/mealSlice';
 import { saveUserData } from '../redux/userSlice';
 import { saveIngredientData } from '../redux/ingredientSlice';
+import { saveAllUserData } from '../redux/allUserSlice';
 const MainNavigate = () => {
     const dispatch = useDispatch();
     const displayname = useSelector((state) => state.user.displayName)
     const auth = getAuth();
     const Mainnavigate = createNativeStackNavigator();
     const [user, setUserToken] = useState(null)
+
+    const [meals, setMeals] = useState([])
+    const [allUser, setAllUser] = useState([])
+    const [curUser, setCurUser] = useState({})
+    const [ingredients, setIngredients] = useState([])
+
     const storeUser = useSelector((state) => state.user)
+    const storeAllUser = useSelector((state) => state.allUser)
     const storeMeal = useSelector((state) => state.meal)
     const storeIngredient = useSelector((state) => state.ingredient)
-    const [meals, setMeals] = useState([])
-    const [users, setUsers] = useState([])
-    const [ingredients, setIngredients] = useState([])
+
     useEffect(() => {
         onAuthStateChanged(FIREBASE_AUTH, (user) => {
             try {
                 setUserToken(user ? user.stsTokenManager : null);
+
+                const userSnapshot = onSnapshot(doc(FIRE_STORE, 'users', user.uid), (doc) => {
+                    dispatch(saveUserData(doc.data()));
+                })
+
                 const allIngredientSnapshot = onSnapshot(collection(FIRE_STORE, 'ingredients'), (collect) => {
                     const allIngredients = collect.docs.map((doc) => ({ ingredientId: doc.id, ...doc.data() }));
-            
                     setIngredients(allIngredients);
-                    dispatch(saveIngredientData(allIngredients))
                 }, (error) => {
                     console.log(error);
                 });
+                
                 const allUserSnapshot = onSnapshot(collection(FIRE_STORE, 'users'), (collect) => {
-                    const allUsers = collect.docs.map((doc) => ({ userId: doc.id, ...doc.data() }));
-                    setUsers(allUsers);
-                    dispatch(saveUserData(allUsers))
+                    const allUserDoc = collect.docs.map((doc) => ({ ...doc.data() }));
+
+                    setAllUser(allUserDoc);
+                    // console.log(allUserDoc)
                 }, (error) => {
                     console.log(error);
                 });
-
+                
                 const allMealSnapshot = onSnapshot(collection(FIRE_STORE, 'meals'), (collect) => {
                     const allMeals = collect.docs.map((doc) => ({ mealId: doc.id, ...doc.data() }));
                     // Link ingredients to meals
@@ -58,10 +69,9 @@ const MainNavigate = () => {
                         });
                         return { ...meal, tags: linkedIngredients };
                     });
-
                     // Link createdBy to user
                     const linkedMealsWithUsers = linkedMeals.map((meal) => {
-                        const createdByUser = users.find((user) => user.userId === meal.createdBy);
+                        const createdByUser = allUser.find((user) => user.userId === meal.createdBy);
                         return { ...meal, createdBy: createdByUser };
                     });
                     setMeals(linkedMealsWithUsers);
@@ -70,17 +80,19 @@ const MainNavigate = () => {
                     console.log(error);
                 });
 
+                dispatch(saveIngredientData(ingredients))
+                dispatch(saveAllUserData(allUser))
+                
 
-
-
+                // console.log(storeAllUser)
             } catch (e) {
-                console.log(e);
+                console.log("From Main Navigate:", e);
             }
             //query database 
 
         })
-    }, [displayname])
-    
+    }, [displayname, storeMeal])
+
     return (
 
         <NavigationContainer>
@@ -88,7 +100,6 @@ const MainNavigate = () => {
                 {!user ? <Mainnavigate.Screen name="Authen" component={Authentication} options={{ headerStyle: { backgroundColor: "#E27E8A" } }} /> : displayname == "" && !auth.currentUser.displayName
                     ? <Mainnavigate.Screen name="Name" component={Name} options={{ headerStyle: { backgroundColor: "#E27E8A" } }} />
                     : <Mainnavigate.Screen name="homeWithBottom" component={BottomTabNav} options={{ headerShown: false }} />}
-
             </Mainnavigate.Navigator>
         </NavigationContainer>
     )

@@ -1,20 +1,28 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { createSlice } from "@reduxjs/toolkit";
-const ingredientSlice = createSlice( {
-  name:'ingredient',
-  initialState: {
-    ingredientId:"",
+const ingredientSlice = createSlice({
+  name: 'ingredient',
+  initialState:
+  {
+    ingredientId: "",
     ingredientCategory: "",
-    ingredientName:"",
-},reducers:{
-  saveIngredientData: (state, action) => {
-    return action.payload;
+    ingredientName: "",
   }
-}
+  , reducers: {
+    saveIngredientData: (state, action) => {
+      return action.payload;
+    }
+  }
 })
 
 export const { saveIngredientData } = ingredientSlice.actions
 export default ingredientSlice.reducer
 
 const styles = StyleSheet.create({})
+
+// {
+//   ingredientId: "",
+//   ingredientCategory: "",
+//   ingredientName: "",
+// }
