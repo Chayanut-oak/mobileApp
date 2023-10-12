@@ -10,9 +10,10 @@ import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveMethodData } from '../../redux/cookingMethodSlice';
-import { saveMethodImageData } from '../../redux/cookingMethodSlice';
-const Filter = (props) => {
+import { saveMethodImageData,resetDataToFalse } from '../../redux/cookingMethodSlice';
+const Filter = (props,{route}) => {
     const dispatch = useDispatch();
+    const cookStore = useSelector((state) => state.cook)
     const [selectedButtons, setSelectedButtons] = useState([]);
     const [isModalVisible, setModalVisible] = useState(false);
     const [modalName, setModalName] = useState('');
@@ -23,6 +24,7 @@ const Filter = (props) => {
     const [mainInput, setMainInput] = useState('');
     const [storeIngredient, setStoreIngredient] = useState(useSelector((state) => state.ingredient));
     const [selectedImage, setSelectedImage] = useState(null);
+ 
     useEffect(() => {
         if (storeIngredient) {
             const arra = storeIngredient.filter((item) => item.ingredientCategory == "วัถุดิบหลัก");
@@ -36,12 +38,29 @@ const Filter = (props) => {
         }
     }, [storeIngredient]);
     useEffect(() => {
-        dispatch(saveMethodImageData({ mainImage: selectedImage, tag: selectedButtons }))
-    }, [selectedImage, selectedButtons]);
+        if(selectedImage != null){
+            var filename = selectedImage.substring(selectedImage.lastIndexOf('/') + 1);
+        }
+        
+        dispatch(saveMethodImageData({ mainImage: selectedImage,imageName: filename, tag: selectedButtons, mealName:meallName }))
+
+    }, [selectedImage, selectedButtons,meallName]);
+
+
+    // useEffect(() => {
+    //     if(cookStore.reset == true){
+    //         setSelectedButtons([])
+    //         setMealName('')
+    //         setSelectedImage(null)
+    //         dispatch(resetDataToFalse(false))
+    //     }
+    // }, [cookStore]);
+
     const [categoryButton, setCategoryButton] = useState([
         'Clean',
         'Soup',
     ]);
+    
     const [mainIngredientButton, setMainIngredientButton] = useState([]);
     const [veggieButton, setVeggieButton] = useState([]);
     const [seasoningButton, setSeasoningButton] = useState([]);
@@ -59,6 +78,7 @@ const Filter = (props) => {
         setSelectedButtons(selectedButtons.filter((text) => text !== buttonText));
 
     };
+    
     const handelModal = () => {
         setModalVisible(!isModalVisible);
         setModalName('');
@@ -125,6 +145,8 @@ const Filter = (props) => {
 
         }
     };
+    
+ 
     const navigation = useNavigation();
     const navigateToTargetScreen = () => {
         navigation.navigate('TargetScreen', { selectedImage });
@@ -134,15 +156,16 @@ const Filter = (props) => {
     const mainIngredientPairs = splitButtonIntoPairs(mainIngredientButton)
     const veggiePairs = splitButtonIntoPairs(veggieButton)
     const seasoningPairs = splitButtonIntoPairs(seasoningButton)
+
     return (
         <ScrollView style={{ backgroundColor: '#2F2C2C' }}>
             <View style={styles.container}>
 
-                <TouchableOpacity onPress={() => pickImage()}>
+            {props.New == 'New' ? <TouchableOpacity onPress={() => pickImage()}>
                     <View style={{ width: 300, height: 200, backgroundColor: '#888888', alignSelf: 'center', marginBottom: 15 }}>
                         <Image style={{ width: '100%', height: '100%', resizeMode: 'contain', borderRadius: 20 }} source={{ uri: selectedImage }} ></Image>
                     </View>
-                </TouchableOpacity>
+                </TouchableOpacity>: null}
 
                 {props.New == 'New' ? <View style={{ flexDirection: 'row' }}>
 
@@ -150,9 +173,10 @@ const Filter = (props) => {
                     <TextInput
                         style={styles.input2}
                         placeholder="Name"
-
+                       
                         onChangeText={(text) => setMealName(text)}
                     />
+                    
                 </View> : null}
                 {selectPairs.map((pair, pairIndex) => (
                     <View key={pairIndex} style={styles.row} >

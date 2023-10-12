@@ -10,82 +10,84 @@ import Modal from "react-native-modal";
 import { getDownloadURL, ref, uploadBytes, deleteObject } from 'firebase/storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveMethodData } from '../../redux/cookingMethodSlice';
+import { delMethodData,updateMethodData ,updateImageData,updateImagePathData} from '../../redux/cookingMethodSlice';
 const CookingMethod = () => {
   const mealsCollection = collection(FIRE_STORE, "meals")
+  const cookingMethod = useSelector((state) => state.cook.steps)
   const [step, setStep] = useState([])
   const [detail, setDetail] = useState('')
   const [currentDetail, setCurrentDetail] = useState('')
   const [selectedImage, setSelectedImage] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [Result, setResult] = useState();
+  const [Result, setResult] = useState('');
   const [link, setLink] = useState('');
   const methodStore = useSelector((state) => state.cook)
-  const cookingMethod = useSelector((state) => state.cook.cookingMethod)
-  const dispatch = useDispatch()
-  console.log(methodStore)
-  const handleRemoveItem = (stepDetail) => {
 
-    setStep(step.filter((item, index) => index !== stepDetail));
+  const dispatch = useDispatch() 
 
+  const handleRemoveItem = async(stepDetail) => {
+    const imageToDelete = cookingMethod[stepDetail].stepImage.stepImageName ;
+    if(imageToDelete != null){
+    const reference = ref(FIRE_STORAGE, '/stepImages/' + imageToDelete);
+    await deleteObject(reference);
+    }
+    dispatch(delMethodData(cookingMethod.filter((item, index) => index !== stepDetail)))
   };
+  // useEffect(() => {
+  //     dispatch(saveMethodData(step))
 
-  useEffect(() => {
-    dispatch(saveMethodData(step))
-  }, [step]);
-  console.log(step)
-  console.log(detail)
-  const handleSetStep = () => {
-    { setStep([...step, { image: selectedImage, stepDetail: detail }]) }
-    dispatch(saveMethodData(step))
+  // }, [step,cookingMethod]);
+
+  const handleSetStep = async(filename) => {
+    if(filename){
+       var reference = ref(FIRE_STORAGE, '/stepImages/' + filename)
+       const imageUrl = await getDownloadURL(reference);
+       { dispatch(saveMethodData( {stepDetail:detail,stepImage:{ stepImageName: filename , stepImagePath: imageUrl}})) }
+    }else{
+       { dispatch(saveMethodData( {stepDetail:detail,stepImage:{ stepImageName: null , stepImagePath: null}})) }
+    }
     setDetail('')
     setSelectedImage(null)
-
   };
+
+
 
   const handleUpdateStep = (stepIndex) => {
-    setStep((prevStep) => {
-      const updatedStep = [...prevStep];
-      updatedStep[stepIndex].stepDetail = currentDetail;
-      return updatedStep;
-    });
-
+    dispatch(updateMethodData( [cookingMethod[stepIndex].stepDetail= currentDetail , stepIndex]))
   };
+ 
   const newImage = async (imageIndex) => {
-
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
-    setResult(result)
+    const filename = result.assets[0].uri.substring(result.assets[0].uri.lastIndexOf('/') + 1);
+    setResult(filename)
     setSelectedImage(result.assets[0].uri);
-    console.log(Result)
     setModalVisible(true)
   }
-
+  // 34165f1b-4e39-4c9e-98a6-55962cb92cf9.jpe
 
   const handleUpdateImage = async (imageIndex) => {
-
     try {
-      const imageToDelete = step[imageIndex].image;
-      const oldImage = imageToDelete.substring(imageToDelete.lastIndexOf('/') + 1);
-      const reference = ref(FIRE_STORAGE, 'stepImages/' + oldImage);
+      const imageToDelete = cookingMethod[imageIndex].stepImage.stepImageName ;
+      const reference = ref(FIRE_STORAGE, '/stepImages/' + imageToDelete);
+     
       await deleteObject(reference);
-      console.log(selectedImage)
+    
       if (!Result.canceled) {
-        setStep((prevStep) => {
-          const updatedStep = [...prevStep];
-          updatedStep[imageIndex].image = Result.assets[0].uri;
-          return updatedStep;
-        });
+        const reference2 = ref(FIRE_STORAGE, '/stepImages/' + Result)
+        const imageUrl = await getDownloadURL(reference2);
+        dispatch(updateImageData( [cookingMethod[imageIndex].stepImage.stepImageName = Result , imageIndex]))
+        dispatch(updateImagePathData( [cookingMethod[imageIndex].stepImage.stepImagePath = imageUrl , imageIndex]))
       }
-
     } catch (error) {
       console.log(error);
-
     }
   };
+  // 8de15ee8-0ec5-4226-b085-3f3ce470a59e.jpeg
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -104,7 +106,7 @@ const CookingMethod = () => {
   }
 
   const uploadImage = async (imageIndex) => {
-    if (selectedImage != null) {
+   
       const blob = await new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.onload = function () {
@@ -124,8 +126,10 @@ const CookingMethod = () => {
       });
       setSelectedImage(null);
       setModalVisible(false)
-    }
-
+      if(imageIndex != 'new'){
+           handleSetStep(filename)
+      }
+   
   };
 
 
@@ -138,16 +142,15 @@ const CookingMethod = () => {
           <TextInput style={styles.stepText} placeholder='แนบลิ้งที่เกี่ยวข้อง' onChangeText={setLink} >
           </TextInput>
         </View>
-
       </View>
       <FlatList
         data={cookingMethod}
         renderItem={({ item, index }) => (
           <View key={index} style={{ alignItems: "flex-end", }}>
-            {item.image != null ? <TouchableOpacity onPress={() => { newImage(index) }} style={{ alignSelf: 'center' }}>
+            {item.stepImage.stepImagePath != null ? <TouchableOpacity onPress={() => { newImage(index) }} style={{ alignSelf: 'center' }}>
               <View style={{ width: 300, height: 200 }}>
-                <Image style={{ width: '100%', height: '100%', resizeMode: 'contain', borderRadius: 20 }} source={{ uri: item.image }}></Image>
-
+                <Image style={{ width: '100%', height: '100%', resizeMode: 'contain', borderRadius: 20 }} source={{ uri: item.stepImage.stepImagePath }}></Image>
+                                  
               </View>
             </TouchableOpacity> : null}
 
@@ -176,7 +179,7 @@ const CookingMethod = () => {
 
             <Modal isVisible={isModalVisible}>
               <View style={{ width: 200, height: 200, backgroundColor: '#ffff', justifyContent: 'center', alignSelf: 'center', alignItems: 'center' }}>
-                <Button title='YES' onPress={() => { uploadImage(index), handleUpdateImage(index) }} />
+                <Button title='YES' onPress={() => { uploadImage('new'), handleUpdateImage(index) }} />
                 <Button title="Kotowaru" onPress={handelModal} />
               </View>
             </Modal>
@@ -186,7 +189,7 @@ const CookingMethod = () => {
 
 
       <View style={styles.stepCard1}>
-        <TouchableOpacity onPress={() => { handleSetStep(), uploadImage() }}>
+        <TouchableOpacity onPress={() => {  selectedImage != null ? uploadImage(): handleSetStep() }}>
           <LinearGradient style={styles.stepNo1} colors={['#DD2572', '#F02E5D']}>
             <Text>
               <MaterialIcons name="add" size={24} color="black" />
