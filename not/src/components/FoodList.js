@@ -1,49 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
-
+import { useSelector } from 'react-redux';
 const FoodList = () => {
-  const [images, setImages] = useState([
-    {
-      mealImage: require('../../picture/crab.jpg'),
-      mealName: 'ปู',
-    },
-    {
-      mealImage: require('../../picture/crab.jpg'),
-      mealName: 'ปู',
-    },
-    {
-      mealImage: require('../../picture/crab.jpg'),
-      mealName: 'ปู',
-    },
-    {
-      mealImage: require('../../picture/crab.jpg'),
-      mealName: 'ปู',
-    },
-  ]);
-
-
+  const storeMeal = useSelector((state) => state.meal)
   const splitImagesIntoPairs = (images) => {
     const pairs = [];
-    for (let i = 0; i < images.length; i += 2) {
+    for (let i = 0; i < 4; i += 2) {
       const pair = images.slice(i, i + 2);
       pairs.push(pair);
     }
     return pairs;
   };
 
-  const imagePairs = splitImagesIntoPairs(images);
+
+  const imagePairs = splitImagesIntoPairs(storeMeal);
 
   return (
     <View style={styles.container}>
       {imagePairs.map((pair, pairIndex) => (
         <View key={pairIndex} style={styles.row}>
           {pair.map((item, itemIndex) => (
-            <View key={itemIndex} style={styles.item}>
-              <TouchableOpacity>
+            <View key={itemIndex} >
+              <TouchableOpacity style={styles.item}>
                 <Image
                   style={styles.image}
-                  source={item.mealImage}
+                  source={item.mealImage.imagePath ? { uri: item.mealImage.imagePath } : require("../../picture/image.png")}
                 />
                 <Text style={styles.title}>{item.mealName}</Text>
               </TouchableOpacity>

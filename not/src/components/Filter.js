@@ -10,8 +10,8 @@ import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveMethodData } from '../../redux/cookingMethodSlice';
-import { saveMethodImageData,resetDataToFalse } from '../../redux/cookingMethodSlice';
-const Filter = (props,{route}) => {
+import { saveMethodImageData, resetDataToFalse } from '../../redux/cookingMethodSlice';
+const Filter = (props, { route }) => {
     const dispatch = useDispatch();
     const cookStore = useSelector((state) => state.cook)
     const [selectedButtons, setSelectedButtons] = useState([]);
@@ -22,11 +22,11 @@ const Filter = (props,{route}) => {
     const [categoryInput, setCategoryInput] = useState('');
     const [veggieInput, setVeggieInput] = useState('');
     const [mainInput, setMainInput] = useState('');
-    const [storeIngredient, setStoreIngredient] = useState(useSelector((state) => state.ingredient));
     const [selectedImage, setSelectedImage] = useState(null);
- 
+    const storeIngredient = useSelector((state) => state.ingredient);
+
     useEffect(() => {
-        if (storeIngredient) {
+        if (storeIngredient.length != 0) {
             const arra = storeIngredient.filter((item) => item.ingredientCategory == "วัถุดิบหลัก");
             setMainIngredientButton(arra.map(item => item.ingredientName));
             const arra2 = storeIngredient.filter((item) => item.ingredientCategory == "ผักและผลไม้");
@@ -38,13 +38,13 @@ const Filter = (props,{route}) => {
         }
     }, [storeIngredient]);
     useEffect(() => {
-        if(selectedImage != null){
+        if (selectedImage != null) {
             var filename = selectedImage.substring(selectedImage.lastIndexOf('/') + 1);
         }
-        
-        dispatch(saveMethodImageData({ mainImage: selectedImage,imageName: filename, tag: selectedButtons, mealName:meallName }))
 
-    }, [selectedImage, selectedButtons,meallName]);
+        dispatch(saveMethodImageData({ mainImage: selectedImage, imageName: filename, tag: selectedButtons, mealName: meallName }))
+
+    }, [selectedImage, selectedButtons, meallName]);
 
 
     // useEffect(() => {
@@ -56,11 +56,7 @@ const Filter = (props,{route}) => {
     //     }
     // }, [cookStore]);
 
-    const [categoryButton, setCategoryButton] = useState([
-        'Clean',
-        'Soup',
-    ]);
-    
+    const [categoryButton, setCategoryButton] = useState([]);
     const [mainIngredientButton, setMainIngredientButton] = useState([]);
     const [veggieButton, setVeggieButton] = useState([]);
     const [seasoningButton, setSeasoningButton] = useState([]);
@@ -78,7 +74,7 @@ const Filter = (props,{route}) => {
         setSelectedButtons(selectedButtons.filter((text) => text !== buttonText));
 
     };
-    
+
     const handelModal = () => {
         setModalVisible(!isModalVisible);
         setModalName('');
@@ -119,11 +115,13 @@ const Filter = (props,{route}) => {
             ingredientCategory: categoryInput ? 'หมวดหมู่' : mainInput ? 'วัถุดิบหลัก' : veggieInput ? "ผักและผลไม้" : seasoningInput ? 'เครื่องปรุง' : null,
             ingredientName: categoryInput ? categoryInput : mainInput ? mainInput : veggieInput ? veggieInput : seasoningInput ? seasoningInput : null,
         }
-        await addDoc(collection(FIRE_STORE, "ingredients"), {
-            ingredientCategory: data.ingredientCategory,
-            ingredientName: data.ingredientName,
+        if (data.ingredientName != null) {
+            await addDoc(collection(FIRE_STORE, "ingredients"), {
+                ingredientCategory: data.ingredientCategory,
+                ingredientName: data.ingredientName,
 
-        });
+            });
+        }
     };
     const splitButtonIntoPairs = (button) => {
         const pairs = [];
@@ -145,8 +143,8 @@ const Filter = (props,{route}) => {
 
         }
     };
-    
- 
+
+
     const navigation = useNavigation();
     const navigateToTargetScreen = () => {
         navigation.navigate('TargetScreen', { selectedImage });
@@ -161,11 +159,11 @@ const Filter = (props,{route}) => {
         <ScrollView style={{ backgroundColor: '#2F2C2C' }}>
             <View style={styles.container}>
 
-            {props.New == 'New' ? <TouchableOpacity onPress={() => pickImage()}>
+                {props.New == 'New' ? <TouchableOpacity onPress={() => pickImage()}>
                     <View style={{ width: 300, height: 200, backgroundColor: '#888888', alignSelf: 'center', marginBottom: 15 }}>
                         <Image style={{ width: '100%', height: '100%', resizeMode: 'contain', borderRadius: 20 }} source={{ uri: selectedImage }} ></Image>
                     </View>
-                </TouchableOpacity>: null}
+                </TouchableOpacity> : null}
 
                 {props.New == 'New' ? <View style={{ flexDirection: 'row' }}>
 
@@ -173,10 +171,10 @@ const Filter = (props,{route}) => {
                     <TextInput
                         style={styles.input2}
                         placeholder="Name"
-                       
+
                         onChangeText={(text) => setMealName(text)}
                     />
-                    
+
                 </View> : null}
                 {selectPairs.map((pair, pairIndex) => (
                     <View key={pairIndex} style={styles.row} >
@@ -405,7 +403,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         borderRadius: 50,
         textAlign: 'center'
-    },buttonModal: {
+    }, buttonModal: {
         width: "80%",
         marginTop: 10
     }

@@ -3,18 +3,7 @@ import React from 'react'
 import { createSlice } from "@reduxjs/toolkit";
 const mealSlice = createSlice({
     name: 'meal',
-    initialState: {
-            mealId: "",
-            mealName: "",
-            mealCategory: "",
-            createdBy: "",
-            mealImage: {},
-            like: 0,
-            mealYoutube: "",
-            reviews: [],
-            steps: [],
-            tags: []
-        }
+    initialState: []
     , reducers: {
             saveMealData: (state, action) => {
                 return action.payload;
