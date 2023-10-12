@@ -3,12 +3,7 @@ import React from 'react'
 import { createSlice } from "@reduxjs/toolkit";
 const ingredientSlice = createSlice({
   name: 'ingredient',
-  initialState:
-  {
-    ingredientId: "",
-    ingredientCategory: "",
-    ingredientName: "",
-  }
+  initialState:[]
   , reducers: {
     saveIngredientData: (state, action) => {
       return action.payload;

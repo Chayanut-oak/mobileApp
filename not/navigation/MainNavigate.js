@@ -25,10 +25,10 @@ const MainNavigate = () => {
     const Mainnavigate = createNativeStackNavigator();
     const [user, setUserToken] = useState(null)
 
-    const [meals, setMeals] = useState([])
-    const [allUser, setAllUser] = useState([])
-    const [curUser, setCurUser] = useState({})
-    const [ingredients, setIngredients] = useState([])
+    // const [meals, setMeals] = useState([])
+    // const [allUser, setAllUser] = useState([])
+    // const [curUser, setCurUser] = useState({})
+    // const [ingredients, setIngredients] = useState([])
 
     const storeUser = useSelector((state) => state.user)
     const storeAllUser = useSelector((state) => state.allUser)
@@ -39,27 +39,27 @@ const MainNavigate = () => {
         onAuthStateChanged(FIREBASE_AUTH, (user) => {
             try {
                 setUserToken(user ? user.stsTokenManager : null);
-
-                const userSnapshot = onSnapshot(doc(FIRE_STORE, 'users', user.uid), (doc) => {
-                    dispatch(saveUserData(doc.data()));
-                })
-
+                let ingredients
+                let allUser
                 const allIngredientSnapshot = onSnapshot(collection(FIRE_STORE, 'ingredients'), (collect) => {
                     const allIngredients = collect.docs.map((doc) => ({ ingredientId: doc.id, ...doc.data() }));
-                    setIngredients(allIngredients);
+                    dispatch(saveIngredientData(allIngredients))
+                    ingredients = allIngredients
                 }, (error) => {
                     console.log(error);
                 });
-                
-                const allUserSnapshot = onSnapshot(collection(FIRE_STORE, 'users'), (collect) => {
-                    const allUserDoc = collect.docs.map((doc) => ({ ...doc.data() }));
 
-                    setAllUser(allUserDoc);
-                    // console.log(allUserDoc)
+                const allUserSnapshot = onSnapshot(collection(FIRE_STORE, 'users'), (collect) => {
+                    // const curUserDoc = collect.docs.find((doc) => doc.data().userId == user.uid)
+                    const allUserDoc = collect.docs.map((doc) => ({ ...doc.data() }));
+                    const curUserDoc = allUserDoc.find(item => item.userId == user.uid)
+                    dispatch(saveAllUserData(allUserDoc))
+                    dispatch(saveUserData(curUserDoc));
+                    allUser = allUserDoc
                 }, (error) => {
                     console.log(error);
                 });
-                
+
                 const allMealSnapshot = onSnapshot(collection(FIRE_STORE, 'meals'), (collect) => {
                     const allMeals = collect.docs.map((doc) => ({ mealId: doc.id, ...doc.data() }));
                     // Link ingredients to meals
@@ -74,25 +74,35 @@ const MainNavigate = () => {
                         const createdByUser = allUser.find((user) => user.userId === meal.createdBy);
                         return { ...meal, createdBy: createdByUser };
                     });
-                    setMeals(linkedMealsWithUsers);
-                    dispatch(saveMealData(linkedMealsWithUsers))
+                    dispatch(saveMealData(linkedMealsWithUsers));
                 }, (error) => {
                     console.log(error);
                 });
 
-                dispatch(saveIngredientData(ingredients))
-                dispatch(saveAllUserData(allUser))
-                
 
-                // console.log(storeAllUser)
+                // console.log(meals)
+                return () => {
+                    if (allMealSnapshot) {
+                        allMealSnapshot();
+                    }
+                    if (allUserSnapshot) {
+                        allUserSnapshot();
+                    }
+                    if (allIngredientSnapshot) {
+                        allIngredientSnapshot();
+                    }
+                };
+
             } catch (e) {
                 console.log("From Main Navigate:", e);
             }
             //query database 
-
         })
-    }, [displayname, storeMeal])
-
+    }, [])
+    // console.log("storeUser", storeUser)
+    // console.log("storeAllUser", storeAllUser)
+    // console.log("storeMeal", storeMeal)
+    // console.log("storeIngredient", storeIngredient)
     return (
 
         <NavigationContainer>

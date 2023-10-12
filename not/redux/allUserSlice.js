@@ -3,17 +3,7 @@ import React from 'react'
 import { createSlice } from "@reduxjs/toolkit";
 const allUserSlice = createSlice({
     name: 'allUser',
-    initialState: [{
-        userId: "",
-        firstName: "",
-        lastName: "",
-        userImage: {},
-        email: "",
-        displayName: "",
-        favoriteMeals: [],
-        followed: [],
-        follower: []
-    }], reducers: {
+    initialState: [], reducers: {
         saveAllUserData: (state, action) => {
             return action.payload;
         }
