@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity, FlatList, Button, TextInput, ScrollView } from 'react-native'
 import React from 'react'
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import Modal from "react-native-modal";
 import axios from 'axios';
@@ -81,23 +81,23 @@ const Filter = (props) => {
             setCategoryInput('');
         }
         const data = {
-            ingredientId:null,
-            ingredientCategory: categoryInput ?'category': mainInput ? 'mainIngredient':veggieInput?"veggie&Fruit":seasoningInput?'seasoning':null,
-            ingredientName:categoryInput ?categoryInput: mainInput ? mainInput:veggieInput?veggieInput:seasoningInput?seasoningInput:null,
+            ingredientId: null,
+            ingredientCategory: categoryInput ? 'category' : mainInput ? 'mainIngredient' : veggieInput ? "veggie&Fruit" : seasoningInput ? 'seasoning' : null,
+            ingredientName: categoryInput ? categoryInput : mainInput ? mainInput : veggieInput ? veggieInput : seasoningInput ? seasoningInput : null,
         }
-    
+
         axios
-        .post("http://192.168.1.130:8080/addIngredient", data, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-        .then((response) => {
-            console.log(response)
-        })
-        .catch((error) => {
-            alert(error.response.data)
-        });
+            .post("http://192.168.1.130:8080/addIngredient", data, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+            .then((response) => {
+                console.log(response)
+            })
+            .catch((error) => {
+                alert(error.response.data)
+            });
     };
     const splitButtonIntoPairs = (button) => {
         const pairs = [];
@@ -113,14 +113,14 @@ const Filter = (props) => {
     const veggiePairs = splitButtonIntoPairs(veggieButton)
     const seasoningPairs = splitButtonIntoPairs(seasoningButton)
     return (
-        <View style={styles.container }>
-            <ScrollView>
-                <View style={{flexDirection:'row'}}>
-                    <Text style={{color:'white',flex:1,alignSelf:'center' }}>ชื่อเมนู:</Text>
+        <ScrollView style={{ backgroundColor: '#2F2C2C' }}>
+            <View style={styles.container}>
+                <View style={{ flexDirection: 'row' }}>
+                    <Text style={{ color: 'white', flex: 1, alignSelf: 'center' }}>ชื่อเมนู:</Text>
                     <TextInput
                         style={styles.input2}
                         placeholder="Name"
-                       
+
                         onChangeText={(text) => setMealName(text)}
                     />
                 </View>
@@ -278,8 +278,8 @@ const Filter = (props) => {
                         </View>
                     </Modal>
                 </View>
-            </ScrollView>
-        </View>
+            </View>
+        </ScrollView>
     );
 }
 
@@ -289,8 +289,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'flex-start', // Align content to the top
-
-        height:"100%",
+        height: "100%",
         backgroundColor: '#2F2C2C',
         padding: 20,
         paddingTop: 50,
@@ -328,7 +327,7 @@ const styles = StyleSheet.create({
     },
     input2: {
         width: '100%',
-        flex:6,
+        flex: 6,
         height: 40,
         backgroundColor: '#D9D9D9',
         borderWidth: 1,
@@ -339,9 +338,9 @@ const styles = StyleSheet.create({
     }, row: {
         flexDirection: 'row',
 
-    },input: {
+    }, input: {
         width: '100%',
-     
+
         height: 40,
         backgroundColor: '#D9D9D9',
         borderWidth: 1,

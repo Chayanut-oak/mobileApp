@@ -22,15 +22,15 @@ const MealDetail = ({ navigation }) => {
     setMeal(selectedMeal)
     console.log(meal)
   }, [meal])
-  
-  if(!meal){
-    return(
+
+  if (!meal) {
+    return (
       <Text>Loading</Text>
     )
   }
   return (
-    <View style={styles.container}>
-      <ScrollView >
+    <ScrollView >
+      <View style={styles.container}>
         <View style={styles.imageContainer}>
           <Image
             style={styles.image}
@@ -88,16 +88,16 @@ const MealDetail = ({ navigation }) => {
                 </LinearGradient>
                 <View style={styles.stepDetail}>
                   <Text style={styles.stepText}>
-                    {step.text}
+                    {step.stepDetail}
                   </Text>
                 </View>
               </View>
-              {step.image ? <Image style={styles.stepImage} source={{ uri: step.stepImage }} /> : null}
+              {step.stepImage ? <Image style={styles.stepImage} source={{ uri: step.stepImage }} /> : null}
             </View>
           ))}
         </View>
-      </ScrollView>
-    </View>
+      </View>
+    </ScrollView>
   );
 };
 

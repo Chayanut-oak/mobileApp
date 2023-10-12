@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image,TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { useState } from 'react';
 const Recommend = ({ navigation }) => {
@@ -11,9 +11,9 @@ const Recommend = ({ navigation }) => {
   ]);
   return (
     <View style={{ alignItems: 'center' }}>
+      <Text style={{ paddingRight: 190, color: '#C5C5C5', marginBottom: 10 }}>Recommend</Text>
       {Recommend.map((item, index) => (
         <View key={index} style={{ alignItems: 'center', width: 300, marginTop: 10 }}>
-          <Text style={{ paddingRight: 190, color: '#C5C5C5', marginBottom: 10 }}>Recommend</Text>
           <TouchableOpacity>
             <Image
               style={{

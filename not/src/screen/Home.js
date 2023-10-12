@@ -11,17 +11,17 @@ import SearchBar from '../components/SearchBar';
 const Home = ({ navigation }) => {
 
   return (
-    <View style={styles.container}>
-      <ScrollView>
+    <ScrollView>
+      <View style={styles.container}>
         <View style={styles.search}>
-          <SearchBar navigation={navigation}/>
+          <SearchBar navigation={navigation} />
         </View>
 
-        <Category navigation={navigation}/>
+        <Category navigation={navigation} />
         <Recommend />
         <FoodList />
-      </ScrollView>
-    </View>
+      </View>
+    </ScrollView>
   );
 };
 
@@ -39,5 +39,5 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center', // Center align the button horizontally
   },
-  
+
 });
