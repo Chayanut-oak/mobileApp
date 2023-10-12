@@ -9,15 +9,21 @@ import Food from '../src/screen/Food'
 import { FIREBASE_AUTH } from '../Firebaseconfig'
 import MealDetail from '../src/screen/MealDetail'
 import Review from '../src/screen/Review'
+import { useDispatch } from 'react-redux'
+import { saveUserData } from '../redux/userSlice'
 
 const HomeNav = () => {
+  const dispatch = useDispatch();
   const HomeNavigate = createNativeStackNavigator()
   return (
     <HomeNavigate.Navigator >
       <HomeNavigate.Screen name="Home" component={Home} options={{
         headerStyle: { backgroundColor: "#E27E8A" }, headerRight: () => (
           <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-            <Text onPress={() => FIREBASE_AUTH.signOut()}>
+            <Text onPress={() => {
+              dispatch(saveUserData({}))
+              FIREBASE_AUTH.signOut()
+              }}>
               Exit
             </Text>
           </HeaderButtons>)

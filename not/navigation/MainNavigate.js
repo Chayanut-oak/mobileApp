@@ -24,12 +24,6 @@ const MainNavigate = () => {
     const auth = getAuth();
     const Mainnavigate = createNativeStackNavigator();
     const [user, setUserToken] = useState(null)
-
-    // const [meals, setMeals] = useState([])
-    // const [allUser, setAllUser] = useState([])
-    // const [curUser, setCurUser] = useState({})
-    // const [ingredients, setIngredients] = useState([])
-
     const storeUser = useSelector((state) => state.user)
     const storeAllUser = useSelector((state) => state.allUser)
     const storeMeal = useSelector((state) => state.meal)
@@ -52,9 +46,11 @@ const MainNavigate = () => {
                 const allUserSnapshot = onSnapshot(collection(FIRE_STORE, 'users'), (collect) => {
                     // const curUserDoc = collect.docs.find((doc) => doc.data().userId == user.uid)
                     const allUserDoc = collect.docs.map((doc) => ({ ...doc.data() }));
-                    const curUserDoc = allUserDoc.find(item => item.userId == user.uid)
+                    if (user) { 
+                        const curUserDoc = allUserDoc.find(item => item.userId == user.uid) 
+                        dispatch(saveUserData(curUserDoc));
+                    }
                     dispatch(saveAllUserData(allUserDoc))
-                    dispatch(saveUserData(curUserDoc));
                     allUser = allUserDoc
                 }, (error) => {
                     console.log(error);
