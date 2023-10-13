@@ -28,7 +28,7 @@ const CookingNav = ({ route, navigation }) => {
     });
     dispatch(resetData({
       createdBy: '',
-      like: '',
+      like: 0,
       mealName: '',
       mealYoutube: '',
       mealImage: {},

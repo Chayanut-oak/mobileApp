@@ -5,7 +5,7 @@ const cookingMethodSlice = createSlice({
   name: 'cooking',
   initialState: {
     createdBy: '',
-    like: '',
+    like: 0,
     mealName: '',
     mealYoutube: '',
     mealImage: {},

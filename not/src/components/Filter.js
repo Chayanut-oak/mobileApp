@@ -4,12 +4,13 @@ import { useState, useEffect } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import Modal from "react-native-modal";
 import axios from 'axios';
-import { FIRE_STORE } from '../../Firebaseconfig';
+import { FIRE_STORE, FIRE_STORAGE } from '../../Firebaseconfig';
 import { collection, addDoc } from "firebase/firestore";
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveMethodData } from '../../redux/cookingMethodSlice';
+import { getDownloadURL, ref, uploadBytes, deleteObject } from 'firebase/storage';
 import { saveMethodImageData, resetDataToFalse, saveMethodTagsData, saveMethodMealNameData, delMethodTagsData } from '../../redux/cookingMethodSlice';
 const Filter = (props, { route }) => {
     const dispatch = useDispatch();
@@ -120,21 +121,64 @@ const Filter = (props, { route }) => {
         }
         return pairs;
     };
-    
+
     const pickImage = async () => {
+
+        if (cookStore.mealImage.imagePath) {
+            const imageToDelete = cookStore.mealImage.imageName ;
+            const reference = ref(FIRE_STORAGE, '/mealsImages/' + imageToDelete);
+           
+            await deleteObject(reference);
+            dispatch(saveMethodImageData({ mainImage: null, imageName: null }))
+
+        }
+
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
             aspect: [4, 3],
             quality: 1
         });
+
         if (!result.canceled) {
+            uploadImage(result.assets[0].uri)
+            // var filename = result.assets[0].uri.substring(result.assets[0].uri.lastIndexOf('/') + 1);
 
-            var filename = result.assets[0].uri.substring(result.assets[0].uri.lastIndexOf('/') + 1);
-
-            dispatch(saveMethodImageData({ mainImage: result.assets[0].uri, imageName: filename }))
-            setSelectedImage(null)
+            // dispatch(saveMethodImageData({ mainImage: result.assets[0].uri, imageName: filename }))
+            // setSelectedImage(null)
         }
+
+    };
+
+    const setImageData = async (File) => {
+        var filename = File.substring(File.lastIndexOf('/') + 1);
+        var reference = ref(FIRE_STORAGE, '/mealsImages/' + filename)
+        const imageUrl = await getDownloadURL(reference);
+        dispatch(saveMethodImageData({ mainImage: imageUrl, imageName: filename }))
+        setSelectedImage(null)
+    }
+    const uploadImage = async (Image) => {
+
+        const blob = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                resolve(xhr.response);
+            };
+            xhr.onerror = function () {
+                reject(new TypeError('Network request failed'));
+            };
+            xhr.responseType = 'blob';
+            xhr.open('GET', Image, true);
+            xhr.send(null);
+        });
+        const filename = Image.substring(Image.lastIndexOf('/') + 1);
+        const imageStorageRef = ref(FIRE_STORAGE, '/mealsImages/' + filename);
+        await uploadBytes(imageStorageRef, blob, {
+            contentType: 'image/jpeg',
+        });
+
+        setImageData(Image)
+
     };
     const newMealName = async (text) => {
         dispatch(saveMethodMealNameData({ mealName: text }))
@@ -149,7 +193,7 @@ const Filter = (props, { route }) => {
     const mainIngredientPairs = splitButtonIntoPairs(mainIngredientButton)
     const veggiePairs = splitButtonIntoPairs(veggieButton)
     const seasoningPairs = splitButtonIntoPairs(seasoningButton)
-    console.log(cookStore)
+
     return (
         <ScrollView style={{ backgroundColor: '#2F2C2C' }}>
             <View style={styles.container}>
@@ -166,7 +210,7 @@ const Filter = (props, { route }) => {
                     <TextInput
                         style={styles.input2}
                         placeholder="Name"
-
+                        value={cookStore.mealName}
                         onChangeText={(text) => newMealName(text)}
                     />
 
