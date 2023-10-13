@@ -24,7 +24,6 @@ const FoodList = () => {
       const pair = images.slice(i, i + 2);
       pairs.push(pair);
     }
-    console.log(JSON.stringify(pairs))
     return pairs;
   };
 

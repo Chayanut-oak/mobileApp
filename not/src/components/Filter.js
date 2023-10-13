@@ -10,10 +10,11 @@ import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveMethodData } from '../../redux/cookingMethodSlice';
-import { saveMethodImageData, resetDataToFalse } from '../../redux/cookingMethodSlice';
+import { saveMethodImageData, resetDataToFalse, saveMethodTagsData, saveMethodMealNameData, delMethodTagsData } from '../../redux/cookingMethodSlice';
 const Filter = (props, { route }) => {
     const dispatch = useDispatch();
     const cookStore = useSelector((state) => state.cook)
+    const storeIngredient = useSelector((state) => state.ingredient);
     const [selectedButtons, setSelectedButtons] = useState([]);
     const [isModalVisible, setModalVisible] = useState(false);
     const [modalName, setModalName] = useState('');
@@ -23,7 +24,6 @@ const Filter = (props, { route }) => {
     const [veggieInput, setVeggieInput] = useState('');
     const [mainInput, setMainInput] = useState('');
     const [selectedImage, setSelectedImage] = useState(null);
-    const storeIngredient = useSelector((state) => state.ingredient);
 
     useEffect(() => {
         if (storeIngredient.length != 0) {
@@ -37,24 +37,7 @@ const Filter = (props, { route }) => {
             setSeasoningButton(arra4.map(item => item.ingredientName));
         }
     }, [storeIngredient]);
-    useEffect(() => {
-        if (selectedImage != null) {
-            var filename = selectedImage.substring(selectedImage.lastIndexOf('/') + 1);
-        }
 
-        dispatch(saveMethodImageData({ mainImage: selectedImage, imageName: filename, tag: selectedButtons, mealName: meallName }))
-
-    }, [selectedImage, selectedButtons, meallName]);
-
-
-    // useEffect(() => {
-    //     if(cookStore.reset == true){
-    //         setSelectedButtons([])
-    //         setMealName('')
-    //         setSelectedImage(null)
-    //         dispatch(resetDataToFalse(false))
-    //     }
-    // }, [cookStore]);
 
     const [categoryButton, setCategoryButton] = useState([]);
     const [mainIngredientButton, setMainIngredientButton] = useState([]);
@@ -62,17 +45,21 @@ const Filter = (props, { route }) => {
     const [seasoningButton, setSeasoningButton] = useState([]);
 
     const handleButtonPress = (buttonText) => {
-        if (selectedButtons.includes(buttonText)) {
-            setSelectedButtons(selectedButtons.filter((text) => text !== buttonText));
-
+        if (cookStore.tags.includes(buttonText)) {
+            // setSelectedButtons(selectedButtons.filter((text) => text !== buttonText));
+            const newTags = cookStore.tags.filter((text) => text !== buttonText)
+            console.log(newTags)
+            dispatch(delMethodTagsData(newTags))
         } else {
-            setSelectedButtons([...selectedButtons, buttonText]);
+            // setSelectedButtons([...selectedButtons, buttonText]);
+            dispatch(saveMethodTagsData(buttonText))
         }
-
     };
-    const handleButtonUnpress = (buttonText) => {
-        setSelectedButtons(selectedButtons.filter((text) => text !== buttonText));
 
+    const handleButtonUnpress = (buttonText) => {
+        const newTags = cookStore.tags.filter((text) => text !== buttonText)
+
+        dispatch(delMethodTagsData(newTags))
     };
 
     const handelModal = () => {
@@ -125,12 +112,15 @@ const Filter = (props, { route }) => {
     };
     const splitButtonIntoPairs = (button) => {
         const pairs = [];
-        for (let i = 0; i < button.length; i += 3) {
-            const pair = button.slice(i, i + 3);
-            pairs.push(pair);
+        if (Array.isArray(button) && button.length > 0) {
+            for (let i = 0; i < button.length; i += 3) {
+                const pair = button.slice(i, i + 3);
+                pairs.push(pair);
+            }
         }
         return pairs;
     };
+    
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -139,29 +129,34 @@ const Filter = (props, { route }) => {
             quality: 1
         });
         if (!result.canceled) {
-            setSelectedImage(result.assets[0].uri);
 
+            var filename = result.assets[0].uri.substring(result.assets[0].uri.lastIndexOf('/') + 1);
+
+            dispatch(saveMethodImageData({ mainImage: result.assets[0].uri, imageName: filename }))
+            setSelectedImage(null)
         }
     };
-
+    const newMealName = async (text) => {
+        dispatch(saveMethodMealNameData({ mealName: text }))
+    };
 
     const navigation = useNavigation();
     const navigateToTargetScreen = () => {
         navigation.navigate('TargetScreen', { selectedImage });
     };
-    const selectPairs = splitButtonIntoPairs(selectedButtons);
+    const selectPairs = splitButtonIntoPairs(cookStore.tags);
     const categoryPairs = splitButtonIntoPairs(categoryButton);
     const mainIngredientPairs = splitButtonIntoPairs(mainIngredientButton)
     const veggiePairs = splitButtonIntoPairs(veggieButton)
     const seasoningPairs = splitButtonIntoPairs(seasoningButton)
-
+    console.log(cookStore)
     return (
         <ScrollView style={{ backgroundColor: '#2F2C2C' }}>
             <View style={styles.container}>
 
                 {props.New == 'New' ? <TouchableOpacity onPress={() => pickImage()}>
                     <View style={{ width: 300, height: 200, backgroundColor: '#888888', alignSelf: 'center', marginBottom: 15 }}>
-                        <Image style={{ width: '100%', height: '100%', resizeMode: 'contain', borderRadius: 20 }} source={{ uri: selectedImage }} ></Image>
+                        <Image style={{ width: '100%', height: '100%', resizeMode: 'contain', borderRadius: 20 }} source={{ uri: cookStore.mealImage.imagePath }} ></Image>
                     </View>
                 </TouchableOpacity> : null}
 
@@ -172,7 +167,7 @@ const Filter = (props, { route }) => {
                         style={styles.input2}
                         placeholder="Name"
 
-                        onChangeText={(text) => setMealName(text)}
+                        onChangeText={(text) => newMealName(text)}
                     />
 
                 </View> : null}
@@ -213,7 +208,7 @@ const Filter = (props, { route }) => {
                                         onPress={() => handleButtonPress(item)}>
                                         <LinearGradient
                                             colors={['#DD2572', '#F02E5D']}
-                                            style={[selectedButtons.includes(item) && styles.selectedButton, styles.TouchableOpacity]}>
+                                            style={[cookStore.tags.includes(item) && styles.selectedButton, styles.TouchableOpacity]}>
                                             <Text style={{ color: '#F3F3F3' }}>{item}</Text>
                                         </LinearGradient>
 
@@ -242,7 +237,7 @@ const Filter = (props, { route }) => {
                                         onPress={() => handleButtonPress(item)}>
                                         <LinearGradient
                                             colors={['#DD2572', '#F02E5D']}
-                                            style={[selectedButtons.includes(item) && styles.selectedButton, styles.TouchableOpacity]}>
+                                            style={[cookStore.tags.includes(item) && styles.selectedButton, styles.TouchableOpacity]}>
                                             <Text style={{ color: '#F3F3F3' }}>{item}</Text>
                                         </LinearGradient>
 
@@ -270,7 +265,7 @@ const Filter = (props, { route }) => {
                                         onPress={() => handleButtonPress(item)}>
                                         <LinearGradient
                                             colors={['#DD2572', '#F02E5D']}
-                                            style={[selectedButtons.includes(item) && styles.selectedButton, styles.TouchableOpacity]}>
+                                            style={[cookStore.tags.includes(item) && styles.selectedButton, styles.TouchableOpacity]}>
                                             <Text style={{ color: '#F3F3F3' }}>{item}</Text>
                                         </LinearGradient>
 
@@ -297,7 +292,7 @@ const Filter = (props, { route }) => {
                                         onPress={() => handleButtonPress(item)}>
                                         <LinearGradient
                                             colors={['#DD2572', '#F02E5D']}
-                                            style={[selectedButtons.includes(item) && styles.selectedButton, styles.TouchableOpacity]}>
+                                            style={[cookStore.tags.includes(item) && styles.selectedButton, styles.TouchableOpacity]}>
                                             <Text style={{ color: '#F3F3F3' }}>{item}</Text>
                                         </LinearGradient>
 

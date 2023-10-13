@@ -8,7 +8,7 @@ import { collection, addDoc } from "firebase/firestore";
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { HeaderButtons } from 'react-navigation-header-buttons';
 import CustomHeaderButton from '../src/components/CustomHeaderButton';
-import { useSelector,useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { getAuth } from "firebase/auth";
 const CookingNav = ({ route, navigation }) => {
   const dispatch = useDispatch()
@@ -17,18 +17,26 @@ const CookingNav = ({ route, navigation }) => {
   const CookNavigate = createNativeStackNavigator()
   const upMethod = async () => {
     await addDoc(collection(FIRE_STORE, "meals"), {
-      createdBy : auth.currentUser.displayName,
-      like : methodStore.like,
-      mealImage:methodStore.mealImage,
-      mealName:methodStore.mealName,
-      mealYoutube:methodStore.mealYoutube,
+      createdBy: auth.currentUser.uid,
+      like: methodStore.like,
+      mealImage: methodStore.mealImage,
+      mealName: methodStore.mealName,
+      mealYoutube: methodStore.mealYoutube,
       reviews: methodStore.reviews,
       steps: methodStore.steps,
-      tags:methodStore.tags
-  });
-  dispatch(resetData("","",{},"","",[],[],[]))
+      tags: methodStore.tags
+    });
+    dispatch(resetData({
+      createdBy: '',
+      like: '',
+      mealName: '',
+      mealYoutube: '',
+      mealImage: {},
+      reviews: [],
+      tags: [],
+      steps: [],
+    }))
   }
-  
   return (
     <CookNavigate.Navigator>
       <CookNavigate.Screen name="CreateMeal" component={CreateMeal} options={{
@@ -43,8 +51,8 @@ const CookingNav = ({ route, navigation }) => {
       <CookNavigate.Screen name="CookingMethod" component={CookingMethod} options={{
         headerStyle: { backgroundColor: "#E27E8A" }, headerRight: () => (
           <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-            <Text onPress={() => {navigation.navigate('homeWithBottom'),upMethod()}}>
-             Done
+            <Text onPress={() => { navigation.navigate('CreateMeal'), upMethod() }}>
+              Done
             </Text>
           </HeaderButtons>)
       }

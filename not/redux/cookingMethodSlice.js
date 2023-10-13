@@ -22,9 +22,20 @@ const cookingMethodSlice = createSlice({
       state.steps = action.payload;
     },
     saveMethodImageData: (state, action) => {
-      const update = { ...state.mealImage, imageName: action.payload.imageName, imagePath: action.payload.mainImage, }
-      state.mealImage = update
-      state.tags = action.payload.tag
+      if( action.payload.imageName && action.payload.mainImage != null){
+        const update = { ...state.mealImage, imageName: action.payload.imageName, imagePath: action.payload.mainImage, }
+        state.mealImage = update
+      }
+    },
+    saveMethodTagsData: (state, action) => {
+      const update = [...state.tags,action.payload]
+      state.tags = update
+    },
+    delMethodTagsData: (state, action) => {
+      
+      state.tags = action.payload
+    },
+    saveMethodMealNameData: (state, action) => {
       state.mealName = action.payload.mealName
     },
     updateMethodData: (state, action) => {
@@ -39,9 +50,6 @@ const cookingMethodSlice = createSlice({
     resetData: (state, action) => {
       return action.payload
     },
-    resetDataToFalse: (state, action) => {
-      state.reset = action.payload
-    },
   }
 })
 
@@ -51,7 +59,7 @@ export const { updateMethodData } = cookingMethodSlice.actions
 export const { updateImageData } = cookingMethodSlice.actions
 export const { updateImagePathData } = cookingMethodSlice.actions
 export const { resetData } = cookingMethodSlice.actions
-export const { saveMethodImageData } = cookingMethodSlice.actions
+export const { saveMethodImageData,saveMethodTagsData,saveMethodMealNameData,delMethodTagsData } = cookingMethodSlice.actions
 export default cookingMethodSlice.reducer
 
 
