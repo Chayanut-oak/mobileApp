@@ -24,7 +24,7 @@ const MealDetail = ({ navigation, route }) => {
   useEffect(() => {
     const selectedMeal = storeMeal.find(item => item.mealId === mealId);
     setMeal(selectedMeal)
-  }, [meal])
+  }, [storeMeal])
 
   if (!meal) {
     return (
