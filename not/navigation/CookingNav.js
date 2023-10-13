@@ -24,7 +24,7 @@ const CookingNav = ({ route, navigation }) => {
       mealYoutube: methodStore.mealYoutube,
       reviews: methodStore.reviews,
       steps: methodStore.steps,
-      tags: methodStore.tags
+      tags: methodStore.tags.map((tag) => tag.ingredientId)
     });
     dispatch(resetData({
       createdBy: '',

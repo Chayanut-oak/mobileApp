@@ -2,8 +2,8 @@ import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react
 import React from 'react'
 import { useState } from 'react';
 
-const MealCategories = ({ navigation }) => {
-  
+const MealCategories = ({ navigation, route }) => {
+  console.log(route)
   const [mealCategories, setmealCategories] = useState([
     {
       mealImage: require('../../picture/crab.jpg'),

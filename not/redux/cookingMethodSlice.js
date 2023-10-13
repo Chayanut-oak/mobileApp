@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { createSlice } from "@reduxjs/toolkit";
+import { action } from '@datorama/akita';
 const cookingMethodSlice = createSlice({
   name: 'cooking',
   initialState: {
@@ -47,9 +48,14 @@ const cookingMethodSlice = createSlice({
     updateImagePathData: (state, action) => {
       state.steps[action.payload[1]].stepImage.stepImagePath = action.payload[0];
     },
+    saveLink:(state, action)=>{
+      state.mealYoutube = action.payload
+      console.log(state)
+    },
     resetData: (state, action) => {
       return action.payload
     },
+    
   }
 })
 
@@ -58,6 +64,7 @@ export const { delMethodData } = cookingMethodSlice.actions
 export const { updateMethodData } = cookingMethodSlice.actions
 export const { updateImageData } = cookingMethodSlice.actions
 export const { updateImagePathData } = cookingMethodSlice.actions
+export const { saveLink } = cookingMethodSlice.actions
 export const { resetData } = cookingMethodSlice.actions
 export const { saveMethodImageData,saveMethodTagsData,saveMethodMealNameData,delMethodTagsData } = cookingMethodSlice.actions
 export default cookingMethodSlice.reducer

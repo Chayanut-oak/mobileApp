@@ -29,16 +29,16 @@ const Filter = (props, { route }) => {
     useEffect(() => {
         if (storeIngredient.length != 0) {
             const arra = storeIngredient.filter((item) => item.ingredientCategory == "วัถุดิบหลัก");
-            setMainIngredientButton(arra.map(item => item.ingredientName));
+            setMainIngredientButton(arra);
             const arra2 = storeIngredient.filter((item) => item.ingredientCategory == "ผักและผลไม้");
-            setVeggieButton(arra2.map(item => item.ingredientName));
+            setVeggieButton(arra2);
             const arra3 = storeIngredient.filter((item) => item.ingredientCategory == "หมวดหมู่");
-            setCategoryButton(arra3.map(item => item.ingredientName));
+            setCategoryButton(arra3);
             const arra4 = storeIngredient.filter((item) => item.ingredientCategory == "เครื่องปรุง");
-            setSeasoningButton(arra4.map(item => item.ingredientName));
+            setSeasoningButton(arra4);
         }
     }, [storeIngredient]);
-
+   
 
     const [categoryButton, setCategoryButton] = useState([]);
     const [mainIngredientButton, setMainIngredientButton] = useState([]);
@@ -49,7 +49,7 @@ const Filter = (props, { route }) => {
         if (cookStore.tags.includes(buttonText)) {
             // setSelectedButtons(selectedButtons.filter((text) => text !== buttonText));
             const newTags = cookStore.tags.filter((text) => text !== buttonText)
-            console.log(newTags)
+            // console.log(newTags)
             dispatch(delMethodTagsData(newTags))
         } else {
             // setSelectedButtons([...selectedButtons, buttonText]);
@@ -226,7 +226,7 @@ const Filter = (props, { route }) => {
                                     <LinearGradient
                                         colors={['#DD2572', '#F02E5D']}
                                         style={[styles.TouchableOpacity]}>
-                                        <Text style={styles.centeredText}>{item}</Text>
+                                        <Text style={styles.centeredText}>{item.ingredientName}</Text>
                                     </LinearGradient>
 
                                 </TouchableOpacity>
@@ -253,7 +253,7 @@ const Filter = (props, { route }) => {
                                         <LinearGradient
                                             colors={['#DD2572', '#F02E5D']}
                                             style={[cookStore.tags.includes(item) && styles.selectedButton, styles.TouchableOpacity]}>
-                                            <Text style={{ color: '#F3F3F3' }}>{item}</Text>
+                                            <Text style={{ color: '#F3F3F3' }}>{item.ingredientName}</Text>
                                         </LinearGradient>
 
                                     </TouchableOpacity>
@@ -282,7 +282,7 @@ const Filter = (props, { route }) => {
                                         <LinearGradient
                                             colors={['#DD2572', '#F02E5D']}
                                             style={[cookStore.tags.includes(item) && styles.selectedButton, styles.TouchableOpacity]}>
-                                            <Text style={{ color: '#F3F3F3' }}>{item}</Text>
+                                            <Text style={{ color: '#F3F3F3' }}>{item.ingredientName}</Text>
                                         </LinearGradient>
 
                                     </TouchableOpacity>
@@ -310,7 +310,7 @@ const Filter = (props, { route }) => {
                                         <LinearGradient
                                             colors={['#DD2572', '#F02E5D']}
                                             style={[cookStore.tags.includes(item) && styles.selectedButton, styles.TouchableOpacity]}>
-                                            <Text style={{ color: '#F3F3F3' }}>{item}</Text>
+                                            <Text style={{ color: '#F3F3F3' }}>{item.ingredientName}</Text>
                                         </LinearGradient>
 
                                     </TouchableOpacity>
@@ -337,7 +337,7 @@ const Filter = (props, { route }) => {
                                         <LinearGradient
                                             colors={['#DD2572', '#F02E5D']}
                                             style={[cookStore.tags.includes(item) && styles.selectedButton, styles.TouchableOpacity]}>
-                                            <Text style={{ color: '#F3F3F3' }}>{item}</Text>
+                                            <Text style={{ color: '#F3F3F3' }}>{item.ingredientName}</Text>
                                         </LinearGradient>
 
                                     </TouchableOpacity>

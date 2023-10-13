@@ -10,7 +10,7 @@ import Modal from "react-native-modal";
 import { getDownloadURL, ref, uploadBytes, deleteObject } from 'firebase/storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveMethodData } from '../../redux/cookingMethodSlice';
-import { delMethodData,updateMethodData ,updateImageData,updateImagePathData} from '../../redux/cookingMethodSlice';
+import { delMethodData, updateMethodData, updateImageData, updateImagePathData, saveLink } from '../../redux/cookingMethodSlice';
 const CookingMethod = () => {
   const mealsCollection = collection(FIRE_STORE, "meals")
   const cookingMethod = useSelector((state) => state.cook.steps)
@@ -23,13 +23,22 @@ const CookingMethod = () => {
   const [link, setLink] = useState('');
   const methodStore = useSelector((state) => state.cook)
 
-  const dispatch = useDispatch() 
+  const dispatch = useDispatch()
 
-  const handleRemoveItem = async(stepDetail) => {
-    const imageToDelete = cookingMethod[stepDetail].stepImage.stepImageName ;
-    if(imageToDelete != null){
-    const reference = ref(FIRE_STORAGE, '/stepImages/' + imageToDelete);
-    await deleteObject(reference);
+  const handleUpdateLink = async () => {
+    if (link) {
+      let parts = link.split("/")
+      let video_id = parts[parts.length - 1].split("?")[0]
+      dispatch(saveLink(video_id))
+    }
+  }
+
+
+  const handleRemoveItem = async (stepDetail) => {
+    const imageToDelete = cookingMethod[stepDetail].stepImage.stepImageName;
+    if (imageToDelete != null) {
+      const reference = ref(FIRE_STORAGE, '/stepImages/' + imageToDelete);
+      await deleteObject(reference);
     }
     dispatch(delMethodData(cookingMethod.filter((item, index) => index !== stepDetail)))
   };
@@ -38,13 +47,13 @@ const CookingMethod = () => {
 
   // }, [step,cookingMethod]);
 
-  const handleSetStep = async(filename) => {
-    if(filename){
-       var reference = ref(FIRE_STORAGE, '/stepImages/' + filename)
-       const imageUrl = await getDownloadURL(reference);
-       { dispatch(saveMethodData( {stepDetail:detail,stepImage:{ stepImageName: filename , stepImagePath: imageUrl}})) }
-    }else{
-       { dispatch(saveMethodData( {stepDetail:detail,stepImage:{ stepImageName: null , stepImagePath: null}})) }
+  const handleSetStep = async (filename) => {
+    if (filename) {
+      var reference = ref(FIRE_STORAGE, '/stepImages/' + filename)
+      const imageUrl = await getDownloadURL(reference);
+      { dispatch(saveMethodData({ stepDetail: detail, stepImage: { stepImageName: filename, stepImagePath: imageUrl } })) }
+    } else {
+      { dispatch(saveMethodData({ stepDetail: detail, stepImage: { stepImageName: null, stepImagePath: null } })) }
     }
     setDetail('')
     setSelectedImage(null)
@@ -53,9 +62,9 @@ const CookingMethod = () => {
 
 
   const handleUpdateStep = (stepIndex) => {
-    dispatch(updateMethodData( [cookingMethod[stepIndex].stepDetail= currentDetail , stepIndex]))
+    dispatch(updateMethodData([cookingMethod[stepIndex].stepDetail = currentDetail, stepIndex]))
   };
- 
+
   const newImage = async (imageIndex) => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -72,16 +81,16 @@ const CookingMethod = () => {
 
   const handleUpdateImage = async (imageIndex) => {
     try {
-      const imageToDelete = cookingMethod[imageIndex].stepImage.stepImageName ;
+      const imageToDelete = cookingMethod[imageIndex].stepImage.stepImageName;
       const reference = ref(FIRE_STORAGE, '/stepImages/' + imageToDelete);
-     
+
       await deleteObject(reference);
-    
+
       if (!Result.canceled) {
         const reference2 = ref(FIRE_STORAGE, '/stepImages/' + Result)
         const imageUrl = await getDownloadURL(reference2);
-        dispatch(updateImageData( [cookingMethod[imageIndex].stepImage.stepImageName = Result , imageIndex]))
-        dispatch(updateImagePathData( [cookingMethod[imageIndex].stepImage.stepImagePath = imageUrl , imageIndex]))
+        dispatch(updateImageData([cookingMethod[imageIndex].stepImage.stepImageName = Result, imageIndex]))
+        dispatch(updateImagePathData([cookingMethod[imageIndex].stepImage.stepImagePath = imageUrl, imageIndex]))
       }
     } catch (error) {
       console.log(error);
@@ -104,32 +113,31 @@ const CookingMethod = () => {
     setModalVisible(!isModalVisible);
     setSelectedImage(null)
   }
-
   const uploadImage = async (imageIndex) => {
-   
-      const blob = await new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-        xhr.onload = function () {
-          resolve(xhr.response);
-        };
-        xhr.onerror = function () {
-          reject(new TypeError('Network request failed'));
-        };
-        xhr.responseType = 'blob';
-        xhr.open('GET', selectedImage, true);
-        xhr.send(null);
-      });
-      const filename = selectedImage.substring(selectedImage.lastIndexOf('/') + 1);
-      const imageStorageRef = ref(FIRE_STORAGE, 'stepImages/' + filename);
-      await uploadBytes(imageStorageRef, blob, {
-        contentType: 'image/jpeg',
-      });
-      setSelectedImage(null);
-      setModalVisible(false)
-      if(imageIndex != 'new'){
-           handleSetStep(filename)
-      }
-   
+
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function () {
+        reject(new TypeError('Network request failed'));
+      };
+      xhr.responseType = 'blob';
+      xhr.open('GET', selectedImage, true);
+      xhr.send(null);
+    });
+    const filename = selectedImage.substring(selectedImage.lastIndexOf('/') + 1);
+    const imageStorageRef = ref(FIRE_STORAGE, 'stepImages/' + filename);
+    await uploadBytes(imageStorageRef, blob, {
+      contentType: 'image/jpeg',
+    });
+    setSelectedImage(null);
+    setModalVisible(false)
+    if (imageIndex != 'new') {
+      handleSetStep(filename)
+    }
+
   };
 
 
@@ -139,7 +147,7 @@ const CookingMethod = () => {
       <Text style={{ color: 'white' }}>ขั้นตอนการทำ</Text>
       <View style={styles.stepCard2}>
         <View style={styles.stepDetail2}>
-          <TextInput style={styles.stepText} placeholder='แนบลิ้งที่เกี่ยวข้อง' onChangeText={setLink} >
+          <TextInput style={styles.stepText} placeholder='แนบ Youtube' onEndEditing={handleUpdateLink} onChangeText={setLink} >
           </TextInput>
         </View>
       </View>
@@ -150,7 +158,7 @@ const CookingMethod = () => {
             {item.stepImage.stepImagePath != null ? <TouchableOpacity onPress={() => { newImage(index) }} style={{ alignSelf: 'center' }}>
               <View style={{ width: 300, height: 200 }}>
                 <Image style={{ width: '100%', height: '100%', resizeMode: 'contain', borderRadius: 20 }} source={{ uri: item.stepImage.stepImagePath }}></Image>
-                                  
+
               </View>
             </TouchableOpacity> : null}
 
@@ -189,7 +197,7 @@ const CookingMethod = () => {
 
 
       <View style={styles.stepCard1}>
-        <TouchableOpacity onPress={() => {  selectedImage != null ? uploadImage(): handleSetStep() }}>
+        <TouchableOpacity onPress={() => { selectedImage != null ? uploadImage() : handleSetStep() }}>
           <LinearGradient style={styles.stepNo1} colors={['#DD2572', '#F02E5D']}>
             <Text>
               <MaterialIcons name="add" size={24} color="black" />

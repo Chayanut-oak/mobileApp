@@ -1,8 +1,12 @@
 import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from 'react-native'
 import { useState } from 'react';
 import React from 'react'
+import { useSelector } from 'react-redux';
 
-const Category = ({ navigation }) => {
+const Category = ({ navigation}) => {
+  const meals = useSelector((state) => state.meals)
+  // const categoryList = meals.filter()
+
   const [images, setimages] = useState([
     {
       mealImage: require('../../picture/image.png'),
