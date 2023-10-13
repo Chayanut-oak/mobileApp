@@ -8,8 +8,8 @@ const Food = ({ route, navigation }) => {
       <View style={styles.search}>
         <SearchBar navigation={navigation} />
       </View>
-      <MealCategories navigation={navigation}/>
-      
+      <MealCategories navigation={navigation} category={route.params.categoryId} />
+
 
     </View>
   )

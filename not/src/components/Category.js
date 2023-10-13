@@ -1,43 +1,55 @@
 import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from 'react-native'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import React from 'react'
 import { useSelector } from 'react-redux';
 
-const Category = ({ navigation}) => {
-  const meals = useSelector((state) => state.meals)
-  // const categoryList = meals.filter()
+const Category = ({ navigation }) => {
+  const storeMeal = useSelector((state) => state.meal)
+  const [category, setCategory] = useState([])
+  useEffect(() => {
+    if (storeMeal.length != 0) {
+      let array = [...storeMeal]
+      filtered = array.map((val) => {
+        tags = val.tags.filter((tag) => tag.ingredientCategory == "หมวดหมู่")
+        return { image: val.mealImage, tags: tags }
+      }
+      )
+      const uniqueIngredients = {};
+      filtered.forEach(item => {
+        item.tags.forEach(tag => {
+          const ingredientId = tag.ingredientId;
+          const ingredientName = tag.ingredientName;
+          if (!uniqueIngredients[ingredientName]) {
+            uniqueIngredients[ingredientName] = { ingredientId, image: item.image };
+          }
+        });
+      });
+      const result = Object.entries(uniqueIngredients).map(([ingredientName, data]) => ({
+        ingredientId: data.ingredientId,
+        ingredientName,
+        image: data.image
+      }));
+      setCategory(result);
+    }
+  }, [storeMeal])
 
-  const [images, setimages] = useState([
-    {
-      mealImage: require('../../picture/image.png'),
-      mealCategory: 'Second Item',
-    },
-    {
-      mealImage: require('../../picture/image.png'),
-      mealCategory: 'First Item',
-    }, {
-      mealImage: require('../../picture/image.png'),
-      mealCategory: 'First Item',
-    }, {
-      mealImage: require('../../picture/image.png'),
-      mealCategory: 'First Item',
-    },
-  ]);
+
   return (
     <View style={{ height: 130, marginTop: 10 }}>
-
-      <FlatList data={images}
+      <FlatList data={category}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         renderItem={({ item }) => {
-          return (<View style={{ alignItems: 'center', }}>
-            <TouchableOpacity onPress={() => navigation.navigate('mealCategories', { Category: item.mealCategory })} style={{ alignItems: 'center', }}>
-              <Image
-                style={{ flex: 1, width: 100, height: 100, margin: 5, resizeMode: 'contain', }}
-                source={item.mealImage}
-              /><Text style={{ color: "#D1D1D1" }}>{item.mealName}</Text>
-            </TouchableOpacity>
-          </View>)
+          return (
+            <View style={{ alignItems: 'center', }}>
+              <TouchableOpacity onPress={() => navigation.navigate('mealCategories', { Category: item.ingredientName, categoryId: item.ingredientId })} style={{ alignItems: 'center', }}>
+                <Image
+                  style={{ flex: 1, width: 100, height: 100, margin: 5, borderRadius: 100, resizeMode: 'contain', }}
+                  source={{ uri: item.image.imagePath }}
+                /><Text style={{ color: "#D1D1D1" }}>{item.ingredientName}</Text>
+              </TouchableOpacity>
+            </View>
+          )
         }}
       />
     </View>

@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-const FoodList = () => {
+import MealDetail from '../screen/MealDetail';
+const FoodList = ({ navigation }) => {
   const storeMeal = useSelector((state) => state.meal)
   const [imagePairs, setImagePairs] = useState([])
   useEffect(() => {
@@ -34,7 +35,7 @@ const FoodList = () => {
         <View key={pairIndex} style={styles.row}>
           {pair.map((item, itemIndex) => (
             <View key={itemIndex} >
-              <TouchableOpacity style={styles.item}>
+              <TouchableOpacity style={styles.item} onPress={() => { navigation.navigate("mealDetail", { mealId: item.mealId }) }}>
                 <Image
                   style={styles.image}
                   source={item.mealImage.imagePath ? { uri: item.mealImage.imagePath } : require("../../picture/image.png")}

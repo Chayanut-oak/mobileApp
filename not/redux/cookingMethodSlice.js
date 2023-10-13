@@ -50,7 +50,6 @@ const cookingMethodSlice = createSlice({
     },
     saveLink:(state, action)=>{
       state.mealYoutube = action.payload
-      console.log(state)
     },
     resetData: (state, action) => {
       return action.payload

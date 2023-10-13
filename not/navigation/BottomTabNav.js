@@ -44,7 +44,7 @@ const BottomTabNav = ({route , navigation}) => {
       <MenuTab.Screen name="New" component={CookingNav} initialParams={{ customProp: 'Another custom prop' }} options={{
         headerStyle: { backgroundColor: "#E27E8A" },  headerShown: false 
       }} />
-      <MenuTab.Screen name="Notification" component={Notification} options={{
+      <MenuTab.Screen name="Notification"  component={Notification} options={{
         headerStyle: { backgroundColor: "#E27E8A" }
       }} />
       <MenuTab.Screen name={auth.currentUser.displayName} component={Profile} options={{

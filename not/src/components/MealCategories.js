@@ -1,60 +1,32 @@
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
-const MealCategories = ({ navigation, route }) => {
-  console.log(route)
-  const [mealCategories, setmealCategories] = useState([
-    {
-      mealImage: require('../../picture/crab.jpg'),
-      mealName: 'ปู',
-    },
-    {
-      mealImage: require('../../picture/crab.jpg'),
-      mealName: 'ปู',
-    },
-    {
-      mealImage: require('../../picture/crab.jpg'),
-      mealName: 'ปู',
-    },
-    {
-      mealImage: require('../../picture/crab.jpg'),
-      mealName: 'ปู',
-    }, {
-      mealImage: require('../../picture/crab.jpg'),
-      mealName: 'ปู',
-    }, {
-      mealImage: require('../../picture/crab.jpg'),
-      mealName: 'ปู',
-    }, {
-      mealImage: require('../../picture/crab.jpg'),
-      mealName: 'ปู',
-    }, {
-      mealImage: require('../../picture/crab.jpg'),
-      mealName: 'ปู',
-    }, {
-      mealImage: require('../../picture/crab.jpg'),
-      mealName: 'ปู',
-    }, {
-      mealImage: require('../../picture/crab.jpg'),
-      mealName: 'ปู',
-    },
-  ]);
+const MealCategories = ({ navigation, category }) => {
+  const mealStore = useSelector(state => state.meal)
+  const [mealList, setMealList] = useState([])
+  useEffect(() => {
+    const filteredData = mealStore.filter(item => {
+      return item.tags.some(tag => tag.ingredientId === category);
+    });
+    setMealList(filteredData)
+  }, [mealStore])
   return (
     <View style={styles.container}>
       <View style={styles.row}>
         <FlatList
-          data={mealCategories}
+          data={mealList}
           numColumns={2}
           showsHorizontalScrollIndicator={false}
           renderItem={({ item, index }) => (
             <TouchableOpacity onPress={() => {
-              navigation.navigate("mealDetail", {mealId:""})
+              navigation.navigate("mealDetail", { mealId: item.mealId })
             }}>
               <View key={index} style={styles.item}>
                 <Image
                   style={styles.image}
-                  source={item.mealImage}
+                  source={{ uri: item.mealImage.imagePath }}
                 />
                 <Text style={styles.title}>{item.mealName}</Text>
               </View>
@@ -73,7 +45,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    height:"90%"
+    height: "90%"
   },
   row: {
     justifyContent: 'space-around',
