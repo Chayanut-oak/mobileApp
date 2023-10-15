@@ -11,7 +11,7 @@ import MealDetail from '../src/screen/MealDetail'
 import Review from '../src/screen/Review'
 import { useDispatch } from 'react-redux'
 import { saveUserData } from '../redux/userSlice'
-
+import SearchBarTabNav from './SearchBarTabNav'
 const HomeNav = ({navigation}) => {
   const dispatch = useDispatch();
   const HomeNavigate = createNativeStackNavigator()
@@ -29,7 +29,7 @@ const HomeNav = ({navigation}) => {
           </HeaderButtons>)
       }
       } />
-      <HomeNavigate.Screen name="SearchScreen" component={SearchScreen} options={{
+      <HomeNavigate.Screen name="SearchScreen" component={SearchBarTabNav} options={{
         headerStyle: { backgroundColor: "#E27E8A" }
       }} />
       <HomeNavigate.Screen name="mealCategories"  component={Food} options={
