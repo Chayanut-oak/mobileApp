@@ -29,6 +29,7 @@ const MealCategories = ({ navigation, category }) => {
                   source={{ uri: item.mealImage.imagePath }}
                 />
                 <Text style={styles.title}>{item.mealName}</Text>
+                <Text style={styles.title}>โดย: {item.createdBy.displayName}</Text>
               </View>
             </TouchableOpacity>
 

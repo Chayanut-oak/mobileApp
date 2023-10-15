@@ -41,6 +41,7 @@ const FoodList = ({ navigation }) => {
                   source={item.mealImage.imagePath ? { uri: item.mealImage.imagePath } : require("../../picture/image.png")}
                 />
                 <Text style={styles.title}>{item.mealName}</Text>
+                <Text style={styles.title}>โดย: {item.createdBy.displayName}</Text>
               </TouchableOpacity>
             </View>
           ))}
