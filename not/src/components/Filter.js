@@ -15,6 +15,7 @@ import { saveMethodImageData, resetDataToFalse, saveMethodTagsData, saveMethodMe
 const Filter = (props, { route }) => {
     const dispatch = useDispatch();
     const cookStore = useSelector((state) => state.cook)
+    const mealStore = useSelector((state) => state.meal)
     const storeIngredient = useSelector((state) => state.ingredient);
     const [selectedButtons, setSelectedButtons] = useState([]);
     const [isModalVisible, setModalVisible] = useState(false);
@@ -38,7 +39,7 @@ const Filter = (props, { route }) => {
             setSeasoningButton(arra4);
         }
     }, [storeIngredient]);
-   
+
 
     const [categoryButton, setCategoryButton] = useState([]);
     const [mainIngredientButton, setMainIngredientButton] = useState([]);
@@ -125,9 +126,9 @@ const Filter = (props, { route }) => {
     const pickImage = async () => {
 
         if (cookStore.mealImage.imagePath) {
-            const imageToDelete = cookStore.mealImage.imageName ;
+            const imageToDelete = cookStore.mealImage.imageName;
             const reference = ref(FIRE_STORAGE, '/mealsImages/' + imageToDelete);
-           
+
             await deleteObject(reference);
             dispatch(saveMethodImageData({ mainImage: null, imageName: null }))
 
@@ -194,9 +195,21 @@ const Filter = (props, { route }) => {
     const veggiePairs = splitButtonIntoPairs(veggieButton)
     const seasoningPairs = splitButtonIntoPairs(seasoningButton)
 
+    // const searchMenu = (text) => {
+    //     for (let i = 0; i < mealStore.length; i++) {
+    //        const result = mealStore.filter((x) => (x.mealName.toLowerCase().replace(/\s/g, '')).includes((text).toLowerCase().replace(/\s/g, '')));
+    //        for (let j = 0; j < mealStore[i].tags.length; j++) {
+    //         console.log(mealStore[i].tags);    
+    //      }
+    //     }
+    // }
     return (
         <ScrollView style={{ backgroundColor: '#2F2C2C' }}>
             <View style={styles.container}>
+            {props.filter == 'filter' ? <View>
+                    <TextInput style={styles.textInput} placeholder='ค้นหาเมนูอาหาร' onChangeText={(text) => searchMenu(text)}/>
+                </View> : null}
+
 
                 {props.New == 'New' ? <TouchableOpacity onPress={() => pickImage()}>
                     <View style={{ width: 300, height: 200, backgroundColor: '#888888', alignSelf: 'center', marginBottom: 15 }}>
@@ -222,7 +235,7 @@ const Filter = (props, { route }) => {
                                 key={itemIndex}>
                                 <TouchableOpacity
 
-                                    onPress={() => handleButtonUnpress(item)}>
+                                 onPress={() => handleButtonUnpress(item)}>
                                     <LinearGradient
                                         colors={['#DD2572', '#F02E5D']}
                                         style={[styles.TouchableOpacity]}>
@@ -445,5 +458,14 @@ const styles = StyleSheet.create({
     }, buttonModal: {
         width: "80%",
         marginTop: 10
-    }
+    }, textInput: {
+        marginBottom: 15,
+        textAlign: "center",
+        borderWidth: 1,
+        borderColor: "black",
+        borderRadius: 100,
+        padding: 10,
+        width: "100%",
+        backgroundColor: "#fff"
+    },
 })
