@@ -6,13 +6,14 @@ import { TouchableOpacity } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import axios from 'axios';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 const auth = FIREBASE_AUTH;
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(false);
   const handleSignIn = async () => {
     setLoading(true);
     try {
@@ -24,7 +25,9 @@ const Login = ({ navigation }) => {
       setLoading(false);
     }
   };
-
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
   return (
     <KeyboardAwareScrollView style={{ backgroundColor: "#2F2C2C" }}>
       <View style={styles.container}>
@@ -42,12 +45,20 @@ const Login = ({ navigation }) => {
             placeholder="Email"
             onChangeText={(text) => setEmail(text)}
           />
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            secureTextEntry
-            onChangeText={(text) => setPassword(text)}
-          />
+          <View style={styles.input}>
+            <TextInput
+              style={styles.inputField}
+              placeholder="Password"
+              secureTextEntry={!showPassword}
+              onChangeText={(text) => setPassword(text)}
+            />
+            <MaterialCommunityIcons
+              name={showPassword ? 'eye-off' : 'eye'}
+              size={24}
+              style={styles.icon}
+              onPress={toggleShowPassword}
+            />
+          </View>
         </View>
 
         <TouchableOpacity onPress={handleSignIn}>
@@ -93,6 +104,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingLeft: 10,
     borderRadius: 50,
+    flexDirection: 'row',
   },
   forgotPasswordText: {
     marginTop: 10,
@@ -120,6 +132,13 @@ const styles = StyleSheet.create({
   image: {
     width: 250,
     height: 250,
+  }, inputField: {
+    flex: 1,
+    color: '#333',
+    borderRadius: 50,
+  }, icon: {
+    padding: 5,
+    marginRight: 5,
   },
 });
 
