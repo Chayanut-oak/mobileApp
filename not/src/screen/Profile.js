@@ -58,7 +58,12 @@ const Profile = ({navigation}) => {
                 <Image
                 style={styles.image}
                 source={{ uri: item.mealImage.imagePath }}
-              /><View style={styles.textContainer}>
+              /><TouchableOpacity style={styles.favoriteIconContainer}>
+              <Image
+                style={styles.favoriteIcon}
+                source={require("../../picture/favoriteIcon.png")}
+              />
+            </TouchableOpacity><View style={styles.textContainer}>
               <Text style={styles.mealName}>{item.mealName}</Text>
             </View>
               </View></View>
@@ -75,7 +80,14 @@ const Profile = ({navigation}) => {
                 <Image
                 style={styles.image}
                 source={{ uri: item.mealImage.imagePath }}
-              /><View style={styles.textContainer}>
+                
+              /><TouchableOpacity style={styles.favoriteIconContainer}>
+              <Image
+                style={styles.favoriteIcon}
+                source={require("../../picture/favoriteIcon.png")}
+              />
+            </TouchableOpacity>
+            <View style={styles.textContainer}>
               <Text style={styles.mealName}>{item.mealName}</Text>
             </View>
               </View></View>
@@ -112,6 +124,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     position: "relative", // This is important for positioning child elements
+    flexDirection: "row",
   },
   image: {
     width: 160,
@@ -132,5 +145,17 @@ const styles = StyleSheet.create({
     left: 170,
     alignItems: 'flex-start',
     position: "absolute", // คำสั่งนี้จะจัดให้อยู่ด้านซ้าย
+    flexDirection: 'row',
+  },
+  favoriteIconContainer: {
+    position: "absolute",
+    bottom: 10, // Position at the bottom
+    left: 160, // Position at the right
+    backgroundColor: "transparent",
+  },
+  favoriteIcon: {
+    width: 50,
+    height: 50,
+    resizeMode: "contain",
   },
 })
