@@ -26,6 +26,8 @@ const Filter = (props, { route }) => {
     const [veggieInput, setVeggieInput] = useState('');
     const [mainInput, setMainInput] = useState('');
     const [selectedImage, setSelectedImage] = useState(null);
+    const [textSeacrh, setTexSeacrh] = useState("")
+    const [mealFiltered, setMealFiltered] = useState([])
 
     useEffect(() => {
         if (storeIngredient.length != 0) {
@@ -38,8 +40,33 @@ const Filter = (props, { route }) => {
             const arra4 = storeIngredient.filter((item) => item.ingredientCategory == "เครื่องปรุง");
             setSeasoningButton(arra4);
         }
-    }, [storeIngredient]);
 
+    }, [storeIngredient]);
+    useEffect(() => {
+        const searchMenu = () => {
+            let filtered = mealStore.filter(meal => {
+                console.log("Meals tags", meal);
+                console.log("Selected tags", cookStore.tags);
+                // Check if any of the selected tags are in meal.tags
+                const commonTags = meal.tags.filter(tag => cookStore.tags.includes(tag));
+
+                // Check if the meal name contains the search text (case-insensitive)
+                const nameMatchesSearch = meal.mealName.toLowerCase().includes(textSeacrh.toLowerCase());
+
+                if (cookStore.tags.length > 0 && textSeacrh === "") {
+                    return commonTags.length > 0; // Filter by tags only.
+                } else if (cookStore.tags.length === 0 && textSeacrh !== "") {
+                    return nameMatchesSearch; // Filter by name only.
+                } else {
+                    return commonTags.length > 0 && nameMatchesSearch; // Filter by both tags and name.
+                }
+            });
+            setMealFiltered(filtered)
+            console.log(filtered.length, textSeacrh)
+
+        }
+        searchMenu()
+    }, [textSeacrh, cookStore])
 
     const [categoryButton, setCategoryButton] = useState([]);
     const [mainIngredientButton, setMainIngredientButton] = useState([]);
@@ -60,7 +87,6 @@ const Filter = (props, { route }) => {
 
     const handleButtonUnpress = (buttonText) => {
         const newTags = cookStore.tags.filter((text) => text !== buttonText)
-
         dispatch(delMethodTagsData(newTags))
     };
 
@@ -71,16 +97,16 @@ const Filter = (props, { route }) => {
     }
 
     const handleInputChange = (text) => {
-        if (modalName == 'Add Seasoning') {
+        if (modalName == 'เพิ่มเครื่องปรุง') {
             setSeasoningInput(text);
         }
-        if (modalName == 'Add Main Ingredient') {
+        if (modalName == 'เพิ่มวัถุดิบหลัก') {
             setMainInput(text)
         }
-        if (modalName == 'New Category') {
+        if (modalName == 'เพิ่มหมวดหมู่') {
             setCategoryInput(text);
         }
-        if (modalName == 'Add Vegetable or Fruit') {
+        if (modalName == 'เพิ่มผักและผลไม้') {
             setVeggieInput(text);
         }
     };
@@ -108,7 +134,6 @@ const Filter = (props, { route }) => {
             await addDoc(collection(FIRE_STORE, "ingredients"), {
                 ingredientCategory: data.ingredientCategory,
                 ingredientName: data.ingredientName,
-
             });
         }
     };
@@ -195,19 +220,31 @@ const Filter = (props, { route }) => {
     const veggiePairs = splitButtonIntoPairs(veggieButton)
     const seasoningPairs = splitButtonIntoPairs(seasoningButton)
 
-    // const searchMenu = (text) => {
-    //     for (let i = 0; i < mealStore.length; i++) {
-    //        const result = mealStore.filter((x) => (x.mealName.toLowerCase().replace(/\s/g, '')).includes((text).toLowerCase().replace(/\s/g, '')));
-    //        for (let j = 0; j < mealStore[i].tags.length; j++) {
-    //         console.log(mealStore[i].tags);    
-    //      }
-    //     }
-    // }
+    const FoodCard = (meal) => {
+        return (
+            <TouchableOpacity style={styles.foodCard} onPress={() => navigation.navigate("mealDetail", {mealId:meal.mealId})}>
+                <Image style={styles.foodImage} source={meal.mealImage ? { uri: meal.mealImage.imagePath } : require("../../picture/image.png")} />
+                <View style={styles.foodText}>
+                    <Text style={{color:"#fff" ,fontWeight:"bold"}}>ชื่อเมนู: {meal.mealName}</Text>
+                    <Text style={{color:"#fff" ,fontWeight:"bold"}}>Tags:{meal.tags.map(tag => " " + tag.ingredientName) + " "}</Text>
+                    <Text style={{color:"#fff" ,fontWeight:"bold"}}>ขาดTags:{meal.tags.filter(mealTag => {
+                        return !cookStore.tags.some(tag => mealTag.ingredientId === tag.ingredientId)
+                    }).map(tag => " " + tag.ingredientName) + " "}</Text>
+                    <Text style={{color:"#fff" ,fontWeight:"bold"}}>โดย: {meal.createdBy.displayName}</Text>
+                </View>
+            </TouchableOpacity>
+
+        )
+    }
+
+
     return (
         <ScrollView style={{ backgroundColor: '#2F2C2C' }}>
             <View style={styles.container}>
-            {props.filter == 'filter' ? <View>
-                    <TextInput style={styles.textInput} placeholder='ค้นหาเมนูอาหาร' onChangeText={(text) => searchMenu(text)}/>
+                {props.filter == 'filter' ? <View>
+                    <TextInput style={styles.textInput} placeholder='ค้นหาเมนูอาหาร' onChangeText={(text) => {
+                        setTexSeacrh(text)
+                    }} />
                 </View> : null}
 
 
@@ -235,7 +272,7 @@ const Filter = (props, { route }) => {
                                 key={itemIndex}>
                                 <TouchableOpacity
 
-                                 onPress={() => handleButtonUnpress(item)}>
+                                    onPress={() => handleButtonUnpress(item)}>
                                     <LinearGradient
                                         colors={['#DD2572', '#F02E5D']}
                                         style={[styles.TouchableOpacity]}>
@@ -255,7 +292,7 @@ const Filter = (props, { route }) => {
                 }} />
                 <View style={styles.buttonContainer}>
 
-                    <Text style={{ color: '#F3F3F3', margin: 5 }}>Category</Text>
+                    <Text style={{ color: '#F3F3F3', margin: 5 }}>หมวดหมู่</Text>
                     {categoryPairs.map((pair, pairIndex) => (
                         <View key={pairIndex} style={styles.row} >
                             {pair.map((item, itemIndex) => (
@@ -271,11 +308,10 @@ const Filter = (props, { route }) => {
 
                                     </TouchableOpacity>
                                 </View>
-
                             ))}
                         </View>
                     ))}
-                    {props.New == 'New' ? <TouchableOpacity onPress={() => { handelModal(), setModalName('New Category') }}>
+                    {props.New == 'New' ? <TouchableOpacity onPress={() => { handelModal(), setModalName('เพิ่มหมวดหมู่') }}>
                         <LinearGradient
                             colors={['#DD2572', '#F02E5D']}
                             style={[styles.TouchableOpacity]}>
@@ -283,7 +319,7 @@ const Filter = (props, { route }) => {
                         </LinearGradient>
                     </TouchableOpacity> : null}
 
-                    <Text style={{ color: '#F3F3F3', margin: 5 }}>Main Ingredient</Text>
+                    <Text style={{ color: '#F3F3F3', margin: 5 }}>วัถุดิบหลัก</Text>
                     {mainIngredientPairs.map((pair, pairIndex) => (
                         <View key={pairIndex} style={styles.row} >
                             {pair.map((item, itemIndex) => (
@@ -304,41 +340,39 @@ const Filter = (props, { route }) => {
                             ))}
                         </View>
                     ))}
-                    {props.New == 'New' ? <TouchableOpacity onPress={() => { handelModal(), setModalName('Add Main Ingredient') }}>
+                    {props.New == 'New' ? <TouchableOpacity onPress={() => { handelModal(), setModalName('เพิ่มวัถุดิบหลัก') }}>
                         <LinearGradient
                             colors={['#DD2572', '#F02E5D']}
                             style={[styles.TouchableOpacity]}>
                             <Text style={{ color: '#F3F3F3' }}>+</Text>
                         </LinearGradient>
                     </TouchableOpacity> : null}
-                    <Text style={{ color: '#F3F3F3', margin: 5 }}>Vegetable and Fruit</Text>
+                    <Text style={{ color: '#F3F3F3', margin: 5 }}>ผักและผลไม้</Text>
                     {veggiePairs.map((pair, pairIndex) => (
                         <View key={pairIndex} style={styles.row} >
                             {pair.map((item, itemIndex) => (
                                 <View style={styles.item}
                                     key={itemIndex}>
                                     <TouchableOpacity
-
                                         onPress={() => handleButtonPress(item)}>
                                         <LinearGradient
                                             colors={['#DD2572', '#F02E5D']}
                                             style={[cookStore.tags.includes(item) && styles.selectedButton, styles.TouchableOpacity]}>
                                             <Text style={{ color: '#F3F3F3' }}>{item.ingredientName}</Text>
                                         </LinearGradient>
-
                                     </TouchableOpacity>
                                 </View>
                             ))}
                         </View>
                     ))}
-                    {props.New == 'New' ? <TouchableOpacity onPress={() => { handelModal(), setModalName('Add Vegetable or Fruit') }}>
+                    {props.New == 'New' ? <TouchableOpacity onPress={() => { handelModal(), setModalName('เพิ่มผักและผลไม้') }}>
                         <LinearGradient
                             colors={['#DD2572', '#F02E5D']}
                             style={[styles.TouchableOpacity]}>
                             <Text style={{ color: '#F3F3F3' }}>+</Text>
                         </LinearGradient>
                     </TouchableOpacity> : null}
-                    <Text style={{ color: '#F3F3F3', margin: 5 }}>Seasoning</Text>
+                    <Text style={{ color: '#F3F3F3', margin: 5 }}>เครื่องปรุง</Text>
                     {seasoningPairs.map((pair, pairIndex) => (
                         <View key={pairIndex} style={styles.row} >
                             {pair.map((item, itemIndex) => (
@@ -359,19 +393,24 @@ const Filter = (props, { route }) => {
                             ))}
                         </View>
                     ))}
-                    {props.New == 'New' ? <TouchableOpacity onPress={() => { handelModal(), setModalName('Add Seasoning') }}>
+                    {props.New == 'New' ? <TouchableOpacity onPress={() => { handelModal(), setModalName('เพิ่มเครื่องปรุง') }}>
                         <LinearGradient
                             colors={['#DD2572', '#F02E5D']}
                             style={[styles.TouchableOpacity]}>
                             <Text style={{ color: '#F3F3F3' }}>+</Text>
                         </LinearGradient>
                     </TouchableOpacity> : null}
+
+
+                    {props.filter = "filter" ?
+                        mealFiltered.map(meal => FoodCard(meal)) : null
+                    }
                     <Modal isVisible={isModalVisible}>
                         <View style={{ width: 200, height: 200, backgroundColor: '#2F2C2C', justifyContent: 'center', alignSelf: 'center', alignItems: 'center' }}>
                             <View style={styles.inputContainer}>
                                 <TextInput
                                     style={styles.input}
-                                    placeholder="Name"
+                                    placeholder="ชื่อ"
                                     onChangeText={handleInputChange} // Step 2: Update the seasoningInput state
                                     ref={(input) => { this.textInputRef = input; }}
                                 />
@@ -380,7 +419,7 @@ const Filter = (props, { route }) => {
                                 <Button color="#DD2572" title={modalName} onPress={() => { handleAdd(), this.textInputRef.clear(); }} />
                             </View>
                             <View style={styles.buttonModal}>
-                                <Button color="#DD2572" title="Cancel" onPress={handelModal} />
+                                <Button color="#DD2572" title="ปิด" onPress={handelModal} />
                             </View>
                         </View>
                     </Modal>
@@ -393,13 +432,28 @@ const Filter = (props, { route }) => {
 export default Filter
 
 const styles = StyleSheet.create({
+    foodCard: {
+        width: "100%",
+        flexDirection: "row",
+        flex: 1,
+        padding: 10,
+        marginTop: 10,
+        backgroundColor: "#707070",
+        borderRadius: 20,
+    },
+    foodImage: {
+        flex: 1
+    },
+    foodText: {
+        flex: 2,
+        marginLeft: 10
+    },
     container: {
         flex: 1,
         justifyContent: 'flex-start', // Align content to the top
         height: "100%",
         backgroundColor: '#2F2C2C',
         padding: 20,
-        paddingTop: 50,
     },
     buttonContainer: {
         alignItems: 'flex-start',

@@ -9,12 +9,14 @@ const SearchUser = ({ navigation }) => {
                 <TextInput style={styles.textInput} placeholder='ค้นหาผู้ใช้' />
             </View>
             {/* <FlatList /> */}
-            <View style={styles.user}>
-                <Image style={styles.userImage} source={user ? { uri: user.image } : require("../../picture/image.png")} />
-                <Text>
-                    NUT
-                </Text>
-            </View>
+            <TouchableOpacity>
+                <View style={styles.user}>
+                    <Image style={styles.userImage} source={user ? { uri: user.image } : require("../../picture/image.png")} />
+                    <Text style={styles.displayName}>
+                        NUT
+                    </Text>
+                </View>
+            </TouchableOpacity>
         </ScrollView>
     );
 };
@@ -26,7 +28,7 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     textInput: {
-        marginBottom:15,
+        marginBottom: 15,
         textAlign: "center",
         borderWidth: 1,
         borderColor: "black",
@@ -35,14 +37,19 @@ const styles = StyleSheet.create({
         width: "100%",
         backgroundColor: "#fff"
     },
-    user:{
-        padding:10,
-        backgroundColor:"#fff"
+    user: {
+        padding: 10,
+        backgroundColor: "#fff",
+        flexDirection: "row",
+        borderRadius:10
     },
-    userImage:{
-        width:50,
-        height:50,
-        borderRadius:50
+    userImage: {
+        width: 50,
+        height: 50,
+        borderRadius: 50
+    },
+    displayName: {
+
     }
 });
 
