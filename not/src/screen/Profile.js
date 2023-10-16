@@ -63,6 +63,11 @@ const Profile = ({navigation}) => {
                 style={styles.favoriteIcon}
                 source={require("../../picture/favoriteIcon.png")}
               />
+            </TouchableOpacity><TouchableOpacity style={styles.shareIconContainer}>
+              <Image
+                style={styles.shareIcon}
+                source={require("../../picture/shareicon.png")}
+              />
             </TouchableOpacity><View style={styles.textContainer}>
               <Text style={styles.mealName}>{item.mealName}</Text>
             </View>
@@ -155,6 +160,17 @@ const styles = StyleSheet.create({
   },
   favoriteIcon: {
     width: 50,
+    height: 50,
+    resizeMode: "contain",
+  },
+  shareIconContainer: {
+    position: "absolute",
+    bottom: 30, // Position at the bottom
+    left: 320, // Position at the right
+    backgroundColor: "transparent",
+  },
+  shareIcon: {
+    width: 30,
     height: 50,
     resizeMode: "contain",
   },
