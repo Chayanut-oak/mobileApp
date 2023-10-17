@@ -13,7 +13,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { arrayRemove, arrayUnion } from "firebase/firestore";
 import { saveUserData } from "../../redux/userSlice";
-import { collection, doc, setDoc, updateDoc } from 'firebase/firestore';
+import { collection, doc, setDoc, updateDoc, increment } from 'firebase/firestore';
 import { FIRE_STORE } from '../../Firebaseconfig'
 const MealDetail = ({ navigation, route }) => {
   const mealId = route.params.mealId
@@ -28,21 +28,30 @@ const MealDetail = ({ navigation, route }) => {
     setMeal(selectedMeal)
   }, [storeMeal])
   const addFavorite = () => {
-    const collectRef = collection(FIRE_STORE, "users")
-    const userRef = doc(collectRef, storeUser.userId)
-    dispatch(saveUserData({ favoriteMeals: [...storeUser.favoriteMeals, mealId] }))
+    const collectUserRef = collection(FIRE_STORE, "users")
+    const userRef = doc(collectUserRef, storeUser.userId)
+    const collectMealRef = collection(FIRE_STORE, "meals")
+    const mealRef = doc(collectMealRef, mealId)
+    // dispatch(saveUserData({ favoriteMeals: [...storeUser.favoriteMeals, mealId] }))
     updateDoc(userRef, {
       "favoriteMeals": arrayUnion(mealId),
     });
+    updateDoc(mealRef, {
+      "like": increment(1)
+    });
   }
   const removeFavorite = () => {
-    const collectRef = collection(FIRE_STORE, "users")
-    const userRef = doc(collectRef, storeUser.userId)
-    dispatch(saveUserData({ favoriteMeals: storeUser.favoriteMeals.filter((meal => meal.mealId != mealId)) }))
+    const collectUserRef = collection(FIRE_STORE, "users")
+    const userRef = doc(collectUserRef, storeUser.userId)
+    const collectMealRef = collection(FIRE_STORE, "meals")
+    const mealRef = doc(collectMealRef, mealId)
+    // dispatch(saveUserData({ favoriteMeals: storeUser.favoriteMeals.filter((meal => meal.mealId != mealId)) }))
     updateDoc(userRef, {
       "favoriteMeals": arrayRemove(mealId),
     });
-
+    updateDoc(mealRef, {
+      "like": increment(-1)
+    });
   }
   if (!meal) {
     return (
