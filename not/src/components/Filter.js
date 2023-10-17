@@ -222,7 +222,7 @@ const Filter = (props, { route }) => {
 
     const FoodCard = (meal) => {
         return (
-            <TouchableOpacity style={styles.foodCard} onPress={() => navigation.navigate("mealDetail", {mealId:meal.mealId})}>
+            <TouchableOpacity key={meal.mealId} style={styles.foodCard} onPress={() => navigation.navigate("mealDetail", {mealId:meal.mealId})}>
                 <Image style={styles.foodImage} source={meal.mealImage ? { uri: meal.mealImage.imagePath } : require("../../picture/image.png")} />
                 <View style={styles.foodText}>
                     <Text style={{color:"#fff" ,fontWeight:"bold"}}>ชื่อเมนู: {meal.mealName}</Text>

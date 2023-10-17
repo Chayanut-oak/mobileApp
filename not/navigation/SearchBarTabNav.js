@@ -7,14 +7,16 @@ const TopTab = createMaterialTopTabNavigator()
 const SearchBarTabNav = () => {
   return (
     <TopTab.Navigator screenOptions={{
-      tabBarStyle: { backgroundColor: "#707070", height: "auto"},
-      tabBarLabelStyle: { fontSize: 15, fontWeight: "bold", color: "black" },
+      tabBarStyle: { backgroundColor: "#2F2C2C", height: "auto" },
+      tabBarActiveTintColor: '#DD2572',
+      tabBarInactiveTintColor:"white",
+      tabBarLabelStyle: { fontSize: 15, fontWeight: "bold" },
       tabBarIndicatorStyle: {
         borderBottomColor: '#505050',
         borderBottomWidth: 4,
       },
     }}
-    
+
     >
       <TopTab.Screen component={SearchScreen} name={"SearchMeal"} options={{ tabBarLabel: 'Search Meal' }} />
       <TopTab.Screen component={SearchUser} name={"SearchUser"} options={{ tabBarLabel: 'Search User' }} />
