@@ -11,8 +11,10 @@ import YoutubeIframe from "react-native-youtube-iframe";
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSelector, useDispatch } from 'react-redux';
-
-
+import { arrayRemove, arrayUnion } from "firebase/firestore";
+import { saveUserData } from "../../redux/userSlice";
+import { collection, doc, setDoc, updateDoc } from 'firebase/firestore';
+import { FIRE_STORE } from '../../Firebaseconfig'
 const MealDetail = ({ navigation, route }) => {
   const mealId = route.params.mealId
   const storeMeal = useSelector((state) => state.meal)
@@ -25,7 +27,23 @@ const MealDetail = ({ navigation, route }) => {
     const selectedMeal = storeMeal.find(item => item.mealId === mealId);
     setMeal(selectedMeal)
   }, [storeMeal])
+  const addFavorite = () => {
+    const collectRef = collection(FIRE_STORE, "users")
+    const userRef = doc(collectRef, storeUser.userId)
+    dispatch(saveUserData({ favoriteMeals: [...storeUser.favoriteMeals, mealId] }))
+    updateDoc(userRef, {
+      "favoriteMeals": arrayUnion(mealId),
+    });
+  }
+  const removeFavorite = () => {
+    const collectRef = collection(FIRE_STORE, "users")
+    const userRef = doc(collectRef, storeUser.userId)
+    dispatch(saveUserData({ favoriteMeals: storeUser.favoriteMeals.filter((meal => meal.mealId != mealId)) }))
+    updateDoc(userRef, {
+      "favoriteMeals": arrayRemove(mealId),
+    });
 
+  }
   if (!meal) {
     return (
       <Text>Loading</Text>
@@ -40,10 +58,16 @@ const MealDetail = ({ navigation, route }) => {
             style={styles.image}
             source={meal.mealImage.imagePath ? { uri: meal.mealImage.imagePath } : require("../../picture/image.png")}
           />
-          <TouchableOpacity style={styles.favoriteIconContainer}>
+          <TouchableOpacity style={styles.favoriteIconContainer} onPress={() => {
+            if (storeUser.favoriteMeals.includes(mealId)) {
+              removeFavorite()
+            } else {
+              addFavorite()
+            }
+          }}>
             <Image
               style={styles.favoriteIcon}
-              source={require("../../picture/favoriteIcon.png")}
+              source={!storeUser.favoriteMeals.includes(mealId) ? require("../../picture/favoriteIcon.png") : require("../../picture/favoriteIconToggle.png")}
             />
           </TouchableOpacity>
         </View>
