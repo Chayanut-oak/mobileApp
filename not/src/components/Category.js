@@ -46,7 +46,7 @@ const Category = ({ navigation }) => {
                 <Image
                   style={{ flex: 1, width: 100, height: 100, margin: 5, borderRadius: 100, resizeMode: 'contain', }}
                   source={{ uri: item.image.imagePath }}
-                /><Text style={{ color: "#D1D1D1" }}>{item.ingredientName}</Text>
+                /><Text style={{fontSize:15,fontWeight:"bold", color: "#D1D1D1" }}>{item.ingredientName}</Text>
               </TouchableOpacity>
             </View>
           )

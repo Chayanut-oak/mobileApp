@@ -20,17 +20,15 @@ const MealCategories = ({ navigation, category }) => {
           numColumns={2}
           showsHorizontalScrollIndicator={false}
           renderItem={({ item, index }) => (
-            <TouchableOpacity onPress={() => {
+            <TouchableOpacity key={index} style={styles.item} onPress={() => {
               navigation.navigate("mealDetail", { mealId: item.mealId })
             }}>
-              <View key={index} style={styles.item}>
-                <Image
-                  style={styles.image}
-                  source={{ uri: item.mealImage.imagePath }}
-                />
-                <Text style={styles.title}>{item.mealName}</Text>
-                <Text style={styles.title}>โดย: {item.createdBy.displayName}</Text>
-              </View>
+              <Image
+                style={styles.image}
+                source={{ uri: item.mealImage.imagePath }}
+              />
+              <Text style={{ fontSize: 15, fontWeight: "bold", color: "white" }}>{item.mealName}</Text>
+              <Text style={{ fontSize: 15, fontWeight: "bold", color: "#DD2572" }}>   {item.createdBy.displayName}</Text>
             </TouchableOpacity>
 
           )}
@@ -52,12 +50,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   item: {
-    alignItems: 'center',
+    marginHorizontal:15
   },
   image: {
     width: 150,
     height: 150,
-    margin: 5,
+    marginTop: 5,
+    marginBottom: -18,
     resizeMode: 'contain',
   },
   title: {

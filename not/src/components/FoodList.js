@@ -10,6 +10,7 @@ const FoodList = ({ navigation }) => {
     if (storeMeal.length != 0) {
       let array = [...storeMeal]
       setImagePairs(splitImagesIntoPairs(shuffle(array)))
+
     }
   }, [storeMeal])
 
@@ -34,16 +35,14 @@ const FoodList = ({ navigation }) => {
       {imagePairs.map((pair, pairIndex) => (
         <View key={pairIndex} style={styles.row}>
           {pair.map((item, itemIndex) => (
-            <View key={itemIndex} >
-              <TouchableOpacity style={styles.item} onPress={() => { navigation.navigate("mealDetail", { mealId: item.mealId }) }}>
-                <Image
-                  style={styles.image}
-                  source={item.mealImage.imagePath ? { uri: item.mealImage.imagePath } : require("../../picture/image.png")}
-                />
-                <Text style={styles.title}>{item.mealName}</Text>
-                <Text style={styles.title}>โดย: {item.createdBy.displayName}</Text>
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity key={itemIndex} style={styles.item} onPress={() => { navigation.navigate("mealDetail", { mealId: item.mealId }) }}>
+              <Image
+                style={styles.image}
+                source={item.mealImage.imagePath ? { uri: item.mealImage.imagePath } : require("../../picture/image.png")}
+              />
+              <Text style={{ fontSize: 15, fontWeight: "bold", color: "white" }}>{item.mealName}</Text>
+              <Text style={{ fontSize: 15, fontWeight: "bold", color: "#DD2572" }}>   {item.createdBy.displayName}</Text>
+            </TouchableOpacity>
           ))}
         </View>
       ))}
@@ -62,16 +61,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   item: {
-    alignItems: 'center',
 
   },
   image: {
     width: 150,
     height: 150,
-    margin: 5,
+    marginTop: 5,
+    marginBottom: -18,
     resizeMode: 'contain',
+
   },
   title: {
+    textAlign: "left",
     color: "#D1D1D1",
   },
 });
