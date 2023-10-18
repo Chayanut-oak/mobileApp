@@ -33,8 +33,8 @@ const BottomTabNav = ({route , navigation}) => {
             iconName = focused ? 'add-circle' : 'add-circle-outline';
           } else if (route.name === 'Notification') {
             iconName = focused ? 'notifications' : 'notifications-outline';
-          } else if (route.name === auth.currentUser.displayName) {
-            iconName = focused ? 'ellipse-outline' : 'ellipse-sharp';
+          } else if (route.name === "Profile") {
+            iconName = focused ? 'person-sharp' : 'person-outline';
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
