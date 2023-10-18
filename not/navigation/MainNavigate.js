@@ -46,8 +46,8 @@ const MainNavigate = () => {
                 const allUserSnapshot = onSnapshot(collection(FIRE_STORE, 'users'), (collect) => {
                     // const curUserDoc = collect.docs.find((doc) => doc.data().userId == user.uid)
                     const allUserDoc = collect.docs.map((doc) => ({ ...doc.data() }));
-                    if (user) { 
-                        const curUserDoc = allUserDoc.find(item => item.userId == user.uid) 
+                    if (user) {
+                        const curUserDoc = allUserDoc.find(item => item.userId == user.uid)
                         dispatch(saveUserData(curUserDoc));
                     }
                     dispatch(saveAllUserData(allUserDoc))
@@ -103,7 +103,7 @@ const MainNavigate = () => {
 
         <NavigationContainer>
             <Mainnavigate.Navigator>
-                {!user ? <Mainnavigate.Screen name="Authen" component={Authentication} options={{ headerStyle: { backgroundColor: "#E27E8A" } }} /> : displayname == "" && !auth.currentUser.displayName
+                {!user ? <Mainnavigate.Screen name="Authen" component={Authentication} options={{ headerStyle: { backgroundColor: "#E27E8A" } }} /> : !auth.currentUser.displayName
                     ? <Mainnavigate.Screen name="Name" component={Name} options={{ headerStyle: { backgroundColor: "#E27E8A" } }} />
                     : <Mainnavigate.Screen name="homeWithBottom" component={BottomTabNav} options={{ headerShown: false }} />}
             </Mainnavigate.Navigator>
