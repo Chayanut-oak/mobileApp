@@ -47,7 +47,7 @@ const BottomTabNav = ({route , navigation}) => {
       <MenuTab.Screen name="Notification"  component={Notification} options={{
         headerStyle: { backgroundColor: "#E27E8A" }
       }} />
-      <MenuTab.Screen name={auth.currentUser.displayName} component={Profile} options={{
+      <MenuTab.Screen name={"Profile"} component={Profile} options={{
         headerStyle: { backgroundColor: "#E27E8A" }
       }} />
 

@@ -38,8 +38,10 @@ const Register = ({ navigation }) => {
           follower: [],
         };
         await setDoc(doc(FIRE_STORE, 'users', res.user.uid), userData);
+      }else{
+        alert("Wrong confirm password");
       }
-      alert("Wrong confirm password");
+      
     } catch (error) {
       const errorMessage = error.message;
       alert(errorMessage);
