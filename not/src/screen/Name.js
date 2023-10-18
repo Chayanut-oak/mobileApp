@@ -6,8 +6,8 @@ import { HeaderButton } from "react-navigation-header-buttons";
 import { LinearGradient } from 'expo-linear-gradient';
 import { TouchableOpacity } from "react-native";
 import { getAuth } from "firebase/auth";
-import { useDispatch } from 'react-redux';
-import { saveUserData } from '../../redux/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { saveUserData, updateUserDisplayName } from '../../redux/userSlice';
 import { collection, doc, setDoc, updateDoc } from 'firebase/firestore';
 import * as ImagePicker from 'expo-image-picker';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
@@ -15,7 +15,7 @@ const Name = ({ navigation }) => {
 
   const dispatch = useDispatch();
   const auth = FIREBASE_AUTH
-
+  const storeUser = useSelector(store => store.user)
   const [selectedImage, setSelectedImage] = useState(null);
   const [imageObj, setImageObj] = useState({});
   const [displayName, setDisplayName] = useState('');
@@ -24,6 +24,7 @@ const Name = ({ navigation }) => {
     if (Object.keys(imageObj).length != 0) {
       const collectRef = collection(FIRE_STORE, "users")
       const userRef = doc(collectRef, userId)
+      console.log(imageObj)
       updateDoc(userRef, {
         "displayName": displayName,
         "userImage": imageObj,
@@ -84,11 +85,7 @@ const Name = ({ navigation }) => {
         displayName: displayName,
 
       });
-      const user = {
-        displayName: displayName
-      }
-      // dispatch(saveUserData(user));
-      dispatch(saveUserData(user));
+      
       if (displayName != '' && selectedImage != null) {
         await uploadImage()
       } else if (displayName != '') {
@@ -97,12 +94,14 @@ const Name = ({ navigation }) => {
         updateDoc(userRef, {
           "displayName": displayName,
         });
+        dispatch(updateUserDisplayName(displayName));
       }
 
     } catch (error) {
       const errorMessage = error.message;
       // alert(errorMessage);
     }
+    // console.log(storeUser)
   };
 
   return (
