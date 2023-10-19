@@ -47,6 +47,11 @@ const Profile = ({ navigation }) => {
   }
   return (
     <View style={styles.container}>
+      <TouchableOpacity style={styles.settingconContainer} onPress={() => {navigation.navigate('SettingScreen')}}>
+      <Image style={styles.settingIcon}
+                      source={require("../../picture/settingIcon.png")}
+                    />
+      </TouchableOpacity>
       <Image source={storeUser.userImage.imagePath ? { uri: storeUser.userImage.imagePath } : require("../../picture/image.png")} style={styles.profilepic} />
       <Text style={styles.user}>{storeUser.displayName}</Text>
       <View style={{ flexDirection: 'row', gap: 89, marginTop: 10 }}>
@@ -229,6 +234,17 @@ const styles = StyleSheet.create({
   },
   shareIcon: {
     width: 30,
+    height: 50,
+    resizeMode: "contain",
+  },
+  settingconContainer: {
+    position: "absolute",
+    top: 10,
+    left: 335, 
+    backgroundColor: "transparent",
+  },
+  settingIcon: {
+    width: 35,
     height: 50,
     resizeMode: "contain",
   },
