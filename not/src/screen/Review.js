@@ -9,38 +9,61 @@ import {
     TextInput,
     Button,
 } from "react-native";
-
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
+import { FIRE_STORE } from '../../Firebaseconfig'
+import { collection, doc, addDoc, setDoc, getDoc, onSnapshot, query, where, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import YoutubeIframe from "react-native-youtube-iframe";
 import { LinearGradient } from 'expo-linear-gradient';
+import { useSelector } from "react-redux";
 const Review = ({ route }) => {
     const [text, setText] = useState('');
-    const reviews = [
-        {
-            userId: "user001",
-            userName: "Nut2",
-            userImage: "iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAA2BJREFUaEPtmj9o6kAcx3+li0ih4FLq2HZ2bgeduruJFEeplEoLDtXFyamLOBQK6iK0Ih0K3bvo5ODk0kUEoUR0ECwi7eTjd4/kXWKSu1wurSkvk+clv/t+fv9O4m31er1VKBSCQCAAfrw+Pz9hNpvB1nA4XOGHo6Mj2N3d9RXLfD6HwWAAGIgtRVFWwWCQfOEnGBUCNS+Xy78g+/v7QE9semSMWsfj8T8QzCk/wJhpXAPZdBgrR5uCbCqMXbZYgmwaDCvlbUE2BYYFgTqZID8NwwPBDfJTMLwQjkC+G8YJhGOQ74JxCiEE4jWMCIQwiFcwohCuQGTDuIFwDSILxi2EFBC3MDIgpIGIwsiCkAriFEYmhHQQXhjZEJ6AsGC8gPAMxArGKwhPQYwwOPby5QbXz3gUIXqpUcDnvXxD8x+EJ0J0Tfg2tcwK23fFbifYKxjpNcIjlOcentSl75EK4kSgk3t5oKSBiAgTecYKSgqIG0FunpWaWjKEyLDhKiIyBKhedWtLGMTtwma57samEIibBVkdSNS2YxDRhVgA9LzIGo5A6AW2t7fh4uICHh4eNA03Nzdwe3tLxv1+H5LJJLy9vUEqlYL7+3vY2dmx5VksFms2r6+voVKpMG1ygxi9NJlM4Pz8HEqlEkQiEZ1AVVA0GoWzszMiDj/j/XaX0aaZ46xscoGYhRo9XiwWoVqtwt7enk4fzmWzWbi7uyOQr6+v0Gg0mFExs6mu/fX1BYVCwdImE8QqX+3E4RxG6unpiUDS43K5DN1uVzd3dXUFrVYLptOpKTBqaDabJI2fn5/XbOIawn+9YSQymYwWiVgsphNHR8Do6Xw+T57L5XKQSCRIZE9PT0l0rWy+vLyQ+VqtBuFwmNQgnRHCf4aiGEVRtHShx+hxOxCsBQTodDpANwiWzXq9DpeXlyRdR6MRG0Sk/dF1gSlilVpqPaF3Hx8ftSiaNQEzmwjz8fEB7+/vgGmqpq+0AwN0qNHjdNiN9aQKRPEnJydayzbCWNnEwz9YM+12GxAM27oOhDcSdHvFlqqOMXdxH7Frv/RcPB7XauT4+FjXplk20+k0HB4ektTE4yYaiNNDNcbNy7jpmW2I6HHcU/BSN0iMltq1Dg4OdBsiyyY6DQG0QzW/5pjTbzl49gfcxOo1RgS8SgAAAABJRU5ErkJggg==",
-            userReview: "reviews",
-        },
-        {
-            userId: "user002",
-            userName: "Nut0000",
-            userImage: "iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAA2BJREFUaEPtmj9o6kAcx3+li0ih4FLq2HZ2bgeduruJFEeplEoLDtXFyamLOBQK6iK0Ih0K3bvo5ODk0kUEoUR0ECwi7eTjd4/kXWKSu1wurSkvk+clv/t+fv9O4m31er1VKBSCQCAAfrw+Pz9hNpvB1nA4XOGHo6Mj2N3d9RXLfD6HwWAAGIgtRVFWwWCQfOEnGBUCNS+Xy78g+/v7QE9semSMWsfj8T8QzCk/wJhpXAPZdBgrR5uCbCqMXbZYgmwaDCvlbUE2BYYFgTqZID8NwwPBDfJTMLwQjkC+G8YJhGOQ74JxCiEE4jWMCIQwiFcwohCuQGTDuIFwDSILxi2EFBC3MDIgpIGIwsiCkAriFEYmhHQQXhjZEJ6AsGC8gPAMxArGKwhPQYwwOPby5QbXz3gUIXqpUcDnvXxD8x+EJ0J0Tfg2tcwK23fFbifYKxjpNcIjlOcentSl75EK4kSgk3t5oKSBiAgTecYKSgqIG0FunpWaWjKEyLDhKiIyBKhedWtLGMTtwma57samEIibBVkdSNS2YxDRhVgA9LzIGo5A6AW2t7fh4uICHh4eNA03Nzdwe3tLxv1+H5LJJLy9vUEqlYL7+3vY2dmx5VksFms2r6+voVKpMG1ygxi9NJlM4Pz8HEqlEkQiEZ1AVVA0GoWzszMiDj/j/XaX0aaZ46xscoGYhRo9XiwWoVqtwt7enk4fzmWzWbi7uyOQr6+v0Gg0mFExs6mu/fX1BYVCwdImE8QqX+3E4RxG6unpiUDS43K5DN1uVzd3dXUFrVYLptOpKTBqaDabJI2fn5/XbOIawn+9YSQymYwWiVgsphNHR8Do6Xw+T57L5XKQSCRIZE9PT0l0rWy+vLyQ+VqtBuFwmNQgnRHCf4aiGEVRtHShx+hxOxCsBQTodDpANwiWzXq9DpeXlyRdR6MRG0Sk/dF1gSlilVpqPaF3Hx8ftSiaNQEzmwjz8fEB7+/vgGmqpq+0AwN0qNHjdNiN9aQKRPEnJydayzbCWNnEwz9YM+12GxAM27oOhDcSdHvFlqqOMXdxH7Frv/RcPB7XauT4+FjXplk20+k0HB4ektTE4yYaiNNDNcbNy7jpmW2I6HHcU/BSN0iMltq1Dg4OdBsiyyY6DQG0QzW/5pjTbzl49gfcxOo1RgS8SgAAAABJRU5ErkJggg==",
-            userReview: "re",
-        },
-    ]
+    const [reviews, setReviews] = useState([])
+    const user = useSelector(state => state.user)
+    const allUser = useSelector(state => state.allUser)
 
+    useEffect(() => {
+        const reviewQuery = query(collection(FIRE_STORE, "comments"), where("mealId", "==", route.params.mealId));
+        const unsubscribe = onSnapshot(reviewQuery, (querySnapshot) => {
+            const allcomment = querySnapshot.docs.map((doc) => ({ ...doc.data() }))
+            const reviewInMeal = allcomment.map((comment) => {
+                const matchedUser = allUser.find((user) => comment.userId === user.userId);
+                if (matchedUser) {
+                    return { ...comment, commentedBy: matchedUser };
+                }
+            });
+            setReviews(reviewInMeal);
+        });
+        return () => {
+            if (unsubscribe) {
+                unsubscribe();
+            }
+        };
+    }, [])
+    const addComment = async () => {
+        try {
+            await addDoc(collection(FIRE_STORE, "comments"), {
+                review: text,
+                mealId: route.params.mealId,
+                userId: user.userId
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    // if (!reviews) {
+    //     return
+    // }
     return (
         <View style={styles.container}>
             <ScrollView>
                 {reviews.map((review, index) => (
                     <View key={index} style={styles.reviewCard}>
                         <TouchableOpacity>
-                            <Image style={styles.userImage} source={{ uri: `data:image/jpeg;base64,${review.userImage}` }} />
+                            <Image style={styles.userImage} source={{ uri: review.commentedBy.userImage.imagePath }} />
                         </TouchableOpacity>
                         <View style={styles.reviewDetail}>
-                            <Text style={styles.userName}>{review.userName}</Text>
-                            <Text>{review.userReview}</Text>
+                            <Text style={styles.userName}>{review.commentedBy.displayName}</Text>
+                            <Text>{review.review}</Text>
                         </View>
                     </View>
                 ))}
@@ -51,7 +74,10 @@ const Review = ({ route }) => {
                     onChangeText={setText}
                     value={text}
                 />
-                <TouchableOpacity onPress={() => setText("")}>
+                <TouchableOpacity onPress={() => {
+                    addComment()
+                    setText("")
+                }}>
                     <Image style={styles.imageSend} source={require("../../picture/sendIcon.png")} />
                 </TouchableOpacity>
             </View>
@@ -71,7 +97,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         height: 120,
         width: "100%",
-        backgroundColor: "#E6E6E6",
+        backgroundColor: "#D0D0D0",
         alignItems: "center"
     },
     userImage: {
@@ -105,11 +131,11 @@ const styles = StyleSheet.create({
     },
     input: {
         flexDirection: "row",
-        height: 70
+        height: 50
     },
     imageSend: {
-        height: 70,
-        width: 70
+        height: 50,
+        width: 50
     }
 });
 

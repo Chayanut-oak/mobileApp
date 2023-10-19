@@ -19,7 +19,7 @@ const Recommend = ({ navigation }) => {
   }
   if (!recommend) {
     return (
-      <Text>Loading</Text>
+      <Text></Text>
     )
   }
 

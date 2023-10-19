@@ -58,7 +58,7 @@ const MealDetail = ({ navigation, route }) => {
   }
   if (!meal) {
     return (
-      <Text>Loading</Text>
+      <Text></Text>
     )
   }
 
@@ -96,7 +96,7 @@ const MealDetail = ({ navigation, route }) => {
               />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
-              navigation.navigate("mealReview")
+              navigation.navigate("mealReview",{mealId: mealId})
             }}>
               <MaterialCommunityIcons name="comment-text-multiple-outline" size={24} color="white" />
             </TouchableOpacity>
