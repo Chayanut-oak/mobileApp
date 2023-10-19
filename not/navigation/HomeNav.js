@@ -12,6 +12,7 @@ import Review from '../src/screen/Review'
 import { useDispatch } from 'react-redux'
 import { saveUserData } from '../redux/userSlice'
 import SearchBarTabNav from './SearchBarTabNav'
+import ViewUser from '../src/screen/ViewUser'
 const HomeNav = ({navigation}) => {
   const dispatch = useDispatch();
   const HomeNavigate = createNativeStackNavigator()
@@ -40,7 +41,7 @@ const HomeNav = ({navigation}) => {
       <HomeNavigate.Screen name="mealReview" component={Review} options={{
         headerStyle: { backgroundColor: "#E27E8A" }
       }} />
-
+ <HomeNavigate.Screen name="ViewUser" component={ViewUser} options={{ title: "", headerStyle: { backgroundColor: "#E27E8A" } }} />
     </HomeNavigate.Navigator>
   )
 }

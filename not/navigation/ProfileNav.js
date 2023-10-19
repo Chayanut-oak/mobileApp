@@ -12,7 +12,6 @@ const ProfileNav = ({route}) => {
     <ProfileNavigate.Navigator >
       <ProfileNavigate.Screen component={Profile} name="UserProfile"  />
       <ProfileNavigate.Screen component={FollowNav} name="Followed" />
-      <ProfileNavigate.Screen component={ViewUser} name="ViewUser" />
       <ProfileNavigate.Screen component={AnotherFollowNav} name="AnotherFollowNav"/>
     </ProfileNavigate.Navigator>
   )

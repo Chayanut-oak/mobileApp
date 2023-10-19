@@ -1,5 +1,5 @@
 import { StyleSheet, Text, Image, View, TouchableOpacity, FlatList } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 // import proimg from ''
 
@@ -8,50 +8,64 @@ const Profile = ({ navigation }) => {
   const [tab, setTab] = useState(true)
   const meals = useSelector((state) => state.meal);
   const userMeal = useSelector((state) => state.user)
+  const [user ,setUser] = useState(null)
+  useEffect (()=>{
+    if(userMeal){
+      setUser(userMeal)
+    }
+    
+  },[userMeal])
+
+  if (!meals || !user) {
+    return (
+      <Text>Loading</Text>
+    )
+  }
+  
   return (
     <View style={styles.container}>
-       <Image source={{ uri:userMeal.userImage.imagePath  }} style={styles.profilepic}>
-       </Image>
-       <Text style={styles.user}>{userMeal.displayName}</Text>
-      <View style={{ flexDirection: 'row', gap: 89, marginTop: 10 }}>
-        <Text style={{ color: 'white', fontSize: 22 }}>{userMeal.followed.length}</Text>
-        <Text style={{ color: 'white', fontSize: 22 }}>{userMeal.follower.length}</Text>
-        <Text style={{ color: 'white', fontSize: 22 }}>0</Text>
-      </View>
-      <View style={{ flexDirection: 'row', gap: 20, marginTop: 10 }}>
-        <TouchableOpacity onPress={()=> navigation.navigate('Followed')}>
-          <Text style={{ color: 'white', fontSize: 18 }}>กำลังติดตาม</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity onPress={() => navigation.navigate('Followed')}>
-          <Text style={{ color: 'white', fontSize: 18 }}>ผู้ติดตาม</Text>
-        </TouchableOpacity>
-        <Text style={{ color: 'white', fontSize: 18 }}>รายการอาหาร</Text>
-      </View>
-      <View style={{ flexDirection: 'row', marginVertical: 20 }}>
-        <TouchableOpacity
-          style={{ borderColor: tab ? '#CD2A51' : 'white', borderBottomWidth: 5, flex: 1, alignItems: 'center' }}
-          onPress={() => {
-            setTab(true)
-          }}>
-          <Text style={{
-            color: tab ? '#CD2A51' : 'white',
-            fontSize: 18,
-            padding: 5
-          }}>เมนูของฉัน</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{ borderColor: tab ? 'white' : '#CD2A51', borderBottomWidth: 5, flex: 1, alignItems: 'center' }}
-          onPress={() => {
-            setTab(false)
-          }}>
-          <Text style={{
-            color: tab ? 'white' : '#CD2A51',
-            fontSize: 18,
-            padding: 5
-          }}>เมนูที่ชอบ</Text>
-        </TouchableOpacity>
-      </View>
+      <Image source={{ uri:user.userImage.imagePath}} style={styles.profilepic}>
+      </Image>
+      <Text style={styles.user}>{user.displayName}</Text>
+    <View style={{ flexDirection: 'row', gap: 89, marginTop: 10 }}>
+      <Text style={{ color: 'white', fontSize: 22 }}>{user.followed.length}</Text>
+      <Text style={{ color: 'white', fontSize: 22 }}>{user.follower.length}</Text>
+      <Text style={{ color: 'white', fontSize: 22 }}>0</Text>
+    </View>
+    <View style={{ flexDirection: 'row', gap: 20, marginTop: 10 }}>
+      <TouchableOpacity onPress={()=> navigation.navigate('Followed')}>
+        <Text style={{ color: 'white', fontSize: 18 }}>กำลังติดตาม</Text>
+      </TouchableOpacity>
+      
+      <TouchableOpacity onPress={() => navigation.navigate('Followed')}>
+        <Text style={{ color: 'white', fontSize: 18 }}>ผู้ติดตาม</Text>
+      </TouchableOpacity>
+      <Text style={{ color: 'white', fontSize: 18 }}>รายการอาหาร</Text>
+    </View>
+    <View style={{ flexDirection: 'row', marginVertical: 20 }}>
+      <TouchableOpacity
+        style={{ borderColor: tab ? '#CD2A51' : 'white', borderBottomWidth: 5, flex: 1, alignItems: 'center' }}
+        onPress={() => {
+          setTab(true)
+        }}>
+        <Text style={{
+          color: tab ? '#CD2A51' : 'white',
+          fontSize: 18,
+          padding: 5
+        }}>เมนูของฉัน</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{ borderColor: tab ? 'white' : '#CD2A51', borderBottomWidth: 5, flex: 1, alignItems: 'center' }}
+        onPress={() => {
+          setTab(false)
+        }}>
+        <Text style={{
+          color: tab ? 'white' : '#CD2A51',
+          fontSize: 18,
+          padding: 5
+        }}>เมนูที่ชอบ</Text>
+      </TouchableOpacity>
+    </View>
 
       {tab ?
 

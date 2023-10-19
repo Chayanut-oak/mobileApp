@@ -21,11 +21,24 @@ const ViewUser = ({ navigation, route }) => {
       follower: arrayUnion(...[userMeal.userId])
     });
   }
+  const unfollow = async (uid) =>{
+    await updateDoc(doc(FIRE_STORE, "users", userMeal.userId), {
+        followed: arrayRemove(...[user.userId])
+      });
+      await updateDoc(doc(FIRE_STORE, "users", user.userId), {
+        follower: arrayRemove(...[userMeal.userId])
+      });
+}
   return (
     <View style={styles.container}>
       {userMeal.followed.filter((item)=> item.userId == viewUser.userId ).length == 0? <TouchableOpacity style={styles.rightCornerButton} onPress={()=> follow()}>
         <LinearGradient colors={['#DD2572', '#F02E5D']} style={styles.TouchableOpacity}>
           <Text style={styles.centeredText}>ติดตาม</Text>
+        </LinearGradient>
+      </TouchableOpacity>:null}
+      {userMeal.followed.filter((item)=> item.userId == viewUser.userId ).length != 0? <TouchableOpacity style={styles.rightCornerButton} onPress={()=> unfollow()}>
+        <LinearGradient colors={['#DD2572', '#F02E5D']} style={styles.TouchableOpacity}>
+          <Text style={styles.centeredText}>ยกเลิกติดตาม</Text>
         </LinearGradient>
       </TouchableOpacity>:null}
       <Image source={{ uri: viewUser.userImage.imagePath }} style={styles.profilepic}>

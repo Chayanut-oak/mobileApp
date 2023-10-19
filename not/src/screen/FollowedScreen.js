@@ -11,10 +11,10 @@ const FollowedScreen = ({ navigation }) => {
     const unfollow = async (uid) =>{
         const newFollwed = userMeal.followed.filter((item) => item.userId !== uid);
         await updateDoc(doc(FIRE_STORE, "users", userMeal.userId), {
-            followed: arrayRemove(...[uid])
+            followed: arrayRemove(uid)
           });
           await updateDoc(doc(FIRE_STORE, "users", uid), {
-            follower: arrayRemove(...[userMeal.userId])
+            follower: arrayRemove(userMeal.userId)
           });
         dispatch(updateFollowed(newFollwed))
     }

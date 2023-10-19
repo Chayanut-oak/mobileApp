@@ -8,20 +8,12 @@ import { updateDoc, doc, arrayRemove } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 const AnotherUserFollowed = ({ navigation, route }) => {
     const dispatch = useDispatch()
-    const allUserMeal = useSelector((state) => state.allUser)
     const userMeal = useSelector((state) => state.user)
     const [view ,setView] = useState()
     const viewUser = route.params.User
+    const allUserMeal = useSelector((state) => state.allUser)
+    const User = allUserMeal.find((allUser) => allUser.userId === viewUser.userId)
     const auth = getAuth()
-    useEffect(() => {
-        const linkedUser = [viewUser].map((user) => {
-            const linkedUserId = user.followed.map((userId) => {
-                return allUserMeal.find((allUser) => allUser.userId === userId);
-            });
-            return { ...user, followed: linkedUserId };
-        });
-        setView(linkedUser)
-},[])
 
 const FollowedCard = ({ userName, imagePath, uid, index, user }) => {
     return (
@@ -36,8 +28,8 @@ const FollowedCard = ({ userName, imagePath, uid, index, user }) => {
 
 return (
     <SafeAreaView style={styles.container}>
-        {view ?<FlatList
-            data={view[0].followed}
+        {User ?<FlatList
+            data={User.followed}
             numColumns={2}
             renderItem={({ item, index }) => (
                 <FollowedCard userName={item.displayName} imagePath={item.userImage.imagePath} uid={item.userId} index={index} user={item} />

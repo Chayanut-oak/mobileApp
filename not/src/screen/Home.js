@@ -8,6 +8,7 @@ import Category from '../components/Category';
 import Recommend from '../components/Recommend';
 import FoodList from '../components/FoodList';
 import SearchBar from '../components/SearchBar';
+import { useSelector } from 'react-redux';
 const Home = ({ navigation }) => {
 
   return (
