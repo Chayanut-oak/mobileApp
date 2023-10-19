@@ -222,15 +222,15 @@ const Filter = (props, { route }) => {
 
     const FoodCard = (meal) => {
         return (
-            <TouchableOpacity key={meal.mealId} style={styles.foodCard} onPress={() => navigation.navigate("mealDetail", {mealId:meal.mealId})}>
+            <TouchableOpacity key={meal.mealId} style={styles.foodCard} onPress={() => navigation.navigate("mealDetail", { mealId: meal.mealId })}>
                 <Image style={styles.foodImage} source={meal.mealImage ? { uri: meal.mealImage.imagePath } : require("../../picture/image.png")} />
                 <View style={styles.foodText}>
-                    <Text style={{color:"#fff" ,fontWeight:"bold"}}>ชื่อเมนู: {meal.mealName}</Text>
-                    <Text style={{color:"#fff" ,fontWeight:"bold"}}>Tags:{meal.tags.map(tag => " " + tag.ingredientName) + " "}</Text>
-                    <Text style={{color:"#fff" ,fontWeight:"bold"}}>ขาดTags:{meal.tags.filter(mealTag => {
+                    <Text style={{ fontWeight: "bold" }}>ชื่อเมนู: {meal.mealName}</Text>
+                    <Text style={{ fontWeight: "bold" }}>Tags:{meal.tags.map(tag => " " + tag.ingredientName) + " "}</Text>
+                    <Text style={{ fontWeight: "bold" }}>ขาดTags:{meal.tags.filter(mealTag => {
                         return !cookStore.tags.some(tag => mealTag.ingredientId === tag.ingredientId)
                     }).map(tag => " " + tag.ingredientName) + " "}</Text>
-                    <Text style={{color:"#fff" ,fontWeight:"bold"}}>โดย: {meal.createdBy.displayName}</Text>
+                    <Text style={{ fontWeight: "bold" }}>โดย: {meal.createdBy.displayName}</Text>
                 </View>
             </TouchableOpacity>
 
@@ -438,7 +438,7 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 10,
         marginTop: 10,
-        backgroundColor: "#707070",
+        backgroundColor: "#fff",
         borderRadius: 20,
     },
     foodImage: {
