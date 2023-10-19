@@ -11,9 +11,8 @@ import YoutubeIframe from "react-native-youtube-iframe";
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSelector, useDispatch } from 'react-redux';
-import { arrayRemove, arrayUnion } from "firebase/firestore";
 import { saveUserData } from "../../redux/userSlice";
-import { collection, doc, setDoc, updateDoc, increment } from 'firebase/firestore';
+import { collection, doc, setDoc, updateDoc, increment, arrayRemove, arrayUnion } from 'firebase/firestore';
 import { FIRE_STORE } from '../../Firebaseconfig'
 const MealDetail = ({ navigation, route }) => {
   const mealId = route.params.mealId
@@ -25,9 +24,9 @@ const MealDetail = ({ navigation, route }) => {
   const [meal, setMeal] = useState(null)
   useEffect(() => {
     const selectedMeal = storeMeal.find(item => item.mealId === mealId);
-  
+
     setMeal(selectedMeal)
-  }, [storeMeal])
+  }, [storeMeal, mealId])
 
   const addFavorite = () => {
     const collectUserRef = collection(FIRE_STORE, "users")
@@ -89,14 +88,14 @@ const MealDetail = ({ navigation, route }) => {
             <Text style={styles.userName}>{meal.createdBy.displayName}</Text>
           </View>
           <View style={styles.userRight}>
-            <TouchableOpacity onPress={()=>{ navigation.navigate('ViewUser',{User:meal.createdBy})}}>
+            <TouchableOpacity onPress={() => { navigation.navigate('ViewUser', { User: meal.createdBy }) }}>
               <Image
                 style={styles.userImage}
                 source={meal.createdBy.userImage.imagePath ? { uri: meal.createdBy.userImage.imagePath } : require("../../picture/image.png")}
               />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
-              navigation.navigate("mealReview",{mealId: mealId})
+              navigation.navigate("mealReview", { mealId: mealId })
             }}>
               <MaterialCommunityIcons name="comment-text-multiple-outline" size={24} color="white" />
             </TouchableOpacity>

@@ -6,7 +6,7 @@ import AnotherUserFollowed from '../src/screen/AnotherUserFollowed';
 import AnotherUserFollower from '../src/screen/AnotherUserFollower';
 import ViewUser from '../src/screen/ViewUser';
 const TopTab = createMaterialTopTabNavigator()
-const AnotherFollowNav = ({route}) => {
+const AnotherFollowNav = ({ route }) => {
 
   return (
     <TopTab.Navigator screenOptions={{
@@ -17,10 +17,10 @@ const AnotherFollowNav = ({route}) => {
         borderBottomWidth: 4,
       },
     }}
-    
+
     >
-      <TopTab.Screen component={AnotherUserFollowed} name={"AnotherUserFollowed"} options={{ tabBarLabel: 'AnotherUser Followed' }}  initialParams={{ User: route.params.ViewUser }}/>
-      <TopTab.Screen component={AnotherUserFollower} name={"AnotherUserFollower"} options={{ tabBarLabel: 'AnotherUser Follower' }} initialParams={{ User: route.params.ViewUser }}/>
+      <TopTab.Screen component={AnotherUserFollowed} name={"AnotherUserFollowed"} options={{ tabBarLabel: 'ผู้ติดตาม' }} initialParams={{ User: route.params.ViewUser }} />
+      <TopTab.Screen component={AnotherUserFollower} name={"AnotherUserFollower"} options={{ tabBarLabel: 'กำลังติดตาม' }} initialParams={{ User: route.params.ViewUser }} />
     </TopTab.Navigator>
   )
 }

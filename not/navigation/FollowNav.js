@@ -15,10 +15,10 @@ const FollowNav = () => {
         borderBottomWidth: 4,
       },
     }}
-    
+
     >
-      <TopTab.Screen component={FollowedScreen} name={"FollowedScreen"} options={{ tabBarLabel: 'Followed Screen' }} />
-      <TopTab.Screen component={FollowerScreen} name={"FollowerScreen"} options={{ tabBarLabel: 'Follower Screen' }} />
+      <TopTab.Screen component={FollowedScreen} name={"FollowedScreen"} options={{ tabBarLabel: 'ผู้ติดตาม' }} />
+      <TopTab.Screen component={FollowerScreen} name={"FollowerScreen"} options={{ tabBarLabel: 'กำลังติดตาม' }} />
     </TopTab.Navigator>
   )
 }

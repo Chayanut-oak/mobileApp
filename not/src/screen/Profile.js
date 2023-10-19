@@ -1,9 +1,10 @@
+// import proimg from ''
 import { StyleSheet, Text, Image, View, TouchableOpacity, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
-// import proimg from ''
-
-
+import { collection, doc, setDoc, updateDoc, increment, arrayRemove, arrayUnion } from 'firebase/firestore';
+import { FIRE_STORE } from '../../Firebaseconfig'
+import { Feather } from '@expo/vector-icons';
 const Profile = ({ navigation }) => {
   const [tab, setTab] = useState(true)
   const meals = useSelector((state) => state.meal);
@@ -13,24 +14,35 @@ const Profile = ({ navigation }) => {
     return meals.find(meal => meal.mealId === mealId)
   })
   const mapOwn = meals.filter(meal => meal.createdBy.userId == storeUser.userId)
-  // useEffect(() => {
-  //   if (storeUser) {
-  //     setUser(storeUser)
-  //   }
-
-  // }, [storeUser])
-
-  // if (!user) {
-  //   return (
-  //     <View style={{ height: "100%", backgroundColor: "#2F2C2C" }}>
-
-  //     </View>
-  //   )
-  // }
+  const addFavorite = (mealId) => {
+    const collectUserRef = collection(FIRE_STORE, "users")
+    const userRef = doc(collectUserRef, storeUser.userId)
+    const collectMealRef = collection(FIRE_STORE, "meals")
+    const mealRef = doc(collectMealRef, mealId)
+    // dispatch(saveUserData({ favoriteMeals: [...storeUser.favoriteMeals, mealId] }))
+    updateDoc(userRef, {
+      "favoriteMeals": arrayUnion(mealId),
+    });
+    updateDoc(mealRef, {
+      "like": increment(1)
+    });
+  }
+  const removeFavorite = (mealId) => {
+    const collectUserRef = collection(FIRE_STORE, "users")
+    const userRef = doc(collectUserRef, storeUser.userId)
+    const collectMealRef = collection(FIRE_STORE, "meals")
+    const mealRef = doc(collectMealRef, mealId)
+    // dispatch(saveUserData({ favoriteMeals: storeUser.favoriteMeals.filter((meal => meal.mealId != mealId)) }))
+    updateDoc(userRef, {
+      "favoriteMeals": arrayRemove(mealId),
+    });
+    updateDoc(mealRef, {
+      "like": increment(-1)
+    });
+  }
   return (
     <View style={styles.container}>
-      <Image source={storeUser.userImage.imagePath ? { uri: storeUser.userImage.imagePath } : require("../../picture/image.png")} style={styles.profilepic}>
-      </Image>
+      <Image source={storeUser.userImage.imagePath ? { uri: storeUser.userImage.imagePath } : require("../../picture/image.png")} style={styles.profilepic} />
       <Text style={styles.user}>{storeUser.displayName}</Text>
       <View style={{ flexDirection: 'row', gap: 89, marginTop: 10 }}>
         <Text style={{ color: 'white', fontSize: 22 }}>{storeUser.followed.length}</Text>
@@ -77,27 +89,34 @@ const Profile = ({ navigation }) => {
         <FlatList
           data={mapOwn}
           renderItem={({ item }) => {
-            return (<View style={{ flexDirection: "row" }}>
-              <View style={styles.imageContainer}>
-                <Image
-                  style={styles.image}
-                  source={item.mealImage.imagePath ? { uri: item.mealImage.imagePath } : require("../../picture/image.png")}
-                />
-                <TouchableOpacity style={styles.favoriteIconContainer}>
-                  <Image
-                    style={styles.favoriteIcon}
-                    source={require("../../picture/favoriteIcon.png")}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.shareIconContainer} onPress={() => { navigation.navigate("mealDetail", { mealId: item.mealId }) }}>
-                  <Image
-                    style={styles.shareIcon}
-                    source={require("../../picture/shareicon.png")}
-                  />
-                </TouchableOpacity><View style={styles.textContainer}>
-                  <Text style={styles.mealName}>{item.mealName}</Text>
+            return (
+              <View style={{ flexDirection: "row" }}>
+                <View style={styles.imageContainer}>
+                  <TouchableOpacity style={styles.image} onPress={() => { navigation.navigate("mealDetail", { mealId: item.mealId }) }}>
+                    <Image
+                      style={styles.image}
+                      source={item.mealImage.imagePath ? { uri: item.mealImage.imagePath } : require("../../picture/image.png")}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.favoriteIconContainer} onPress={() => {
+                    if (storeUser.favoriteMeals.includes(item.mealId)) {
+                      removeFavorite(item.mealId)
+                    } else {
+                      addFavorite(item.mealId)
+                    }
+                  }}>
+                    <Image
+                      style={styles.favoriteIcon}
+                      source={!storeUser.favoriteMeals.includes(item.mealId) ? require("../../picture/favoriteIcon.png") : require("../../picture/favoriteIconToggle.png")}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.shareIconContainer} onPress={() => { navigation.navigate("mealDetail", { mealId: item.mealId }) }}>
+                    <Feather name="edit" size={24} color="black" />
+                  </TouchableOpacity><View style={styles.textContainer}>
+                    <Text style={styles.mealName}>{item.mealName}</Text>
+                  </View>
                 </View>
-              </View></View>
+              </View>
             );
           }}
         />
@@ -108,16 +127,24 @@ const Profile = ({ navigation }) => {
             renderItem={({ item }) => {
               return (<View style={{ flexDirection: "row" }}>
                 <View style={styles.imageContainer}>
-                  <Image
-                    style={styles.image}
-                    source={item.mealImage.imagePath ? { uri: item.mealImage.imagePath } : require("../../picture/image.png")}
-
-                  /><TouchableOpacity style={styles.favoriteIconContainer}>
+                  <TouchableOpacity style={styles.image} onPress={() => { navigation.navigate("mealDetail", { mealId: item.mealId }) }}>
+                    <Image
+                      style={styles.image}
+                      source={item.mealImage.imagePath ? { uri: item.mealImage.imagePath } : require("../../picture/image.png")}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.favoriteIconContainer} onPress={() => {
+                    if (storeUser.favoriteMeals.includes(item.mealId)) {
+                      removeFavorite(item.mealId)
+                    } else {
+                      addFavorite(item.mealId)
+                    }
+                  }}>
                     <Image
                       style={styles.favoriteIcon}
-                      source={require("../../picture/favoriteIcon.png")}
+                      source={!storeUser.favoriteMeals.includes(item.mealId) ? require("../../picture/favoriteIcon.png") : require("../../picture/favoriteIconToggle.png")}
                     />
-                  </TouchableOpacity >
+                  </TouchableOpacity>
                   <View style={styles.textContainer}>
                     <Text style={styles.mealName}>{item.mealName}</Text>
                   </View>
@@ -193,7 +220,7 @@ const styles = StyleSheet.create({
   },
   shareIconContainer: {
     position: "absolute",
-    bottom: 30, // Position at the bottom
+    top: 40,
     left: 320, // Position at the right
     backgroundColor: "transparent",
   },
