@@ -5,6 +5,7 @@ import Profile from '../src/screen/Profile';
 import ViewUser from '../src/screen/ViewUser';
 import FollowNav from './FollowNav';
 import AnotherFollowNav from './AnotherFollowNav';
+import SettingNav from '../src/screen/SettingScreen';
 const ProfileNavigate = createNativeStackNavigator()
 const ProfileNav = ({ route }) => {
 
@@ -14,6 +15,7 @@ const ProfileNav = ({ route }) => {
       <ProfileNavigate.Screen component={FollowNav} name="Followed" options={{ headerShown: false }} />
       <ProfileNavigate.Screen component={FollowNav} name="Followed2" options={{ headerShown: false }} />
       <ProfileNavigate.Screen component={AnotherFollowNav} name="AnotherFollowNav" options={{ headerShown: false }} />
+      <ProfileNavigate.Screen component={SettingNav} name="SettingScreen" options={{ headerShown: false }} />
     </ProfileNavigate.Navigator>
   )
 }
