@@ -1,11 +1,13 @@
 // import proimg from ''
 import { StyleSheet, Text, Image, View, TouchableOpacity, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
 import { collection, doc, setDoc, updateDoc, increment, arrayRemove, arrayUnion } from 'firebase/firestore';
 import { FIRE_STORE } from '../../Firebaseconfig'
 import { Feather } from '@expo/vector-icons';
+import { saveFollow } from '../../redux/followSlice';
 const Profile = ({ navigation }) => {
+  const dispatch = useDispatch()
   const [tab, setTab] = useState(true)
   const meals = useSelector((state) => state.meal);
   const storeUser = useSelector((state) => state.user)
@@ -40,6 +42,9 @@ const Profile = ({ navigation }) => {
       "like": increment(-1)
     });
   }
+  const savefollow = async()=>{
+    dispatch(saveFollow(storeUser))
+  }
   return (
     <View style={styles.container}>
       <Image source={storeUser.userImage.imagePath ? { uri: storeUser.userImage.imagePath } : require("../../picture/image.png")} style={styles.profilepic} />
@@ -50,11 +55,11 @@ const Profile = ({ navigation }) => {
         <Text style={{ color: 'white', fontSize: 22 }}>{mapOwn.length}</Text>
       </View>
       <View style={{ flexDirection: 'row', gap: 20, marginTop: 10 }}>
-   
+      <TouchableOpacity onPress={() => {navigation.navigate('Followed'),savefollow()}}>
           <Text style={{ color: 'white', fontSize: 18 }}>กำลังติดตาม</Text>
-   
+          </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => navigation.navigate('Followed',{ ViewUser : storeUser })}>
+        <TouchableOpacity onPress={() => {navigation.navigate('Followed'),savefollow()}}>
           <Text style={{ color: 'white', fontSize: 18 }}>ผู้ติดตาม</Text>
         </TouchableOpacity>
         <Text style={{ color: 'white', fontSize: 18 }}>รายการอาหาร</Text>
@@ -121,7 +126,6 @@ const Profile = ({ navigation }) => {
           }}
         />
         :
-        <View>
           <FlatList
             data={mapFav}
             renderItem={({ item }) => {
@@ -152,7 +156,6 @@ const Profile = ({ navigation }) => {
               );
             }}
           />
-        </View>
       }
 
     </View>

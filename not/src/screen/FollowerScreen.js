@@ -5,12 +5,15 @@ import { addFollowed } from '../../redux/userSlice';
 import { FIRE_STORE } from '../../Firebaseconfig';
 import { collection, addDoc, arrayUnion } from "firebase/firestore";
 import { updateDoc,doc,arrayRemove } from 'firebase/firestore';
+import { saveFollow } from '../../redux/followSlice';
+import { getAuth } from 'firebase/auth';
 const FollowerScreen = ({navigation,route}) => {
     const allUserMeal = useSelector((state) => state.allUser)
+    const auth = getAuth()
     const userMeal = useSelector((state) => state.user)
-    const viewUser = route.params.User
     const dispatch = useDispatch()
-    const [user,setUser]= useState(null)
+    const followUser = useSelector((state) => state.follow)
+    const updatedUser = allUserMeal.find((allUser) => allUser.userId === followUser.user.userId);
     const unfollow = async (uid) =>{
         await updateDoc(doc(FIRE_STORE, "users", userMeal.userId), {
             followed: arrayRemove(...[uid])
@@ -27,15 +30,18 @@ const FollowerScreen = ({navigation,route}) => {
             follower: arrayUnion(...[userMeal.userId])
           });
     }
-    useEffect (()=>{
-        const user = allUserMeal.find((allUser) => allUser.userId === viewUser.userId)
-        setUser(user)
-        },[viewUser])
+    
+
+    // useEffect(() => {
+    //   // Listen for changes in route.params.User
+    //   const updatedUser = allUserMeal.find((allUser) => allUser.userId === route.params.User.userId);
+    //   setUser(updatedUser);
+    // }, [route.params.User]);
     
     const FollowedCard = ({ userName, imagePath ,uid,user}) => {
         return (
             <ImageBackground style={styles.item} source={require("../../picture/followedBackground.png")}>
-                <TouchableOpacity onPress={() => navigation.navigate('ViewUser',{User:user})}>
+                <TouchableOpacity onPress={() =>  auth.currentUser.uid == uid ? navigation.navigate('UserProfile') : navigation.navigate('ViewUser', { user: user })}>
                     <Image style={styles.imageUser} source={imagePath ? { uri: imagePath } : require("../../picture/image.png")} />
                 </TouchableOpacity>
                 <Text style={styles.title}>{userName}</Text>
@@ -48,8 +54,8 @@ const FollowerScreen = ({navigation,route}) => {
 
     return (
         <SafeAreaView style={styles.container}>
-           {user? <FlatList
-                data={user.follower}
+           {followUser? <FlatList
+                data={updatedUser.follower}
                 numColumns={2}
                 renderItem={({ item }) => (
                     <FollowedCard userName={item.displayName} imagePath={item.userImage.imagePath}  uid={item.userId} user={item} />

@@ -88,7 +88,7 @@ const MealDetail = ({ navigation, route }) => {
             <Text style={styles.userName}>{meal.createdBy.displayName}</Text>
           </View>
           <View style={styles.userRight}>
-            <TouchableOpacity onPress={() => { navigation.navigate('ViewUser', { User: meal.createdBy }) }}>
+           <TouchableOpacity onPress={() => meal.createdBy.userId == storeUser.userId ? navigation.navigate('Profile') : navigation.navigate('ViewUser', { user: meal.createdBy })}>
               <Image
                 style={styles.userImage}
                 source={meal.createdBy.userImage.imagePath ? { uri: meal.createdBy.userImage.imagePath } : require("../../picture/image.png")}
@@ -131,7 +131,7 @@ const MealDetail = ({ navigation, route }) => {
                   </Text>
                 </View>
               </View>
-              {step.stepImage ? <Image style={styles.stepImage} source={{ uri: step.stepImage.imagePath }} /> : null}
+              {step.stepImage.imagePath ? <Image style={styles.stepImage} source={{ uri: step.stepImage.imagePath }} /> : null}
             </View>
           ))}
         </View>

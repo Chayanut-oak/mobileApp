@@ -6,6 +6,7 @@ import FollowerScreen from '../src/screen/FollowerScreen';
 
 const TopTab = createMaterialTopTabNavigator()
 const FollowNav = ({route}) => {
+
   return (
     <TopTab.Navigator screenOptions={{
       tabBarStyle: { backgroundColor: "#707070", height: "auto", paddingTop: 10 },
@@ -15,10 +16,9 @@ const FollowNav = ({route}) => {
         borderBottomWidth: 4,
       },
     }}
-
     >
-      <TopTab.Screen component={FollowedScreen} name={"FollowedScreen"} options={{ tabBarLabel: 'ผู้ติดตาม' }} initialParams={{ User: route.params.ViewUser }} />
-      <TopTab.Screen component={FollowerScreen} name={"FollowerScreen"} options={{ tabBarLabel: 'กำลังติดตาม' }} initialParams={{ User: route.params.ViewUser }} />
+      <TopTab.Screen component={FollowedScreen} name={"FollowedScreen"} options={{ tabBarLabel: 'ผู้ติดตาม' }}  />
+      <TopTab.Screen component={FollowerScreen} name={"FollowerScreen"} options={{ tabBarLabel: 'กำลังติดตาม' }}  />
     </TopTab.Navigator>
   )
 }

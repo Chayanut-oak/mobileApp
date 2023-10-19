@@ -1,22 +1,24 @@
 import { StyleSheet, Text, Image, View, TouchableOpacity, FlatList } from 'react-native'
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
 import { LinearGradient } from 'expo-linear-gradient';
 // import proimg from ''
 import { collection, addDoc, updateDoc, doc, arrayRemove, increment, arrayUnion } from 'firebase/firestore';
 import { FIRE_STORE } from '../../Firebaseconfig';
-
+import { saveFollow } from '../../redux/followSlice';
 const ViewUser = ({ navigation, route }) => {
   const [tab, setTab] = useState(true)
+  const dispatch = useDispatch()
   const meals = useSelector((state) => state.meal);
   const curUser = useSelector((state) => state.user)
-  const user = route.params.User
+  const user = route.params.user
   const allUser = useSelector((state) => state.allUser)
+  const followUser = useSelector((state) => state.follow)
   const viewUser = allUser.find((allUserItem) => allUserItem.userId === user.userId)
   const mapFav = viewUser.favoriteMeals.map(mealId => {
     return meals.find(meal => meal.mealId === mealId)
   })
-  
+
   const mapOwn = meals.filter(meal => meal.createdBy.userId == viewUser.userId)
   const follow = async () => {
     await updateDoc(doc(FIRE_STORE, "users", curUser.userId), {
@@ -61,7 +63,9 @@ const ViewUser = ({ navigation, route }) => {
       "like": increment(-1)
     });
   }
-
+  const savefollow = async()=>{
+    dispatch(saveFollow(user))
+  }
   return (
     <View style={styles.container}>
       {curUser.followed.filter((item) => item.userId == viewUser.userId).length == 0 ? <TouchableOpacity style={styles.rightCornerButton} onPress={() => follow()}>
@@ -83,8 +87,10 @@ const ViewUser = ({ navigation, route }) => {
         <Text style={{ color: 'white', fontSize: 22 }}>{mapOwn.length}</Text>
       </View>
       <View style={{ flexDirection: 'row', gap: 20, marginTop: 10 }}>
+      <TouchableOpacity onPress={() => {navigation.navigate('Followed'),savefollow()}}>
         <Text style={{ color: 'white', fontSize: 18 }}>กำลังติดตาม</Text>
-        <TouchableOpacity onPress={() => navigation.navigate("Followed2", { ViewUser: viewUser })}>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => {navigation.navigate('Followed'),savefollow()}}>
           <Text style={{ color: 'white', fontSize: 18 }}>ผู้ติดตาม</Text>
         </TouchableOpacity>
         <Text style={{ color: 'white', fontSize: 18 }}>รายการอาหาร</Text>
@@ -147,7 +153,6 @@ const ViewUser = ({ navigation, route }) => {
           }}
         />
         :
-        <View>
           <FlatList
             data={mapFav}
             renderItem={({ item }) => {
@@ -178,7 +183,6 @@ const ViewUser = ({ navigation, route }) => {
               );
             }}
           />
-        </View>
       }
 
     </View>
