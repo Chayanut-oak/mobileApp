@@ -5,21 +5,9 @@ import { useSelector } from 'react-redux';
 import MealDetail from '../screen/MealDetail';
 const FoodList = ({ navigation }) => {
   const storeMeal = useSelector((state) => state.meal)
-  const [imagePairs, setImagePairs] = useState([])
-  useEffect(() => {
-    if (storeMeal.length != 0) {
-      let array = [...storeMeal]
-      setImagePairs(splitImagesIntoPairs(shuffle(array)))
-
-    }
-  }, [storeMeal])
-
   const shuffle = (array) => {
     return array.sort(() => Math.random() - 0.5);
   };
-
-
-
   const splitImagesIntoPairs = (images) => {
     const pairs = [];
     for (let i = 0; i < 4; i += 2) {
@@ -28,6 +16,17 @@ const FoodList = ({ navigation }) => {
     }
     return pairs;
   };
+  const imagePairs = splitImagesIntoPairs(shuffle([...storeMeal]))
+
+  // const [imagePairs, setImagePairs] = useState([])
+  // useEffect(() => {
+  //   if (storeMeal.length != 0) {
+  //     let array = [...storeMeal]
+  //     setImagePairs(splitImagesIntoPairs(shuffle(array)))
+
+  //   }
+  // }, [storeMeal])
+
 
 
   return (

@@ -7,33 +7,35 @@ import { useSelector } from 'react-redux';
 const Profile = ({ navigation }) => {
   const [tab, setTab] = useState(true)
   const meals = useSelector((state) => state.meal);
-  const userMeal = useSelector((state) => state.user)
+  const storeUser = useSelector((state) => state.user)
   const [user, setUser] = useState(null)
-  const [meal, setMeal] = useState(null)
-  useEffect(() => {
-    if (userMeal && meals) {
-      setUser(userMeal)
-      setMeal(meals)
-    }
+  const mapFav = storeUser.favoriteMeals.map(mealId => {
+    return meals.find(meal => meal.mealId === mealId)
+  })
+  const mapOwn = meals.filter(meal => meal.createdBy.userId == storeUser.userId)
+  // useEffect(() => {
+  //   if (storeUser) {
+  //     setUser(storeUser)
+  //   }
 
-  }, [userMeal, meals])
+  // }, [storeUser])
 
-  if (!meal || !user) {
-    return (
-      <View style={{height:"100%", backgroundColor:"#2F2C2C"}}>
+  // if (!user) {
+  //   return (
+  //     <View style={{ height: "100%", backgroundColor: "#2F2C2C" }}>
 
-      </View>
-    )
-  }
+  //     </View>
+  //   )
+  // }
   return (
     <View style={styles.container}>
-      {/* <Image source={user.userImage.imagePath ? { uri: user.userImage.imagePath } : require("../../picture/image.png")} style={styles.profilepic}>
-        </Image> */}
-      <Text style={styles.user}>{user.displayName}</Text>
+      <Image source={storeUser.userImage.imagePath ? { uri: storeUser.userImage.imagePath } : require("../../picture/image.png")} style={styles.profilepic}>
+      </Image>
+      <Text style={styles.user}>{storeUser.displayName}</Text>
       <View style={{ flexDirection: 'row', gap: 89, marginTop: 10 }}>
-        <Text style={{ color: 'white', fontSize: 22 }}>{user.followed.length}</Text>
-        <Text style={{ color: 'white', fontSize: 22 }}>{user.follower.length}</Text>
-        <Text style={{ color: 'white', fontSize: 22 }}>0</Text>
+        <Text style={{ color: 'white', fontSize: 22 }}>{storeUser.followed.length}</Text>
+        <Text style={{ color: 'white', fontSize: 22 }}>{storeUser.follower.length}</Text>
+        <Text style={{ color: 'white', fontSize: 22 }}>{mapOwn.length}</Text>
       </View>
       <View style={{ flexDirection: 'row', gap: 20, marginTop: 10 }}>
         <TouchableOpacity onPress={() => navigation.navigate('Followed')}>
@@ -73,7 +75,7 @@ const Profile = ({ navigation }) => {
       {tab ?
 
         <FlatList
-          data={meal}
+          data={mapOwn}
           renderItem={({ item }) => {
             return (<View style={{ flexDirection: "row" }}>
               <View style={styles.imageContainer}>
@@ -102,7 +104,7 @@ const Profile = ({ navigation }) => {
         :
         <View>
           <FlatList
-            data={meal}
+            data={mapFav}
             renderItem={({ item }) => {
               return (<View style={{ flexDirection: "row" }}>
                 <View style={styles.imageContainer}>

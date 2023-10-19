@@ -6,13 +6,13 @@ import ViewUser from '../src/screen/ViewUser';
 import FollowNav from './FollowNav';
 import AnotherFollowNav from './AnotherFollowNav';
 const ProfileNavigate = createNativeStackNavigator()
-const ProfileNav = ({route}) => {
+const ProfileNav = ({ route }) => {
 
   return (
     <ProfileNavigate.Navigator >
-      <ProfileNavigate.Screen component={Profile} name="UserProfile"  />
-      <ProfileNavigate.Screen component={FollowNav} name="Followed" />
-      <ProfileNavigate.Screen component={AnotherFollowNav} name="AnotherFollowNav"/>
+      <ProfileNavigate.Screen component={Profile} name="UserProfile" options={{ headerShown: false }} />
+      <ProfileNavigate.Screen component={FollowNav} name="Followed" options={{ headerShown: false }} />
+      <ProfileNavigate.Screen component={AnotherFollowNav} name="AnotherFollowNav" options={{ headerShown: false }} />
     </ProfileNavigate.Navigator>
   )
 }

@@ -5,38 +5,33 @@ import { useSelector } from 'react-redux';
 
 const Category = ({ navigation }) => {
   const storeMeal = useSelector((state) => state.meal)
-  const [category, setCategory] = useState([])
-  useEffect(() => {
-    if (storeMeal.length != 0) {
-      let array = [...storeMeal]
-      filtered = array.map((val) => {
-        tags = val.tags.filter((tag) => tag.ingredientCategory == "หมวดหมู่")
-        return { image: val.mealImage, tags: tags }
+  // const [category, setCategory] = useState([])
+  const filtered = [...storeMeal].map((val) => {
+    tags = val.tags.filter((tag) => tag.ingredientCategory == "หมวดหมู่")
+    return { image: val.mealImage, tags: tags }
+  })
+  const uniqueIngredients = {};
+  filtered.forEach(item => {
+    item.tags.forEach(tag => {
+      const ingredientId = tag.ingredientId;
+      const ingredientName = tag.ingredientName;
+      if (!uniqueIngredients[ingredientName]) {
+        uniqueIngredients[ingredientName] = { ingredientId, image: item.image };
       }
-      )
-      const uniqueIngredients = {};
-      filtered.forEach(item => {
-        item.tags.forEach(tag => {
-          const ingredientId = tag.ingredientId;
-          const ingredientName = tag.ingredientName;
-          if (!uniqueIngredients[ingredientName]) {
-            uniqueIngredients[ingredientName] = { ingredientId, image: item.image };
-          }
-        });
-      });
-      const result = Object.entries(uniqueIngredients).map(([ingredientName, data]) => ({
-        ingredientId: data.ingredientId,
-        ingredientName,
-        image: data.image
-      }));
-      setCategory(result);
-    }
-  }, [storeMeal])
+    });
+  });
+  const result = Object.entries(uniqueIngredients).map(([ingredientName, data]) => ({
+    ingredientId: data.ingredientId,
+    ingredientName,
+    image: data.image
+  }));
+
+
 
 
   return (
     <View style={{ height: 130, marginTop: 10 }}>
-      <FlatList data={category}
+      <FlatList data={result}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         renderItem={({ item }) => {
@@ -46,7 +41,7 @@ const Category = ({ navigation }) => {
                 <Image
                   style={{ flex: 1, width: 100, height: 100, margin: 5, borderRadius: 100, resizeMode: 'contain', }}
                   source={{ uri: item.image.imagePath }}
-                /><Text style={{fontSize:15,fontWeight:"bold", color: "#D1D1D1" }}>{item.ingredientName}</Text>
+                /><Text style={{ fontSize: 15, fontWeight: "bold", color: "#D1D1D1" }}>{item.ingredientName}</Text>
               </TouchableOpacity>
             </View>
           )

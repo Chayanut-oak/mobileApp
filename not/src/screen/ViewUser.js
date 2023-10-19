@@ -4,43 +4,47 @@ import { useSelector } from 'react-redux';
 import { LinearGradient } from 'expo-linear-gradient';
 // import proimg from ''
 import { collection, addDoc, arrayUnion } from "firebase/firestore";
-import { updateDoc,doc,arrayRemove } from 'firebase/firestore';
+import { updateDoc, doc, arrayRemove } from 'firebase/firestore';
 import { FIRE_STORE } from '../../Firebaseconfig';
 const ViewUser = ({ navigation, route }) => {
   const [tab, setTab] = useState(true)
   const meals = useSelector((state) => state.meal);
-  const userMeal = useSelector((state) => state.user)
+  const curUser = useSelector((state) => state.user)
   const user = route.params.User
-  const allUserMeal = useSelector((state) => state.allUser)
-  const viewUser = allUserMeal.find((allUser) => allUser.userId === user.userId)
-  const follow = async()=> {
-    await updateDoc(doc(FIRE_STORE, "users", userMeal.userId), {
+  const allUser = useSelector((state) => state.allUser)
+  const viewUser = allUser.find((allUserItem) => allUserItem.userId === user.userId)
+  const mapFav = viewUser.favoriteMeals.map(mealId => {
+    return meals.find(meal => meal.mealId === mealId)
+  })
+  const mapOwn = meals.filter(meal => meal.createdBy.userId == viewUser.userId)
+  const follow = async () => {
+    await updateDoc(doc(FIRE_STORE, "users", curUser.userId), {
       followed: arrayUnion(...[user.userId])
     });
     await updateDoc(doc(FIRE_STORE, "users", user.userId), {
-      follower: arrayUnion(...[userMeal.userId])
+      follower: arrayUnion(...[curUser.userId])
     });
   }
-  const unfollow = async (uid) =>{
-    await updateDoc(doc(FIRE_STORE, "users", userMeal.userId), {
-        followed: arrayRemove(...[user.userId])
-      });
-      await updateDoc(doc(FIRE_STORE, "users", user.userId), {
-        follower: arrayRemove(...[userMeal.userId])
-      });
-}
+  const unfollow = async (uid) => {
+    await updateDoc(doc(FIRE_STORE, "users", curUser.userId), {
+      followed: arrayRemove(...[user.userId])
+    });
+    await updateDoc(doc(FIRE_STORE, "users", user.userId), {
+      follower: arrayRemove(...[curUser.userId])
+    });
+  }
   return (
     <View style={styles.container}>
-      {userMeal.followed.filter((item)=> item.userId == viewUser.userId ).length == 0? <TouchableOpacity style={styles.rightCornerButton} onPress={()=> follow()}>
+      {curUser.followed.filter((item) => item.userId == viewUser.userId).length == 0 ? <TouchableOpacity style={styles.rightCornerButton} onPress={() => follow()}>
         <LinearGradient colors={['#DD2572', '#F02E5D']} style={styles.TouchableOpacity}>
           <Text style={styles.centeredText}>ติดตาม</Text>
         </LinearGradient>
-      </TouchableOpacity>:null}
-      {userMeal.followed.filter((item)=> item.userId == viewUser.userId ).length != 0? <TouchableOpacity style={styles.rightCornerButton} onPress={()=> unfollow()}>
+      </TouchableOpacity> : null}
+      {curUser.followed.filter((item) => item.userId == viewUser.userId).length != 0 ? <TouchableOpacity style={styles.rightCornerButton} onPress={() => unfollow()}>
         <LinearGradient colors={['#DD2572', '#F02E5D']} style={styles.TouchableOpacity}>
           <Text style={styles.centeredText}>ยกเลิกติดตาม</Text>
         </LinearGradient>
-      </TouchableOpacity>:null}
+      </TouchableOpacity> : null}
       <Image source={{ uri: viewUser.userImage.imagePath }} style={styles.profilepic}>
       </Image>
       <Text style={styles.user}>{user.displayName}</Text>
@@ -51,7 +55,7 @@ const ViewUser = ({ navigation, route }) => {
       </View>
       <View style={{ flexDirection: 'row', gap: 20, marginTop: 10 }}>
         <Text style={{ color: 'white', fontSize: 18 }}>กำลังติดตาม</Text>
-        <TouchableOpacity onPress={()=> navigation.navigate("AnotherFollowNav",{ViewUser:user})}>
+        <TouchableOpacity onPress={() => navigation.navigate("AnotherFollowNav", { ViewUser: user })}>
           <Text style={{ color: 'white', fontSize: 18 }}>ผู้ติดตาม</Text>
         </TouchableOpacity>
         <Text style={{ color: 'white', fontSize: 18 }}>รายการอาหาร</Text>
@@ -84,7 +88,7 @@ const ViewUser = ({ navigation, route }) => {
       {tab ?
 
         <FlatList
-          data={meals}
+          data={mapOwn}
           renderItem={({ item }) => {
             return (<View style={{ flexDirection: "row" }}>
               <View style={styles.imageContainer}>
@@ -111,7 +115,7 @@ const ViewUser = ({ navigation, route }) => {
         :
         <View>
           <FlatList
-            data={meals}
+            data={mapFav}
             renderItem={({ item }) => {
               return (<View style={{ flexDirection: "row" }}>
                 <View style={styles.imageContainer}>
@@ -222,8 +226,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     right: 10,
-  },user:{
-    fontSize:40,
-    color:'white'
+  }, user: {
+    fontSize: 40,
+    color: 'white'
   }
 })
