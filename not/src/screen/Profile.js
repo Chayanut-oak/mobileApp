@@ -50,11 +50,11 @@ const Profile = ({ navigation }) => {
         <Text style={{ color: 'white', fontSize: 22 }}>{mapOwn.length}</Text>
       </View>
       <View style={{ flexDirection: 'row', gap: 20, marginTop: 10 }}>
-        <TouchableOpacity onPress={() => navigation.navigate('Followed')}>
+   
           <Text style={{ color: 'white', fontSize: 18 }}>กำลังติดตาม</Text>
-        </TouchableOpacity>
+   
 
-        <TouchableOpacity onPress={() => navigation.navigate('Followed')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Followed',{ ViewUser : storeUser })}>
           <Text style={{ color: 'white', fontSize: 18 }}>ผู้ติดตาม</Text>
         </TouchableOpacity>
         <Text style={{ color: 'white', fontSize: 18 }}>รายการอาหาร</Text>

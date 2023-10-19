@@ -16,6 +16,7 @@ const ViewUser = ({ navigation, route }) => {
   const mapFav = viewUser.favoriteMeals.map(mealId => {
     return meals.find(meal => meal.mealId === mealId)
   })
+  
   const mapOwn = meals.filter(meal => meal.createdBy.userId == viewUser.userId)
   const follow = async () => {
     await updateDoc(doc(FIRE_STORE, "users", curUser.userId), {
@@ -46,6 +47,7 @@ const ViewUser = ({ navigation, route }) => {
       "like": increment(1)
     });
   }
+
   const removeFavorite = (mealId) => {
     const collectUserRef = collection(FIRE_STORE, "users")
     const userRef = doc(collectUserRef, curUser.userId)
@@ -82,7 +84,7 @@ const ViewUser = ({ navigation, route }) => {
       </View>
       <View style={{ flexDirection: 'row', gap: 20, marginTop: 10 }}>
         <Text style={{ color: 'white', fontSize: 18 }}>กำลังติดตาม</Text>
-        <TouchableOpacity onPress={() => navigation.navigate("AnotherFollowNav", { ViewUser: user })}>
+        <TouchableOpacity onPress={() => navigation.navigate("Followed2", { ViewUser: viewUser })}>
           <Text style={{ color: 'white', fontSize: 18 }}>ผู้ติดตาม</Text>
         </TouchableOpacity>
         <Text style={{ color: 'white', fontSize: 18 }}>รายการอาหาร</Text>
@@ -90,7 +92,7 @@ const ViewUser = ({ navigation, route }) => {
       <View style={{ flexDirection: 'row', marginVertical: 20 }}>
         <TouchableOpacity
           style={{ borderColor: tab ? '#CD2A51' : 'white', borderBottomWidth: 5, flex: 1, alignItems: 'center' }}
-          onPress={() => {
+          onPress={() => { 
             setTab(true)
           }}>
           <Text style={{

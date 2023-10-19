@@ -8,36 +8,39 @@ import { updateDoc, doc, arrayRemove } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 const AnotherUserFollowed = ({ navigation, route }) => {
     const dispatch = useDispatch()
-    const userMeal = useSelector((state) => state.user)
-    const [view ,setView] = useState()
-    const viewUser = route.params.User
     const allUserMeal = useSelector((state) => state.allUser)
-    const User = allUserMeal.find((allUser) => allUser.userId === viewUser.userId)
+    const userMeal = useSelector((state) => state.user)
+    const [view, setView] = useState()
+    const viewUser = route.params.User
     const auth = getAuth()
+    useEffect(() => {
+        const user = allUserMeal.find((allUser) => allUser.userId === viewUser.userId)
+        setView(user)
+    }, [viewUser])
 
-const FollowedCard = ({ userName, imagePath, uid, index, user }) => {
+    const FollowedCard = ({ userName, imagePath, uid, index, user }) => {
+        return (
+            <ImageBackground style={styles.item} source={require("../../picture/followedBackground.png")}>
+                <TouchableOpacity onPress={() => auth.currentUser.uid == uid ? navigation.navigate('UserProfile') : navigation.navigate('ViewUser', { User: user })}>
+                    <Image style={styles.imageUser} source={imagePath ? { uri: imagePath } : require("../../picture/image.png")} />
+                </TouchableOpacity>
+                <Text style={styles.title}>{userName}</Text>
+            </ImageBackground>
+        );
+    };
+
     return (
-        <ImageBackground style={styles.item} source={require("../../picture/followedBackground.png")}>
-            <TouchableOpacity onPress={() => auth.currentUser.uid == uid ? navigation.navigate('UserProfile') :navigation.navigate('ViewUser',{User:user})}>
-                <Image style={styles.imageUser} source={imagePath ? { uri: imagePath } : require("../../picture/image.png")} />
-            </TouchableOpacity>
-            <Text style={styles.title}>{userName}</Text>
-        </ImageBackground>
+        <SafeAreaView style={styles.container}>
+            {view ? <FlatList
+                data={view.followed}
+                numColumns={2}
+                renderItem={({ item, index }) => (
+                    <FollowedCard userName={item.displayName} imagePath={item.userImage.imagePath} uid={item.userId} index={index} user={item} />
+                )}
+                keyExtractor={(item) => item.displayName}
+            /> : null}
+        </SafeAreaView>
     );
-};
-
-return (
-    <SafeAreaView style={styles.container}>
-        {User ?<FlatList
-            data={User.followed}
-            numColumns={2}
-            renderItem={({ item, index }) => (
-                <FollowedCard userName={item.displayName} imagePath={item.userImage.imagePath} uid={item.userId} index={index} user={item} />
-            )}
-            keyExtractor={(item) => item.displayName}
-        />:null}
-    </SafeAreaView>
-);
 };
 
 export default AnotherUserFollowed;

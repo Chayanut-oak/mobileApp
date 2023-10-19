@@ -14,9 +14,7 @@ const Home = ({ navigation }) => {
   return (
     <ScrollView style={{ backgroundColor: '#2F2C2C', }}>
       <View style={styles.container}>
-        <View style={styles.search}>
-          <SearchBar navigation={navigation} />
-        </View>
+       
         <Category navigation={navigation} />
         <Recommend navigation={navigation} />
         <FoodList navigation={navigation} />

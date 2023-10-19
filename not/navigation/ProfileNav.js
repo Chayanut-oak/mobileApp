@@ -12,6 +12,7 @@ const ProfileNav = ({ route }) => {
     <ProfileNavigate.Navigator >
       <ProfileNavigate.Screen component={Profile} name="UserProfile" options={{ headerShown: false }} />
       <ProfileNavigate.Screen component={FollowNav} name="Followed" options={{ headerShown: false }} />
+      <ProfileNavigate.Screen component={FollowNav} name="Followed2" options={{ headerShown: false }} />
       <ProfileNavigate.Screen component={AnotherFollowNav} name="AnotherFollowNav" options={{ headerShown: false }} />
     </ProfileNavigate.Navigator>
   )

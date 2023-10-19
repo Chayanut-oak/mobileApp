@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { useEffect ,useState} from 'react';
 import { StyleSheet, Text, View, SafeAreaView, FlatList, ImageBackground, Image, TouchableOpacity } from 'react-native';
 import { useSelector,useDispatch } from 'react-redux';
 import { addFollowed } from '../../redux/userSlice';
 import { FIRE_STORE } from '../../Firebaseconfig';
 import { collection, addDoc, arrayUnion } from "firebase/firestore";
 import { updateDoc,doc,arrayRemove } from 'firebase/firestore';
-const FollowerScreen = ({navigation}) => {
+const FollowerScreen = ({navigation,route}) => {
     const allUserMeal = useSelector((state) => state.allUser)
     const userMeal = useSelector((state) => state.user)
-    
+    const viewUser = route.params.User
     const dispatch = useDispatch()
+    const [user,setUser]= useState(null)
     const unfollow = async (uid) =>{
         await updateDoc(doc(FIRE_STORE, "users", userMeal.userId), {
             followed: arrayRemove(...[uid])
@@ -26,7 +27,11 @@ const FollowerScreen = ({navigation}) => {
             follower: arrayUnion(...[userMeal.userId])
           });
     }
-
+    useEffect (()=>{
+        const user = allUserMeal.find((allUser) => allUser.userId === viewUser.userId)
+        setUser(user)
+        },[viewUser])
+    
     const FollowedCard = ({ userName, imagePath ,uid,user}) => {
         return (
             <ImageBackground style={styles.item} source={require("../../picture/followedBackground.png")}>
@@ -43,14 +48,14 @@ const FollowerScreen = ({navigation}) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <FlatList
-                data={userMeal.follower}
+           {user? <FlatList
+                data={user.follower}
                 numColumns={2}
                 renderItem={({ item }) => (
                     <FollowedCard userName={item.displayName} imagePath={item.userImage.imagePath}  uid={item.userId} user={item} />
                 )}
                 keyExtractor={(item) => item.displayName}
-            />
+            />:null}
         </SafeAreaView>
     );
 };

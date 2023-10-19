@@ -1,43 +1,45 @@
 
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, FlatList, ImageBackground, Image, TouchableOpacity } from 'react-native';
-import { useSelector,useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { addFollowed } from '../../redux/userSlice';
 import { FIRE_STORE } from '../../Firebaseconfig';
 import { collection, addDoc, arrayUnion } from "firebase/firestore";
-import { updateDoc,doc,arrayRemove } from 'firebase/firestore';
+import { updateDoc, doc, arrayRemove } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
-const AnotherUserFollower = ({navigation,route}) => {
+const AnotherUserFollower = ({ navigation, route }) => {
     const dispatch = useDispatch()
     const userMeal = useSelector((state) => state.user)
-    const [view ,setView] = useState()
+    const [view, setView] = useState()
     const viewUser = route.params.User
     const allUserMeal = useSelector((state) => state.allUser)
-    const User = allUserMeal.find((allUser) => allUser.userId === viewUser.userId)
+    const [User, setUser] = useState(null)
     const auth = getAuth()
- 
+    useEffect(() => {
+        const user = allUserMeal.find((allUser) => allUser.userId === viewUser.userId)
+        setUser(user)
+    }, [viewUser])
 
-    const FollowedCard = ({ userName, imagePath ,uid,user}) => {
+    const FollowedCard = ({ userName, imagePath, uid, user }) => {
         return (
             <ImageBackground style={styles.item} source={require("../../picture/followedBackground.png")}>
-                <TouchableOpacity onPress={() => auth.currentUser.uid == uid ? navigation.navigate('UserProfile') :navigation.navigate('ViewUser',{User:user})}>
+                <TouchableOpacity onPress={() => auth.currentUser.uid == uid ? navigation.navigate('UserProfile') : navigation.navigate('ViewUser', { User: user })}>
                     <Image style={styles.imageUser} source={imagePath ? { uri: imagePath } : require("../../picture/image.png")} />
                 </TouchableOpacity>
                 <Text style={styles.title}>{userName}</Text>
             </ImageBackground>
         );
     };
-
     return (
         <SafeAreaView style={styles.container}>
-           {User? <FlatList
+            {User ? <FlatList
                 data={User.follower}
                 numColumns={2}
                 renderItem={({ item }) => (
-                    <FollowedCard userName={item.displayName} imagePath={item.userImage.imagePath}  uid={item.userId} user={item} />
+                    <FollowedCard userName={item.displayName} imagePath={item.userImage.imagePath} uid={item.userId} user={item} />
                 )}
                 keyExtractor={(item) => item.userId}
-            />:null}
+            /> : null}
         </SafeAreaView>
     );
 };

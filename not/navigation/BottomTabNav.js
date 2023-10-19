@@ -16,6 +16,7 @@ import CreateMeal from '../src/screen/CreateMeal';
 import Notification from '../src/screen/Notification'
 import CookingNav from './CookingNav';
 import ProfileNav from './ProfileNav';
+import SearchBarTabNav from './SearchBarTabNav'
 const MenuTab = createBottomTabNavigator();
 const BottomTabNav = ({route , navigation}) => {
   const auth = getAuth();
@@ -32,7 +33,7 @@ const BottomTabNav = ({route , navigation}) => {
             iconName = focused ? 'home' : 'home-outline';
           } else if (route.name === 'New') {
             iconName = focused ? 'add-circle' : 'add-circle-outline';
-          } else if (route.name === 'Notification') {
+          } else if (route.name === 'SearchScreen') {
             iconName = focused ? 'notifications' : 'notifications-outline';
           } else if (route.name === "Profile") {
             iconName = focused ? 'person-sharp' : 'person-outline';
@@ -42,11 +43,12 @@ const BottomTabNav = ({route , navigation}) => {
       })}
     >
       <MenuTab.Screen name="MainHome" component={HomeNav} options={{ headerShown: false }} />
-      <MenuTab.Screen name="New" component={CookingNav} initialParams={{ customProp: 'Another custom prop' }} options={{
-        headerStyle: { backgroundColor: "#E27E8A" },  headerShown: false 
-      }} />
-      <MenuTab.Screen name="Notification"  component={Notification} options={{
+     
+      <MenuTab.Screen name="SearchScreen"  component={SearchBarTabNav} options={{
         headerStyle: { backgroundColor: "#E27E8A" }
+      }} />
+       <MenuTab.Screen name="New" component={CookingNav} initialParams={{ customProp: 'Another custom prop' }} options={{
+        headerStyle: { backgroundColor: "#E27E8A" },  headerShown: false 
       }} />
       <MenuTab.Screen name={"Profile"} component={ProfileNav} options={{
         headerStyle: { backgroundColor: "#E27E8A" }

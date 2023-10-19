@@ -30,9 +30,7 @@ const HomeNav = ({navigation}) => {
           </HeaderButtons>)
       }
       } />
-      <HomeNavigate.Screen name="SearchScreen" component={SearchBarTabNav} options={{
-        headerStyle: { backgroundColor: "#E27E8A" }
-      }} />
+
       <HomeNavigate.Screen name="mealCategories"  component={Food} options={
         ({ route }) => ({
           title: route.params.Category, headerStyle: { backgroundColor: "#E27E8A" }

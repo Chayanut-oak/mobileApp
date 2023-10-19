@@ -3,9 +3,9 @@ import React from 'react'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import FollowedScreen from '../src/screen/FollowedScreen';
 import FollowerScreen from '../src/screen/FollowerScreen';
-import ViewUser from '../src/screen/ViewUser';
+
 const TopTab = createMaterialTopTabNavigator()
-const FollowNav = () => {
+const FollowNav = ({route}) => {
   return (
     <TopTab.Navigator screenOptions={{
       tabBarStyle: { backgroundColor: "#707070", height: "auto", paddingTop: 10 },
@@ -17,8 +17,8 @@ const FollowNav = () => {
     }}
 
     >
-      <TopTab.Screen component={FollowedScreen} name={"FollowedScreen"} options={{ tabBarLabel: 'ผู้ติดตาม' }} />
-      <TopTab.Screen component={FollowerScreen} name={"FollowerScreen"} options={{ tabBarLabel: 'กำลังติดตาม' }} />
+      <TopTab.Screen component={FollowedScreen} name={"FollowedScreen"} options={{ tabBarLabel: 'ผู้ติดตาม' }} initialParams={{ User: route.params.ViewUser }} />
+      <TopTab.Screen component={FollowerScreen} name={"FollowerScreen"} options={{ tabBarLabel: 'กำลังติดตาม' }} initialParams={{ User: route.params.ViewUser }} />
     </TopTab.Navigator>
   )
 }
