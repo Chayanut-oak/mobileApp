@@ -25,8 +25,10 @@ const MealDetail = ({ navigation, route }) => {
   const [meal, setMeal] = useState(null)
   useEffect(() => {
     const selectedMeal = storeMeal.find(item => item.mealId === mealId);
+  
     setMeal(selectedMeal)
   }, [storeMeal])
+
   const addFavorite = () => {
     const collectUserRef = collection(FIRE_STORE, "users")
     const userRef = doc(collectUserRef, storeUser.userId)
@@ -40,6 +42,7 @@ const MealDetail = ({ navigation, route }) => {
       "like": increment(1)
     });
   }
+
   const removeFavorite = () => {
     const collectUserRef = collection(FIRE_STORE, "users")
     const userRef = doc(collectUserRef, storeUser.userId)
@@ -86,7 +89,7 @@ const MealDetail = ({ navigation, route }) => {
             <Text style={styles.userName}>{meal.createdBy.displayName}</Text>
           </View>
           <View style={styles.userRight}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=>{ navigation.navigate('ViewUser',{User:meal.createdBy})}}>
               <Image
                 style={styles.userImage}
                 source={meal.createdBy.userImage.imagePath ? { uri: meal.createdBy.userImage.imagePath } : require("../../picture/image.png")}

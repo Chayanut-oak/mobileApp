@@ -46,18 +46,40 @@ const MainNavigate = () => {
                 const allUserSnapshot = onSnapshot(collection(FIRE_STORE, 'users'), (collect) => {
                     // const curUserDoc = collect.docs.find((doc) => doc.data().userId == user.uid)
                     const allUserDoc = collect.docs.map((doc) => ({ ...doc.data() }));
+                    const linkedUser = allUserDoc.map((user) => {
+                        const linkedUserId = user.followed.map((userId) => {
+                            return allUserDoc.find((allUser) => allUser.userId === userId);
+                        });
+                        return { ...user, followed: linkedUserId };
+                    });
+                    const linkedAll = linkedUser.map((user) => {
+                        const linkedUserId = user.follower.map((userId) => {
+                            return allUserDoc.find((allUser) => allUser.userId === userId);
+                        });
+                        return { ...user, follower: linkedUserId };
+                    });
+       
                     if (user) {
-                        const curUserDoc = allUserDoc.find(item => item.userId == user.uid)
+                        const curUserDoc = linkedAll.find(item => item.userId == user.uid)
+                        // const usersWithFollowedData = storeAllUser.filter(user =>
+                        //     curUserDoc.followed.includes(user.userId)
+                        //   );
+                     
                         dispatch(saveUserData(curUserDoc));
+                        // const linkedUserId = curUserDoc.followed.map((userId) => {
+                        //     return allUserDoc.find((user) => user.userId === userId);
+                        //   });
                     }
-                    dispatch(saveAllUserData(allUserDoc))
-                    allUser = allUserDoc
+                    dispatch(saveAllUserData(linkedAll))
+                    
+                    allUser = linkedAll
                 }, (error) => {
                     console.log(error);
                 });
 
                 const allMealSnapshot = onSnapshot(collection(FIRE_STORE, 'meals'), (collect) => {
                     const allMeals = collect.docs.map((doc) => ({ mealId: doc.id, ...doc.data() }));
+
                     // Link ingredients to meals
                     const linkedMeals = allMeals.map((meal) => {
                         const linkedIngredients = meal.tags.map((ingredientId) => {
@@ -65,11 +87,15 @@ const MainNavigate = () => {
                         });
                         return { ...meal, tags: linkedIngredients };
                     });
+
                     // Link createdBy to user
                     const linkedMealsWithUsers = linkedMeals.map((meal) => {
+
                         const createdByUser = allUser.find((user) => user.userId === meal.createdBy);
+
                         return { ...meal, createdBy: createdByUser };
                     });
+
                     dispatch(saveMealData(linkedMealsWithUsers));
                 }, (error) => {
                     console.log(error);

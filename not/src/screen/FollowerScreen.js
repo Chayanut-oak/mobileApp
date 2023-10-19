@@ -1,33 +1,41 @@
 import React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, FlatList, ImageBackground, Image, TouchableOpacity } from 'react-native';
-import { useSelector , useDispatch} from 'react-redux';
-import { updateFollowed } from '../../redux/userSlice';
+import { useSelector,useDispatch } from 'react-redux';
+import { addFollowed } from '../../redux/userSlice';
 import { FIRE_STORE } from '../../Firebaseconfig';
+import { collection, addDoc, arrayUnion } from "firebase/firestore";
 import { updateDoc,doc,arrayRemove } from 'firebase/firestore';
-const FollowedScreen = ({ navigation }) => {
-    const dispatch = useDispatch()
+const FollowerScreen = ({navigation}) => {
     const allUserMeal = useSelector((state) => state.allUser)
     const userMeal = useSelector((state) => state.user)
+    
+    const dispatch = useDispatch()
     const unfollow = async (uid) =>{
-        const newFollwed = userMeal.followed.filter((item) => item.userId !== uid);
         await updateDoc(doc(FIRE_STORE, "users", userMeal.userId), {
             followed: arrayRemove(...[uid])
           });
           await updateDoc(doc(FIRE_STORE, "users", uid), {
             follower: arrayRemove(...[userMeal.userId])
           });
-        dispatch(updateFollowed(newFollwed))
+    }
+    const followed = async(uid,user)=> {
+        await updateDoc(doc(FIRE_STORE, "users", userMeal.userId), {
+            followed: arrayUnion(...[uid])
+          });
+          await updateDoc(doc(FIRE_STORE, "users", uid), {
+            follower: arrayUnion(...[userMeal.userId])
+          });
     }
 
-    const FollowedCard = ({ userName, imagePath,uid,index,user }) => {
+    const FollowedCard = ({ userName, imagePath ,uid,user}) => {
         return (
             <ImageBackground style={styles.item} source={require("../../picture/followedBackground.png")}>
                 <TouchableOpacity onPress={() => navigation.navigate('ViewUser',{User:user})}>
                     <Image style={styles.imageUser} source={imagePath ? { uri: imagePath } : require("../../picture/image.png")} />
                 </TouchableOpacity>
                 <Text style={styles.title}>{userName}</Text>
-                <TouchableOpacity onPress={() => unfollow(uid,index) }>
-                    <Image style={styles.button} source={require("../../picture/followedButton.png")} />
+                <TouchableOpacity onPress={()=> followed(uid,user)}>
+                    <Image style={styles.button} source={userMeal.followed.filter((item)=> item.userId == uid ).length !== 0 ? require("../../picture/followedButton.png") : require("../../picture/followBack.png")}  />
                 </TouchableOpacity>
             </ImageBackground>
         );
@@ -36,10 +44,10 @@ const FollowedScreen = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <FlatList
-                data={userMeal.followed}
+                data={userMeal.follower}
                 numColumns={2}
-                renderItem={({ item ,index}) => (
-                    <FollowedCard userName={item.displayName} imagePath={item.userImage.imagePath}  uid={item.userId} index={index} user={item}/>
+                renderItem={({ item }) => (
+                    <FollowedCard userName={item.displayName} imagePath={item.userImage.imagePath}  uid={item.userId} user={item} />
                 )}
                 keyExtractor={(item) => item.displayName}
             />
@@ -47,7 +55,7 @@ const FollowedScreen = ({ navigation }) => {
     );
 };
 
-export default FollowedScreen;
+export default FollowerScreen;
 
 const styles = StyleSheet.create({
 

@@ -19,13 +19,18 @@ export const userSlice = createSlice({
       return action.payload;
     },
     updateUserDisplayName: (state, action) => {
-      console.log(action.payload)
       state.displayName = action.payload
+    },
+    updateFollowed: (state, action) => {
+      state.followed = action.payload
+    },
+    addFollowed: (state, action) => {
+      state.followed = action.payload
     }
   }
 })
 
 
 
-export const { saveUserData, updateUserDisplayName } = userSlice.actions
+export const { saveUserData, updateUserDisplayName ,updateFollowed,addFollowed} = userSlice.actions
 export default userSlice.reducer

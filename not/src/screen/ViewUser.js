@@ -1,29 +1,44 @@
 import { StyleSheet, Text, Image, View, TouchableOpacity, FlatList } from 'react-native'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
+import { LinearGradient } from 'expo-linear-gradient';
 // import proimg from ''
-
-
-const Profile = ({ navigation }) => {
+import { collection, addDoc, arrayUnion } from "firebase/firestore";
+import { updateDoc,doc,arrayRemove } from 'firebase/firestore';
+import { FIRE_STORE } from '../../Firebaseconfig';
+const ViewUser = ({ navigation, route }) => {
   const [tab, setTab] = useState(true)
   const meals = useSelector((state) => state.meal);
   const userMeal = useSelector((state) => state.user)
+  const user = route.params.User
+  const allUserMeal = useSelector((state) => state.allUser)
+  const viewUser = allUserMeal.find((allUser) => allUser.userId === user.userId)
+  const follow = async()=> {
+    await updateDoc(doc(FIRE_STORE, "users", userMeal.userId), {
+      followed: arrayUnion(...[user.userId])
+    });
+    await updateDoc(doc(FIRE_STORE, "users", user.userId), {
+      follower: arrayUnion(...[userMeal.userId])
+    });
+  }
   return (
     <View style={styles.container}>
-       <Image source={{ uri:userMeal.userImage.imagePath  }} style={styles.profilepic}>
-       </Image>
-       <Text style={styles.user}>{userMeal.displayName}</Text>
+      {userMeal.followed.filter((item)=> item.userId == viewUser.userId ).length == 0? <TouchableOpacity style={styles.rightCornerButton} onPress={()=> follow()}>
+        <LinearGradient colors={['#DD2572', '#F02E5D']} style={styles.TouchableOpacity}>
+          <Text style={styles.centeredText}>ติดตาม</Text>
+        </LinearGradient>
+      </TouchableOpacity>:null}
+      <Image source={{ uri: viewUser.userImage.imagePath }} style={styles.profilepic}>
+      </Image>
+      <Text style={styles.user}>{user.displayName}</Text>
       <View style={{ flexDirection: 'row', gap: 89, marginTop: 10 }}>
-        <Text style={{ color: 'white', fontSize: 22 }}>{userMeal.followed.length}</Text>
-        <Text style={{ color: 'white', fontSize: 22 }}>{userMeal.follower.length}</Text>
+        <Text style={{ color: 'white', fontSize: 22 }}>{viewUser.followed.length}</Text>
+        <Text style={{ color: 'white', fontSize: 22 }}>{viewUser.follower.length}</Text>
         <Text style={{ color: 'white', fontSize: 22 }}>0</Text>
       </View>
       <View style={{ flexDirection: 'row', gap: 20, marginTop: 10 }}>
-        <TouchableOpacity onPress={()=> navigation.navigate('Followed')}>
-          <Text style={{ color: 'white', fontSize: 18 }}>กำลังติดตาม</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity onPress={() => navigation.navigate('Followed')}>
+        <Text style={{ color: 'white', fontSize: 18 }}>กำลังติดตาม</Text>
+        <TouchableOpacity onPress={()=> navigation.navigate("AnotherFollowNav",{ViewUser:user})}>
           <Text style={{ color: 'white', fontSize: 18 }}>ผู้ติดตาม</Text>
         </TouchableOpacity>
         <Text style={{ color: 'white', fontSize: 18 }}>รายการอาหาร</Text>
@@ -68,8 +83,7 @@ const Profile = ({ navigation }) => {
                     style={styles.favoriteIcon}
                     source={require("../../picture/favoriteIcon.png")}
                   />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.shareIconContainer} onPress={() => { navigation.navigate("mealDetail", { mealId: item.mealId }) }}>
+                </TouchableOpacity><TouchableOpacity style={styles.shareIconContainer}>
                   <Image
                     style={styles.shareIcon}
                     source={require("../../picture/shareicon.png")}
@@ -97,7 +111,7 @@ const Profile = ({ navigation }) => {
                       style={styles.favoriteIcon}
                       source={require("../../picture/favoriteIcon.png")}
                     />
-                  </TouchableOpacity >
+                  </TouchableOpacity>
                   <View style={styles.textContainer}>
                     <Text style={styles.mealName}>{item.mealName}</Text>
                   </View>
@@ -112,7 +126,7 @@ const Profile = ({ navigation }) => {
   )
 }
 
-export default Profile
+export default ViewUser
 
 const styles = StyleSheet.create({
   container: {
@@ -123,6 +137,7 @@ const styles = StyleSheet.create({
   },
   profilepic: {
     alignItems: 'center',
+    marginBottom: 20,
     marginTop: 20,
     position: 'relative',
     backgroundColor: 'white',
@@ -178,8 +193,23 @@ const styles = StyleSheet.create({
     width: 30,
     height: 50,
     resizeMode: "contain",
+  }, centeredText: {
+    textAlign: 'center', // Add this style to center the text horizontally
+    color: 'white'
+  }, TouchableOpacity: {
+    borderColor: 'rgba(0,0,0,0.2)',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: '#fff',
+    borderRadius: 50,
+    width: 'auto',
+    marginRight: 5,
   },
-  user:{
+  rightCornerButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+  },user:{
     fontSize:40,
     color:'white'
   }

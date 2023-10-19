@@ -10,7 +10,7 @@ const Recommend = ({ navigation }) => {
       setRecommend(findRec(storeMeal))
     }
   }, [storeMeal])
-  console.log(recommend)
+
 
   const findRec = (listMeal) => {
     return listMeal.reduce((accumulator, current) => {

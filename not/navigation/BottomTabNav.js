@@ -15,6 +15,7 @@ import Profile from '../src/screen/Profile'
 import CreateMeal from '../src/screen/CreateMeal';
 import Notification from '../src/screen/Notification'
 import CookingNav from './CookingNav';
+import ProfileNav from './ProfileNav';
 const MenuTab = createBottomTabNavigator();
 const BottomTabNav = ({route , navigation}) => {
   const auth = getAuth();
@@ -47,7 +48,7 @@ const BottomTabNav = ({route , navigation}) => {
       <MenuTab.Screen name="Notification"  component={Notification} options={{
         headerStyle: { backgroundColor: "#E27E8A" }
       }} />
-      <MenuTab.Screen name={"Profile"} component={Profile} options={{
+      <MenuTab.Screen name={"Profile"} component={ProfileNav} options={{
         headerStyle: { backgroundColor: "#E27E8A" }
       }} />
 
