@@ -2,19 +2,21 @@ import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { createSlice } from "@reduxjs/toolkit";
 import { action } from '@datorama/akita';
+const initialState = {
+  userId: "",
+  firstName: "",
+  lastName: "",
+  userImage: {},
+  email: "",
+  displayName: "",
+  favoriteMeals: [],
+  followed: [],
+  follower: []
+}
 export const userSlice = createSlice({
   name: 'user',
-  initialState: {
-    userId: "",
-    firstName: "",
-    lastName: "",
-    userImage: {},
-    email: "",
-    displayName: "",
-    favoriteMeals: [],
-    followed: [],
-    follower: []
-  }, reducers: {
+  initialState, 
+  reducers: {
     saveUserData: (state, action) => {
       return action.payload;
     },
@@ -26,11 +28,14 @@ export const userSlice = createSlice({
     },
     addFollowed: (state, action) => {
       state.followed = action.payload
+    },
+    resetToinitialState: (state, action) => {
+      return initialState
     }
   }
 })
 
 
 
-export const { saveUserData, updateUserDisplayName ,updateFollowed,addFollowed} = userSlice.actions
+export const { saveUserData, updateUserDisplayName, updateFollowed, addFollowed, resetToinitialState } = userSlice.actions
 export default userSlice.reducer

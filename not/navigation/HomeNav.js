@@ -10,7 +10,7 @@ import { FIREBASE_AUTH } from '../Firebaseconfig'
 import MealDetail from '../src/screen/MealDetail'
 import Review from '../src/screen/Review'
 import { useDispatch } from 'react-redux'
-import { saveUserData } from '../redux/userSlice'
+import { saveUserData, resetToinitialState } from '../redux/userSlice'
 import SearchBarTabNav from './SearchBarTabNav'
 import ViewUser from '../src/screen/ViewUser'
 const HomeNav = ({navigation}) => {
@@ -22,7 +22,7 @@ const HomeNav = ({navigation}) => {
         headerStyle: { backgroundColor: "#E27E8A" }, headerRight: () => (
           <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
             <Text onPress={() => {
-              dispatch(saveUserData({}))
+              dispatch(resetToinitialState())
               FIREBASE_AUTH.signOut()
               }}>
               Exit

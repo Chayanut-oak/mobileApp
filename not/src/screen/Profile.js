@@ -8,76 +8,80 @@ const Profile = ({ navigation }) => {
   const [tab, setTab] = useState(true)
   const meals = useSelector((state) => state.meal);
   const userMeal = useSelector((state) => state.user)
-  const [user ,setUser] = useState(null)
-  useEffect (()=>{
-    if(userMeal){
+  const [user, setUser] = useState(null)
+  const [meal, setMeal] = useState(null)
+  useEffect(() => {
+    if (userMeal && meals) {
       setUser(userMeal)
+      setMeal(meals)
     }
-    
-  },[userMeal])
 
-  if (!meals || !user) {
+  }, [userMeal, meals])
+
+  if (!meal || !user) {
     return (
-      <Text>Loading</Text>
+      <View style={{height:"100%", backgroundColor:"#2F2C2C"}}>
+
+      </View>
     )
   }
-  
   return (
     <View style={styles.container}>
-      <Image source={{ uri:user.userImage.imagePath}} style={styles.profilepic}>
-      </Image>
+      {/* <Image source={user.userImage.imagePath ? { uri: user.userImage.imagePath } : require("../../picture/image.png")} style={styles.profilepic}>
+        </Image> */}
       <Text style={styles.user}>{user.displayName}</Text>
-    <View style={{ flexDirection: 'row', gap: 89, marginTop: 10 }}>
-      <Text style={{ color: 'white', fontSize: 22 }}>{user.followed.length}</Text>
-      <Text style={{ color: 'white', fontSize: 22 }}>{user.follower.length}</Text>
-      <Text style={{ color: 'white', fontSize: 22 }}>0</Text>
-    </View>
-    <View style={{ flexDirection: 'row', gap: 20, marginTop: 10 }}>
-      <TouchableOpacity onPress={()=> navigation.navigate('Followed')}>
-        <Text style={{ color: 'white', fontSize: 18 }}>กำลังติดตาม</Text>
-      </TouchableOpacity>
-      
-      <TouchableOpacity onPress={() => navigation.navigate('Followed')}>
-        <Text style={{ color: 'white', fontSize: 18 }}>ผู้ติดตาม</Text>
-      </TouchableOpacity>
-      <Text style={{ color: 'white', fontSize: 18 }}>รายการอาหาร</Text>
-    </View>
-    <View style={{ flexDirection: 'row', marginVertical: 20 }}>
-      <TouchableOpacity
-        style={{ borderColor: tab ? '#CD2A51' : 'white', borderBottomWidth: 5, flex: 1, alignItems: 'center' }}
-        onPress={() => {
-          setTab(true)
-        }}>
-        <Text style={{
-          color: tab ? '#CD2A51' : 'white',
-          fontSize: 18,
-          padding: 5
-        }}>เมนูของฉัน</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={{ borderColor: tab ? 'white' : '#CD2A51', borderBottomWidth: 5, flex: 1, alignItems: 'center' }}
-        onPress={() => {
-          setTab(false)
-        }}>
-        <Text style={{
-          color: tab ? 'white' : '#CD2A51',
-          fontSize: 18,
-          padding: 5
-        }}>เมนูที่ชอบ</Text>
-      </TouchableOpacity>
-    </View>
+      <View style={{ flexDirection: 'row', gap: 89, marginTop: 10 }}>
+        <Text style={{ color: 'white', fontSize: 22 }}>{user.followed.length}</Text>
+        <Text style={{ color: 'white', fontSize: 22 }}>{user.follower.length}</Text>
+        <Text style={{ color: 'white', fontSize: 22 }}>0</Text>
+      </View>
+      <View style={{ flexDirection: 'row', gap: 20, marginTop: 10 }}>
+        <TouchableOpacity onPress={() => navigation.navigate('Followed')}>
+          <Text style={{ color: 'white', fontSize: 18 }}>กำลังติดตาม</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.navigate('Followed')}>
+          <Text style={{ color: 'white', fontSize: 18 }}>ผู้ติดตาม</Text>
+        </TouchableOpacity>
+        <Text style={{ color: 'white', fontSize: 18 }}>รายการอาหาร</Text>
+      </View>
+      <View style={{ flexDirection: 'row', marginVertical: 20 }}>
+        <TouchableOpacity
+          style={{ borderColor: tab ? '#CD2A51' : 'white', borderBottomWidth: 5, flex: 1, alignItems: 'center' }}
+          onPress={() => {
+            setTab(true)
+          }}>
+          <Text style={{
+            color: tab ? '#CD2A51' : 'white',
+            fontSize: 18,
+            padding: 5
+          }}>เมนูของฉัน</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{ borderColor: tab ? 'white' : '#CD2A51', borderBottomWidth: 5, flex: 1, alignItems: 'center' }}
+          onPress={() => {
+            setTab(false)
+          }}>
+          <Text style={{
+            color: tab ? 'white' : '#CD2A51',
+            fontSize: 18,
+            padding: 5
+          }}>เมนูที่ชอบ</Text>
+        </TouchableOpacity>
+      </View>
 
       {tab ?
 
         <FlatList
-          data={meals}
+          data={meal}
           renderItem={({ item }) => {
             return (<View style={{ flexDirection: "row" }}>
               <View style={styles.imageContainer}>
                 <Image
                   style={styles.image}
-                  source={{ uri: item.mealImage.imagePath }}
-                /><TouchableOpacity style={styles.favoriteIconContainer}>
+                  source={item.mealImage.imagePath ? { uri: item.mealImage.imagePath } : require("../../picture/image.png")}
+                />
+                <TouchableOpacity style={styles.favoriteIconContainer}>
                   <Image
                     style={styles.favoriteIcon}
                     source={require("../../picture/favoriteIcon.png")}
@@ -98,13 +102,13 @@ const Profile = ({ navigation }) => {
         :
         <View>
           <FlatList
-            data={meals}
+            data={meal}
             renderItem={({ item }) => {
               return (<View style={{ flexDirection: "row" }}>
                 <View style={styles.imageContainer}>
                   <Image
                     style={styles.image}
-                    source={{ uri: item.mealImage.imagePath }}
+                    source={item.mealImage.imagePath ? { uri: item.mealImage.imagePath } : require("../../picture/image.png")}
 
                   /><TouchableOpacity style={styles.favoriteIconContainer}>
                     <Image
@@ -125,6 +129,9 @@ const Profile = ({ navigation }) => {
     </View>
   )
 }
+
+
+
 
 export default Profile
 
@@ -193,8 +200,8 @@ const styles = StyleSheet.create({
     height: 50,
     resizeMode: "contain",
   },
-  user:{
-    fontSize:40,
-    color:'white'
+  user: {
+    fontSize: 40,
+    color: 'white'
   }
 })
