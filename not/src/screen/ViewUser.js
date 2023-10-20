@@ -1,6 +1,6 @@
 import { StyleSheet, Text, Image, View, TouchableOpacity, FlatList } from 'react-native'
 import React, { useState } from 'react'
-import { useSelector,useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { LinearGradient } from 'expo-linear-gradient';
 // import proimg from ''
 import { collection, addDoc, updateDoc, doc, arrayRemove, increment, arrayUnion } from 'firebase/firestore';
@@ -63,7 +63,7 @@ const ViewUser = ({ navigation, route }) => {
       "like": increment(-1)
     });
   }
-  const savefollow = async()=>{
+  const savefollow = async () => {
     dispatch(saveFollow(user))
   }
   return (
@@ -87,10 +87,10 @@ const ViewUser = ({ navigation, route }) => {
         <Text style={{ color: 'white', fontSize: 22 }}>{mapOwn.length}</Text>
       </View>
       <View style={{ flexDirection: 'row', gap: 20, marginTop: 10 }}>
-      <TouchableOpacity onPress={() => {navigation.navigate('Followed'),savefollow()}}>
-        <Text style={{ color: 'white', fontSize: 18 }}>กำลังติดตาม</Text>
+        <TouchableOpacity onPress={() => { navigation.navigate('Followed'), savefollow() }}>
+          <Text style={{ color: 'white', fontSize: 18 }}>กำลังติดตาม</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => {navigation.navigate('Followed'),savefollow()}}>
+        <TouchableOpacity onPress={() => { navigation.navigate('Followed'), savefollow() }}>
           <Text style={{ color: 'white', fontSize: 18 }}>ผู้ติดตาม</Text>
         </TouchableOpacity>
         <Text style={{ color: 'white', fontSize: 18 }}>รายการอาหาร</Text>
@@ -98,7 +98,7 @@ const ViewUser = ({ navigation, route }) => {
       <View style={{ flexDirection: 'row', marginVertical: 20 }}>
         <TouchableOpacity
           style={{ borderColor: tab ? '#CD2A51' : 'white', borderBottomWidth: 5, flex: 1, alignItems: 'center' }}
-          onPress={() => { 
+          onPress={() => {
             setTab(true)
           }}>
           <Text style={{
@@ -140,10 +140,13 @@ const ViewUser = ({ navigation, route }) => {
                     addFavorite(item.mealId)
                   }
                 }}>
-                  <Image
-                    style={styles.favoriteIcon}
-                    source={!curUser.favoriteMeals.includes(item.mealId) ? require("../../picture/favoriteIcon.png") : require("../../picture/favoriteIconToggle.png")}
-                  />
+                  <View style={{ flexDirection: "row" }}>
+                    <Image
+                      style={styles.favoriteIcon}
+                      source={!curUser.favoriteMeals.includes(item.mealId) ? require("../../picture/favoriteIcon.png") : require("../../picture/favoriteIconToggle.png")}
+                    />
+                    <Text style={{ marginTop: 15, color: "white", fontSize: 18, fontWeight: "bold" }}>{item.like}</Text>
+                  </View>
                 </TouchableOpacity>
                 <View style={styles.textContainer}>
                   <Text style={styles.mealName}>{item.mealName}</Text>
@@ -153,36 +156,39 @@ const ViewUser = ({ navigation, route }) => {
           }}
         />
         :
-          <FlatList
-            data={mapFav}
-            renderItem={({ item }) => {
-              return (<View style={{ flexDirection: "row" }}>
-                <View style={styles.imageContainer}>
-                  <TouchableOpacity style={styles.image} onPress={() => { navigation.navigate("mealDetail", { mealId: item.mealId }) }}>
-                    <Image
-                      style={styles.image}
-                      source={{ uri: item.mealImage.imagePath }}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.favoriteIconContainer} onPress={() => {
-                    if (curUser.favoriteMeals.includes(item.mealId)) {
-                      removeFavorite(item.mealId)
-                    } else {
-                      addFavorite(item.mealId)
-                    }
-                  }}>
+        <FlatList
+          data={mapFav}
+          renderItem={({ item }) => {
+            return (<View style={{ flexDirection: "row" }}>
+              <View style={styles.imageContainer}>
+                <TouchableOpacity style={styles.image} onPress={() => { navigation.navigate("mealDetail", { mealId: item.mealId }) }}>
+                  <Image
+                    style={styles.image}
+                    source={{ uri: item.mealImage.imagePath }}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.favoriteIconContainer} onPress={() => {
+                  if (curUser.favoriteMeals.includes(item.mealId)) {
+                    removeFavorite(item.mealId)
+                  } else {
+                    addFavorite(item.mealId)
+                  }
+                }}>
+                  <View style={{ flexDirection: "row" }}>
                     <Image
                       style={styles.favoriteIcon}
                       source={!curUser.favoriteMeals.includes(item.mealId) ? require("../../picture/favoriteIcon.png") : require("../../picture/favoriteIconToggle.png")}
                     />
-                  </TouchableOpacity>
-                  <View style={styles.textContainer}>
-                    <Text style={styles.mealName}>{item.mealName}</Text>
+                    <Text style={{ marginTop: 15, color: "white", fontSize: 18, fontWeight: "bold" }}>{item.like}</Text>
                   </View>
-                </View></View>
-              );
-            }}
-          />
+                </TouchableOpacity>
+                <View style={styles.textContainer}>
+                  <Text style={styles.mealName}>{item.mealName}</Text>
+                </View>
+              </View></View>
+            );
+          }}
+        />
       }
 
     </View>

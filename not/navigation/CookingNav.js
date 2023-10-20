@@ -40,6 +40,8 @@ const CookingNav = ({ route, navigation }) => {
   return (
     <CookNavigate.Navigator>
       <CookNavigate.Screen name="CreateMeal" component={CreateMeal} options={{
+        title:"เพิ่มเมนู",
+        headerTitleStyle:{fontWeight:"bold"},
         headerStyle: { backgroundColor: "#E27E8A" }, headerRight: () => (
           <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
             <Text onPress={() => navigation.navigate('CookingMethod')}>
@@ -49,10 +51,12 @@ const CookingNav = ({ route, navigation }) => {
       }
       }></CookNavigate.Screen>
       <CookNavigate.Screen name="CookingMethod" component={CookingMethod} options={{
+        title:"ขั้นตอน",
+        headerTitleStyle:{fontWeight:"bold"},
         headerStyle: { backgroundColor: "#E27E8A" }, headerRight: () => (
           <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
             <Text onPress={() => { navigation.navigate('CreateMeal'), upMethod() }}>
-              Done
+              เสร็จสิ้น
             </Text>
           </HeaderButtons>)
       }

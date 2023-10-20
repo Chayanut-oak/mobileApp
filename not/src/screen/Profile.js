@@ -1,7 +1,7 @@
 // import proimg from ''
 import { StyleSheet, Text, Image, View, TouchableOpacity, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { useSelector,useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { collection, doc, setDoc, updateDoc, increment, arrayRemove, arrayUnion } from 'firebase/firestore';
 import { FIRE_STORE } from '../../Firebaseconfig'
 import { Feather } from '@expo/vector-icons';
@@ -42,15 +42,15 @@ const Profile = ({ navigation }) => {
       "like": increment(-1)
     });
   }
-  const savefollow = async()=>{
+  const savefollow = async () => {
     dispatch(saveFollow(storeUser))
   }
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.settingconContainer} onPress={() => {navigation.navigate('SettingScreen')}}>
-      <Image style={styles.settingIcon}
-                      source={require("../../picture/settingIcon.png")}
-                    />
+      <TouchableOpacity style={styles.settingconContainer} onPress={() => { navigation.navigate('SettingScreen') }}>
+        <Image style={styles.settingIcon}
+          source={require("../../picture/settingIcon.png")}
+        />
       </TouchableOpacity>
       <Image source={storeUser.userImage.imagePath ? { uri: storeUser.userImage.imagePath } : require("../../picture/image.png")} style={styles.profilepic} />
       <Text style={styles.user}>{storeUser.displayName}</Text>
@@ -60,11 +60,11 @@ const Profile = ({ navigation }) => {
         <Text style={{ color: 'white', fontSize: 22 }}>{mapOwn.length}</Text>
       </View>
       <View style={{ flexDirection: 'row', gap: 20, marginTop: 10 }}>
-      <TouchableOpacity onPress={() => {navigation.navigate('Followed'),savefollow()}}>
+        <TouchableOpacity onPress={() => { navigation.navigate('Followed'), savefollow() }}>
           <Text style={{ color: 'white', fontSize: 18 }}>กำลังติดตาม</Text>
-          </TouchableOpacity>
+        </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => {navigation.navigate('Followed'),savefollow()}}>
+        <TouchableOpacity onPress={() => { navigation.navigate('Followed'), savefollow() }}>
           <Text style={{ color: 'white', fontSize: 18 }}>ผู้ติดตาม</Text>
         </TouchableOpacity>
         <Text style={{ color: 'white', fontSize: 18 }}>รายการอาหาร</Text>
@@ -115,10 +115,13 @@ const Profile = ({ navigation }) => {
                       addFavorite(item.mealId)
                     }
                   }}>
-                    <Image
-                      style={styles.favoriteIcon}
-                      source={!storeUser.favoriteMeals.includes(item.mealId) ? require("../../picture/favoriteIcon.png") : require("../../picture/favoriteIconToggle.png")}
-                    />
+                    <View style={{ flexDirection: "row" }}>
+                      <Image
+                        style={styles.favoriteIcon}
+                        source={!storeUser.favoriteMeals.includes(item.mealId) ? require("../../picture/favoriteIcon.png") : require("../../picture/favoriteIconToggle.png")}
+                      />
+                      <Text style={{ marginTop: 15, color: "white", fontSize: 18, fontWeight: "bold" }}>{item.like}</Text>
+                    </View>
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.shareIconContainer} onPress={() => { navigation.navigate("mealDetail", { mealId: item.mealId }) }}>
                     <Feather name="edit" size={24} color="black" />
@@ -131,36 +134,39 @@ const Profile = ({ navigation }) => {
           }}
         />
         :
-          <FlatList
-            data={mapFav}
-            renderItem={({ item }) => {
-              return (<View style={{ flexDirection: "row" }}>
-                <View style={styles.imageContainer}>
-                  <TouchableOpacity style={styles.image} onPress={() => { navigation.navigate("mealDetail", { mealId: item.mealId }) }}>
-                    <Image
-                      style={styles.image}
-                      source={item.mealImage.imagePath ? { uri: item.mealImage.imagePath } : require("../../picture/image.png")}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.favoriteIconContainer} onPress={() => {
-                    if (storeUser.favoriteMeals.includes(item.mealId)) {
-                      removeFavorite(item.mealId)
-                    } else {
-                      addFavorite(item.mealId)
-                    }
-                  }}>
+        <FlatList
+          data={mapFav}
+          renderItem={({ item }) => {
+            return (<View style={{ flexDirection: "row" }}>
+              <View style={styles.imageContainer}>
+                <TouchableOpacity style={styles.image} onPress={() => { navigation.navigate("mealDetail", { mealId: item.mealId }) }}>
+                  <Image
+                    style={styles.image}
+                    source={item.mealImage.imagePath ? { uri: item.mealImage.imagePath } : require("../../picture/image.png")}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.favoriteIconContainer} onPress={() => {
+                  if (storeUser.favoriteMeals.includes(item.mealId)) {
+                    removeFavorite(item.mealId)
+                  } else {
+                    addFavorite(item.mealId)
+                  }
+                }}>
+                  <View style={{ flexDirection: "row" }}>
                     <Image
                       style={styles.favoriteIcon}
                       source={!storeUser.favoriteMeals.includes(item.mealId) ? require("../../picture/favoriteIcon.png") : require("../../picture/favoriteIconToggle.png")}
                     />
-                  </TouchableOpacity>
-                  <View style={styles.textContainer}>
-                    <Text style={styles.mealName}>{item.mealName}</Text>
+                    <Text style={{ marginTop: 15, color: "white", fontSize: 18, fontWeight: "bold" }}>{item.like}</Text>
                   </View>
-                </View></View>
-              );
-            }}
-          />
+                </TouchableOpacity>
+                <View style={styles.textContainer}>
+                  <Text style={styles.mealName}>{item.mealName}</Text>
+                </View>
+              </View></View>
+            );
+          }}
+        />
       }
 
     </View>
@@ -240,7 +246,7 @@ const styles = StyleSheet.create({
   settingconContainer: {
     position: "absolute",
     top: 10,
-    left: 335, 
+    left: 335,
     backgroundColor: "transparent",
   },
   settingIcon: {

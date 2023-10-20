@@ -5,20 +5,22 @@ import FollowedScreen from '../src/screen/FollowedScreen';
 import FollowerScreen from '../src/screen/FollowerScreen';
 
 const TopTab = createMaterialTopTabNavigator()
-const FollowNav = ({route}) => {
+const FollowNav = ({ route }) => {
 
   return (
     <TopTab.Navigator screenOptions={{
-      tabBarStyle: { backgroundColor: "#707070", height: "auto", paddingTop: 10 },
-      tabBarLabelStyle: { fontSize: 15, fontWeight: "bold", color: "black" },
+      tabBarStyle: { backgroundColor: "#2F2C2C", height: "auto" },
+      tabBarActiveTintColor: '#DD2572',
+      tabBarInactiveTintColor: "white",
+      tabBarLabelStyle: { fontSize: 15, fontWeight: "bold" },
       tabBarIndicatorStyle: {
         borderBottomColor: '#505050',
         borderBottomWidth: 4,
       },
     }}
     >
-      <TopTab.Screen component={FollowedScreen} name={"FollowedScreen"} options={{ tabBarLabel: 'ผู้ติดตาม' }}  />
-      <TopTab.Screen component={FollowerScreen} name={"FollowerScreen"} options={{ tabBarLabel: 'กำลังติดตาม' }}  />
+      <TopTab.Screen component={FollowedScreen} name={"FollowedScreen"} options={{ tabBarLabel: 'ผู้ติดตาม' }} />
+      <TopTab.Screen component={FollowerScreen} name={"FollowerScreen"} options={{ tabBarLabel: 'กำลังติดตาม' }} />
     </TopTab.Navigator>
   )
 }

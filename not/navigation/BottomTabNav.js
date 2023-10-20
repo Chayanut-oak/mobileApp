@@ -18,7 +18,7 @@ import CookingNav from './CookingNav';
 import ProfileNav from './ProfileNav';
 import SearchBarTabNav from './SearchBarTabNav'
 const MenuTab = createBottomTabNavigator();
-const BottomTabNav = ({route , navigation}) => {
+const BottomTabNav = ({ route, navigation }) => {
   const auth = getAuth();
   return (
     <MenuTab.Navigator
@@ -42,16 +42,21 @@ const BottomTabNav = ({route , navigation}) => {
         },
       })}
     >
-      <MenuTab.Screen name="MainHome" component={HomeNav} options={{ headerShown: false }} />
-     
-      <MenuTab.Screen name="SearchScreen"  component={SearchBarTabNav} options={{
-        headerStyle: { backgroundColor: "#E27E8A" }
+      <MenuTab.Screen name="MainHome" component={HomeNav} options={{ headerShown: false, title: "หน้าหลัก" }} />
+
+      <MenuTab.Screen name="SearchScreen" component={SearchBarTabNav} options={{
+        headerStyle: { backgroundColor: "#E27E8A" },
+        headerTitleStyle:{fontWeight:"bold"},
+        title: "ค้นหา"
       }} />
-       <MenuTab.Screen name="New" component={CookingNav} initialParams={{ customProp: 'Another custom prop' }} options={{
-        headerStyle: { backgroundColor: "#E27E8A" },  headerShown: false 
+      <MenuTab.Screen name="New" component={CookingNav} initialParams={{ customProp: 'Another custom prop' }} options={{
+        headerStyle: { backgroundColor: "#E27E8A" }, headerShown: false,
+        title: "เพิ่มเมนู"
       }} />
       <MenuTab.Screen name={"Profile"} component={ProfileNav} options={{
-        headerStyle: { backgroundColor: "#E27E8A" }
+        headerStyle: { backgroundColor: "#E27E8A" },
+        headerTitleStyle:{fontWeight:"bold"},
+        title: "โปรไฟล์"
       }} />
 
 

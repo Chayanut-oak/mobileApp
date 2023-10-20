@@ -18,8 +18,8 @@ const SearchBarTabNav = () => {
     }}
 
     >
-      <TopTab.Screen component={SearchScreen} name={"SearchMeal"} options={{ tabBarLabel: 'Search Meal' }} />
-      <TopTab.Screen component={SearchUser} name={"SearchUser"} options={{ tabBarLabel: 'Search User' }} />
+      <TopTab.Screen component={SearchScreen} name={"SearchMeal"} options={{ tabBarLabel: 'ค้นหาอาหาร' }} />
+      <TopTab.Screen component={SearchUser} name={"SearchUser"} options={{ tabBarLabel: 'ค้นหาผู้ใช้' }} />
     </TopTab.Navigator>
   )
 }
