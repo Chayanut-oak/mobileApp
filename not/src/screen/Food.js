@@ -5,12 +5,7 @@ import SearchBar from '../components/SearchBar'
 const Food = ({ route, navigation }) => {
   return (
     <View style={styles.container}>
-      <View style={styles.search}>
-        <SearchBar navigation={navigation} />
-      </View>
       <MealCategories navigation={navigation} category={route.params.categoryId} />
-
-
     </View>
   )
 }
@@ -23,9 +18,10 @@ const styles = StyleSheet.create({
     alignItems: 'center', // Center align the button horizontally
   }, container: {
     flex: 1,
-    justifyContent: 'flex-start', // Align content to the top
+    marginTop:-10,
+    // justifyContent: 'center', // Align content to the top
     backgroundColor: '#2F2C2C',
-    padding: 20,
-    paddingTop: 20, // Add padding/margin to the top
+    // padding: 10,
+    // paddingTop: 0, // Add padding/margin to the top
   },
 })

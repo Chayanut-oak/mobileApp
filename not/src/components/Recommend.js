@@ -37,11 +37,32 @@ const Recommend = ({ navigation }) => {
             }}
             source={recommend.mealImage.imagePath ? { uri: recommend.mealImage.imagePath } : require("../../picture/image.png")}
           />
-          <Text style={{ textAlign: "left", fontSize: 22, fontWeight: "bold", color: "white" }}>{recommend.mealName}</Text>
-          <Text style={{ textAlign: "left", fontSize: 22, fontWeight: "bold", color: "#DD2572" }}>   {recommend.createdBy?.displayName}</Text>
+          <View style={{ flexDirection: 'row' }}>
+            <View style={{ flex: 4 }}>
+              <Text style={{ textAlign: "left", fontSize: 22, fontWeight: "bold", color: "white" }}>{recommend.mealName}</Text>
+              <Text style={{ textAlign: "left", fontSize: 22, fontWeight: "bold", color: "#DD2572" }}>   {recommend.createdBy?.displayName}</Text>
+            </View>
+            <View style={{
+              flexDirection: "row",
+              padding: 0,
+              flex: 1,
+              marginTop: 10
+            }}>
+              <Text style={{ color: "white", fontSize: 20, fontWeight: "bold", marginRight: 10 }}>
+                {recommend.like}
+              </Text>
+              <Image style={{
+                width: 30,
+                height: 30,
+                resizeMode: 'contain',
+              }}
+                source={require('../../picture/heartIcon.png')} />
+
+            </View>
+          </View>
         </TouchableOpacity>
-      </View>
-    </View>
+      </View >
+    </View >
   );
 }
 

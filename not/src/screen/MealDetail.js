@@ -86,7 +86,9 @@ const MealDetail = ({ navigation, route }) => {
         <LinearGradient style={styles.userCard} colors={['#707070', '#464646']}>
           <View style={styles.userLeft}>
             <Text style={styles.userName}>{meal.createdBy.displayName}</Text>
+            <Text style={{color:"white",fontSize:16,fontWeight:"500"}}>Like: {meal.like}</Text>
           </View>
+          
           <View style={styles.userRight}>
            <TouchableOpacity onPress={() => meal.createdBy.userId == storeUser.userId ? navigation.navigate('Profile') : navigation.navigate('ViewUser', { user: meal.createdBy })}>
               <Image
@@ -97,7 +99,7 @@ const MealDetail = ({ navigation, route }) => {
             <TouchableOpacity onPress={() => {
               navigation.navigate("mealReview", { mealId: mealId })
             }}>
-              <MaterialCommunityIcons name="comment-text-multiple-outline" size={24} color="white" />
+              <MaterialCommunityIcons name="comment-text-multiple-outline" size={30} color="white" />
             </TouchableOpacity>
           </View>
         </LinearGradient>
@@ -206,16 +208,16 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   userImage: {
-    width: 40,
-    height: 40,
+    width: 50,
+    height: 50,
+    marginRight:10,
     borderRadius: 20,
-    marginLeft: 10,
     resizeMode: "contain",
   },
   commentIcon: {
     marginTop: 12,
-    width: 40,
-    height: 40,
+    width: 50,
+    height: 50,
     resizeMode: "contain",
   },
   tags: {

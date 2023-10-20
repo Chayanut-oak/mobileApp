@@ -41,7 +41,9 @@ const FoodList = ({ navigation }) => {
               />
               <Text style={{ fontSize: 15, fontWeight: "bold", color: "white" }}>{item.mealName}</Text>
               <Text style={{ fontSize: 15, fontWeight: "bold", color: "#DD2572" }}>   {item.createdBy.displayName}</Text>
+              
             </TouchableOpacity>
+            
           ))}
         </View>
       ))}

@@ -28,10 +28,9 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start', // Align content to the top
+    justifyContent: 'center', // Align content to the top
     backgroundColor: '#2F2C2C',
-    padding: 20,
-    paddingTop: 20, // Add padding/margin to the top
+    padding: 10,
   },
   search: {
     width: '100%',
