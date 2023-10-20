@@ -34,7 +34,7 @@ const BottomTabNav = ({route , navigation}) => {
           } else if (route.name === 'New') {
             iconName = focused ? 'add-circle' : 'add-circle-outline';
           } else if (route.name === 'SearchScreen') {
-            iconName = focused ? 'notifications' : 'notifications-outline';
+            iconName = focused ? 'search-outline' : 'search-outline';
           } else if (route.name === "Profile") {
             iconName = focused ? 'person-sharp' : 'person-outline';
           }
