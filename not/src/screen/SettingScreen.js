@@ -4,15 +4,11 @@ import React from 'react';
 const SettingScreen = ({ route, navigation }) => {
   return (
     <View style={styles.container}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => { navigation.navigate('EditProfileScreen')}}>
       <View style={styles.buttoncontainer}>
         <Text style={styles.textstyle}>แก้ไขโปรไฟล์</Text>
       </View></TouchableOpacity>
-      <TouchableOpacity>
-      <View style={styles.buttoncontainer}>
-      <Text style={styles.textstyle}>ยืนยันตัวตน</Text>
-      </View></TouchableOpacity>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => { navigation.navigate('ChangePasswordScreen')}}>
       <View style={styles.buttoncontainer}>
       <Text style={styles.textstyle}>เปลี่ยนรหัสผ่าน</Text>
       </View></TouchableOpacity>
