@@ -45,8 +45,8 @@ const Filter = (props, { route }) => {
     useEffect(() => {
         const searchMenu = () => {
             let filtered = mealStore.filter(meal => {
-                console.log("Meals tags", meal);
-                console.log("Selected tags", cookStore.tags);
+                // console.log("Meals tags", meal);
+                // console.log("Selected tags", cookStore.tags);
                 // Check if any of the selected tags are in meal.tags
                 const commonTags = meal.tags.filter(tag => cookStore.tags.includes(tag));
 

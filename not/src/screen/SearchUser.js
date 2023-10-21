@@ -3,6 +3,8 @@ import { TextInput, Image, ScrollView, View, Text, TouchableOpacity, StyleSheet,
 import { useSelector } from 'react-redux';
 const SearchUser = ({ navigation }) => {
     const allUser = useSelector(state => state.allUser)
+    const storeUser = useSelector(state => state.user)
+
     const [userList, setUserList] = useState([])
     const searchUser = (text) => {
         if (text) {
@@ -22,7 +24,7 @@ const SearchUser = ({ navigation }) => {
                 </View>
                 <View style={{ height: "50%" }}>
                     {userList.map(user => (
-                        <TouchableOpacity key={user.userId} onPress={() => { navigation.navigate('ViewUser', { User: user }) }}>
+                        <TouchableOpacity key={user.userId} onPress={() => user.userId == storeUser.userId ? navigation.navigate('Profile') : navigation.navigate('ViewUser', { user: user })}>
                             <View style={styles.user}>
                                 <Image style={styles.userImage} source={user.userImage.imagePath ? { uri: user.userImage.imagePath } : require("../../picture/image.png")} />
                                 <Text style={styles.displayName}>
