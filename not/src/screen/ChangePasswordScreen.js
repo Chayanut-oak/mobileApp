@@ -26,6 +26,7 @@ const ChangePasswordScreen = ({ navigation }) => {
         onChangeText={(text) => setEmail(text)}
       />
       <Button
+       color="#DD2572"
         title="เปลี่ยนรหัสผ่าน"
         onPress={changePassword}
       />
@@ -38,6 +39,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#2F2C2C',
   },
   input: {
     width: 300,
@@ -47,6 +49,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     paddingLeft: 10,
     borderRadius: 10,
+    backgroundColor: 'white',
   },
 });
 
