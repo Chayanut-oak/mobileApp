@@ -402,7 +402,7 @@ const Filter = (props, { route }) => {
                     </TouchableOpacity> : null}
 
 
-                    {props.filter = "filter" ?
+                    {props.filter == "filter" ?
                         mealFiltered.map(meal => FoodCard(meal)) : null
                     }
                     <Modal isVisible={isModalVisible}>

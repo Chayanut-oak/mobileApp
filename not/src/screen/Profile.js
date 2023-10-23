@@ -6,11 +6,13 @@ import { collection, doc, setDoc, updateDoc, increment, arrayRemove, arrayUnion 
 import { FIRE_STORE } from '../../Firebaseconfig'
 import { Feather } from '@expo/vector-icons';
 import { saveFollow } from '../../redux/followSlice';
+import { resetData } from '../../redux/cookingMethodSlice';
 const Profile = ({ navigation }) => {
   const dispatch = useDispatch()
   const [tab, setTab] = useState(true)
   const meals = useSelector((state) => state.meal);
   const storeUser = useSelector((state) => state.user)
+  const cookStore = useSelector((state) => state.cook)
   const [user, setUser] = useState(null)
   const mapFav = storeUser.favoriteMeals.map(mealId => {
     return meals.find(meal => meal.mealId === mealId)
@@ -45,6 +47,12 @@ const Profile = ({ navigation }) => {
   const savefollow = async () => {
     dispatch(saveFollow(storeUser))
   }
+  const setEditMeal = async (mealID)=>{
+    const getMeal = meals.filter((item,index) => item.mealId == mealID)
+    dispatch(resetData({createdBy: getMeal[0].createdBy.userId, like: getMeal[0].like, mealId: mealID, mealImage: getMeal[0].mealImage, mealName: getMeal[0].mealName, mealYoutube: getMeal[0].mealYoutube, reviews: getMeal[0].reviews, steps: getMeal[0].steps, tags: getMeal[0].tags}))
+   
+  }
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.settingconContainer} onPress={() => { navigation.navigate('SettingScreen') }}>
@@ -123,7 +131,8 @@ const Profile = ({ navigation }) => {
                       <Text style={{ marginTop: 15, color: "white", fontSize: 18, fontWeight: "bold" }}>{item.like}</Text>
                     </View>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.shareIconContainer} onPress={() => { navigation.navigate("mealDetail", { mealId: item.mealId }) }}>
+                  <TouchableOpacity style={styles.shareIconContainer} onPress={() => {navigation.navigate("New"),setEditMeal(item.mealId) }}>
+               
                     <Feather name="edit" size={24} color="black" />
                   </TouchableOpacity><View style={styles.textContainer}>
                     <Text style={styles.mealName}>{item.mealName}</Text>

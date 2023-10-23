@@ -4,7 +4,7 @@ import CreateMeal from '../src/screen/CreateMeal'
 import CookingMethod from '../src/screen/CookingMethod'
 import { FIRE_STORE } from '../Firebaseconfig'
 import { resetData } from '../redux/cookingMethodSlice'
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc,updateDoc,doc, } from "firebase/firestore";
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { HeaderButtons } from 'react-navigation-header-buttons';
 import CustomHeaderButton from '../src/components/CustomHeaderButton';
@@ -16,7 +16,8 @@ const CookingNav = ({ route, navigation }) => {
   const auth = getAuth();
   const CookNavigate = createNativeStackNavigator()
   const upMethod = async () => {
-    await addDoc(collection(FIRE_STORE, "meals"), {
+    if(methodStore.mealId == ''){
+      await addDoc(collection(FIRE_STORE, "meals"), {
       createdBy: auth.currentUser.uid,
       like: methodStore.like,
       mealImage: methodStore.mealImage,
@@ -26,15 +27,29 @@ const CookingNav = ({ route, navigation }) => {
       steps: methodStore.steps,
       tags: methodStore.tags.map((tag) => tag.ingredientId)
     });
+    }else{
+      await updateDoc(doc(FIRE_STORE, "meals", methodStore.mealId), {
+        createdBy: auth.currentUser.uid,
+        like: methodStore.like,
+        mealImage: methodStore.mealImage,
+        mealName: methodStore.mealName,
+        mealYoutube: methodStore.mealYoutube,
+        reviews: methodStore.reviews,
+        steps: methodStore.steps,
+        tags: methodStore.tags.map((tag) => tag.ingredientId)
+      });
+    }
+    
     dispatch(resetData({
       createdBy: '',
       like: 0,
+      mealId:'',
+      mealImage: {},
       mealName: '',
       mealYoutube: '',
-      mealImage: {},
       reviews: [],
-      tags: [],
       steps: [],
+      tags: [],
     }))
   }
   return (

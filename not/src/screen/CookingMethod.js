@@ -148,6 +148,7 @@ const CookingMethod = () => {
       <View style={styles.stepCard2}>
         <View style={styles.stepDetail2}>
           <TextInput style={styles.stepText} placeholder='แนบ Youtube' onEndEditing={handleUpdateLink} onChangeText={setLink} >
+          {methodStore.mealYoutube}
           </TextInput>
         </View>
       </View>

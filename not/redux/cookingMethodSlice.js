@@ -6,13 +6,15 @@ const cookingMethodSlice = createSlice({
   name: 'cooking',
   initialState: {
     createdBy: '',
-    like: 0,
+    like: 0, 
+    mealId:'',
+    mealImage: {},
     mealName: '',
     mealYoutube: '',
-    mealImage: {},
     reviews: [],
-    tags: [],
     steps: [],
+    tags: [],
+
 
   }, reducers: {
     saveMethodData: (state, action) => {
