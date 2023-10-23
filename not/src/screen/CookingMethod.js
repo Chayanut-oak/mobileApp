@@ -72,10 +72,14 @@ const CookingMethod = () => {
       aspect: [4, 3],
       quality: 1,
     });
-    const filename = result.assets[0].uri.substring(result.assets[0].uri.lastIndexOf('/') + 1);
+    if (!result.canceled) {
+      const filename = result.assets[0].uri.substring(result.assets[0].uri.lastIndexOf('/') + 1);
     setResult(filename)
     setSelectedImage(result.assets[0].uri);
     setModalVisible(true)
+    }
+
+    
   }
   // 34165f1b-4e39-4c9e-98a6-55962cb92cf9.jpe
 

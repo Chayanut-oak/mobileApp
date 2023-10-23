@@ -133,7 +133,7 @@ const MealDetail = ({ navigation, route }) => {
                   </Text>
                 </View>
               </View>
-              {step.stepImage.imagePath ? <Image style={styles.stepImage} source={{ uri: step.stepImage.imagePath }} /> : null}
+              {step.stepImage.stepImagePath ? <Image style={styles.stepImage} source={{ uri: step.stepImage.stepImagePath }} /> : null}
             </View>
           ))}
         </View>

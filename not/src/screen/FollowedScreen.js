@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, SafeAreaView, FlatList, ImageBackground, Image,
 import { useSelector , useDispatch} from 'react-redux';
 import { updateFollowed } from '../../redux/userSlice';
 import { FIRE_STORE } from '../../Firebaseconfig';
-import { updateDoc,doc,arrayRemove } from 'firebase/firestore';
+import { updateDoc,doc,arrayRemove, arrayUnion } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { saveFollow } from '../../redux/followSlice';
 const FollowedScreen = ({ navigation, route}) => {
@@ -29,6 +29,20 @@ const FollowedScreen = ({ navigation, route}) => {
           });
         dispatch(updateFollowed(newFollwed))
     }
+    
+    const followed = async (uid, user) => {
+        if (userMeal.followed.filter((item) => item.userId == uid).length == 0) {
+            await updateDoc(doc(FIRE_STORE, "users", userMeal.userId), {
+                followed: arrayUnion(...[uid])
+            });
+            await updateDoc(doc(FIRE_STORE, "users", uid), {
+                follower: arrayUnion(...[userMeal.userId])
+            });
+        }
+        else {
+            unfollow(uid)
+        }
+    }
 
 
 
@@ -39,9 +53,9 @@ const FollowedScreen = ({ navigation, route}) => {
                     <Image style={styles.imageUser} source={imagePath ? { uri: imagePath } : require("../../picture/image.png")} />
                 </TouchableOpacity>
                 <Text style={styles.title}>{userName}</Text>
-                <TouchableOpacity onPress={() => unfollow(uid,index) }>
-                    <Image style={styles.button} source={require("../../picture/followedButton.png")} />
-                </TouchableOpacity>
+                {auth.currentUser.uid != uid?<TouchableOpacity onPress={() => followed(uid, user)}>
+                    <Image style={styles.button} source={userMeal.followed.filter((item) => item.userId == uid).length !== 0 ? require("../../picture/followedButton.png") : require("../../picture/followBack.png")} />
+                </TouchableOpacity>:null}
             </ImageBackground>
         );
     };
