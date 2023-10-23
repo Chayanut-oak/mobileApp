@@ -25,7 +25,14 @@ const BottomTabNav = ({ route, navigation }) => {
       screenOptions={({ route }) => ({
         tabBarActiveTintColor: 'white', // Change the color for active tab
         tabBarInactiveTintColor: 'black', // Change the color for inactive tabs
-        tabBarStyle: { backgroundColor: '#E51C7C' }, // Change the background color of the tab bar
+        tabBarStyle: { height: 50 },
+        tabBarBackground: () => (
+          <LinearGradient
+            colors={['#F02E5D','#DD2572']} // สีที่คุณต้องการใช้ใน gradient
+            style={{ flex: 1 }}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+          /> ),// Change the background color of the tab bar
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 

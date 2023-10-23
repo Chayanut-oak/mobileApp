@@ -1,7 +1,11 @@
 import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import React from 'react';
+import { FIREBASE_AUTH } from '../../Firebaseconfig'
+import { useDispatch } from 'react-redux'
+import { resetToinitialState } from '../../redux/userSlice'
 
 const SettingScreen = ({ route, navigation }) => {
+  const dispatch = useDispatch();
   return (
     <View style={styles.container}>
         <TouchableOpacity onPress={() => { navigation.navigate('EditProfileScreen')}}>
@@ -11,6 +15,12 @@ const SettingScreen = ({ route, navigation }) => {
       <TouchableOpacity onPress={() => { navigation.navigate('ChangePasswordScreen')}}>
       <View style={styles.buttoncontainer}>
       <Text style={styles.textstyle}>เปลี่ยนรหัสผ่าน</Text>
+      </View></TouchableOpacity>
+      <TouchableOpacity onPress={() => {
+              dispatch(resetToinitialState())
+              FIREBASE_AUTH.signOut()}}>
+      <View style={styles.buttoncontainer}>
+      <Text style={styles.textstyle}>ออกจากระบบ</Text>
       </View></TouchableOpacity>
     </View>
   );

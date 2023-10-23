@@ -50,13 +50,22 @@ const Register = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <Image
+    source={require('../../picture/veggie.png')} // เปลี่ยนเส้นทางไปยังรูปภาพพื้นหลังของคุณ
+    style={styles.imageBackground} // สร้างรูปแบบสไตล์ของคุณหรือใช้ไปรย่อน
+  ></Image>
       <View style={styles.imageContainer}>
         <Image
           style={styles.image}
           source={require('../../picture/logo.png')}
         />
       </View>
-      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          onChangeText={(text) => setEmail(text)}
+        />
+        <View style={styles.inputContainer}>
         <View style={styles.inputRow}>
           <TextInput
             style={styles.input2}
@@ -69,11 +78,6 @@ const Register = ({ navigation }) => {
             onChangeText={(text) => setLastName(text)}
           />
         </View>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          onChangeText={(text) => setEmail(text)}
-        />
         <View style={styles.input}>
           <TextInput
             style={styles.inputField}
@@ -105,12 +109,12 @@ const Register = ({ navigation }) => {
       </View>
       <TouchableOpacity onPress={handleSignUp}>
         <LinearGradient
-          colors={['#DD2572', '#F02E5D']}
+          colors={['#F02E5D','#DD2572']}
           style={styles.TouchableOpacity}>
           <Text style={styles.Font}>SIGN UP</Text>
         </LinearGradient>
       </TouchableOpacity>
-      <View style={{ flexDirection: 'row' }}>
+      <View style={{ flexDirection: 'row', marginTop: 5 }}>
         <Text style={{ margin: 10, color: 'white' }}>Already have an account? Try</Text>
         <Text style={styles.forgotPasswordText} onPress={() => navigation.navigate("Login")}>
           Sign in
@@ -138,32 +142,33 @@ const styles = StyleSheet.create({
     alignItems: 'center', // Center the input fields horizontally
   },
   input: {
-    width: '100%',
+    width: '90%',
     height: 40,
-    backgroundColor: '#D9D9D9',
+    backgroundColor: 'white',
     borderWidth: 1,
     borderColor: '#ccc',
-    marginBottom: 10,
+    marginBottom: 15,
     paddingLeft: 10,
     borderRadius: 50,
     flexDirection: 'row',
     alignItems: 'center',
   },
   input2: {
-    flex: 1,
+    width: '44%',
     height: 40,
-    backgroundColor: '#D9D9D9',
+    backgroundColor: 'white',
     borderWidth: 1,
     borderColor: '#ccc',
-    marginBottom: 10,
+    marginBottom: 15,
+    marginRight: 5,
     paddingLeft: 10,
     borderRadius: 50,
     alignItems: 'center',
-    marginRight:5
+    left: 17,
   },
   inputField: {
     flex: 1,
-    color: '#333',
+    color: '#3C3C43',
     borderRadius: 50,
   },
   TouchableOpacity: {
@@ -174,6 +179,7 @@ const styles = StyleSheet.create({
     height: 40,
     backgroundColor: '#fff',
     borderRadius: 50,
+    marginTop: 20,
   },
   forgotPasswordText: {
     marginTop: 10,
@@ -190,8 +196,10 @@ const styles = StyleSheet.create({
     marginBottom: 0,
   },
   image: {
-    width: 250,
-    height: 250,
+    width: 320,
+    height: 170,
+    marginBottom: 50,
+    marginTop:50,
   },
   icon: {
     padding: 5,
@@ -201,6 +209,14 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
 
+  },
+  imageBackground: {
+    width: 349, // ความกว้างเต็มหน้าจอ
+    height: 183, // ความสูงเต็มหน้าจอ
+    position: 'absolute', // ตั้งค่ารูปภาพให้เป็นพื้นหลัง
+    zIndex: -1,  // ความสูงเต็มหน้าจอ
+    bottom: 0,
+    right: 60,
   },
 });
 

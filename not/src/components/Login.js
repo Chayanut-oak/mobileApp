@@ -31,6 +31,10 @@ const Login = ({ navigation }) => {
   return (
     <KeyboardAwareScrollView style={{ backgroundColor: "#2F2C2C" }}>
       <View style={styles.container}>
+        <Image
+    source={require('../../picture/veggie.png')} // เปลี่ยนเส้นทางไปยังรูปภาพพื้นหลังของคุณ
+    style={styles.imageBackground} // สร้างรูปแบบสไตล์ของคุณหรือใช้ไปรย่อน
+  ></Image>
         <View style={styles.imageContainer}>
           <Image
             style={styles.image}
@@ -63,19 +67,18 @@ const Login = ({ navigation }) => {
 
         <TouchableOpacity onPress={handleSignIn}>
           <LinearGradient
-            colors={['#DD2572', '#F02E5D']}
+            colors={['#F02E5D','#DD2572']}
             style={styles.TouchableOpacity} >
             <Text style={styles.Font}>SIGN IN</Text>
           </LinearGradient>
         </TouchableOpacity>
 
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row',marginTop: 5 }}>
           <Text style={{ margin: 10, color: '#ffff', }}>Not a Member ?</Text>
           <Text style={styles.forgotPasswordText} onPress={() => navigation.navigate("Register")}>
             Sign up
           </Text>
         </View>
-
       </View>
     </KeyboardAwareScrollView>
 
@@ -96,12 +99,12 @@ const styles = StyleSheet.create({
     alignItems: 'center', // Center the input fields horizontally
   },
   input: {
-    width: '100%',
+    width: '90%',
     height: 40,
-    backgroundColor: '#D9D9D9',
+    backgroundColor: 'white',
     borderWidth: 1,
     borderColor: '#ccc',
-    marginBottom: 10,
+    marginBottom: 15,
     paddingLeft: 10,
     borderRadius: 50,
     flexDirection: 'row',
@@ -119,6 +122,7 @@ const styles = StyleSheet.create({
     height: 40,
     backgroundColor: '#fff',
     borderRadius: 50,
+    marginTop: 20,
   },
   Font: {
     fontSize: 15,
@@ -130,15 +134,24 @@ const styles = StyleSheet.create({
     marginBottom: 0,
   },
   image: {
-    width: 250,
-    height: 250,
+    width: 320,
+    height: 170,
+    marginTop:50,
+    marginBottom: 50,
   }, inputField: {
     flex: 1,
-    color: '#333',
-    borderRadius: 50,
+    color: '#3C3C43',
   }, icon: {
     padding: 5,
     marginRight: 5,
+  },
+  imageBackground: {
+    width: 349, // ความกว้างเต็มหน้าจอ
+    height: 183, // ความสูงเต็มหน้าจอ
+    position: 'absolute', // ตั้งค่ารูปภาพให้เป็นพื้นหลัง
+    zIndex: -1,  // ความสูงเต็มหน้าจอ
+    bottom: -112,
+    right: 60,
   },
 });
 

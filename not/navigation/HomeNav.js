@@ -23,12 +23,6 @@ const HomeNav = ({ navigation }) => {
         headerTitleStyle: { fontWeight: "bold" },
         headerStyle: { backgroundColor: "#E27E8A" }, headerRight: () => (
           <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-            <Text onPress={() => {
-              dispatch(resetToinitialState())
-              FIREBASE_AUTH.signOut()
-            }}>
-              ออกจากระบบ
-            </Text>
           </HeaderButtons>)
       }
       } />
