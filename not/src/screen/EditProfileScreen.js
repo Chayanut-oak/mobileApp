@@ -4,14 +4,17 @@ import { updateProfile } from 'firebase/auth';
 import { FIREBASE_AUTH, FIRE_STORE, FIRE_STORAGE } from '../../Firebaseconfig';
 import { getDownloadURL, ref, uploadBytes, deleteObject } from 'firebase/storage';
 import { doc, updateDoc } from 'firebase/firestore';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
+import { updateUserImage } from '../../redux/userSlice';
 // ตัวแปรที่เก็บอ้างอิงไปยังเอกสารของผู้ใช้ใน Firestore
 
 const auth = FIREBASE_AUTH;
 
 const EditProfileScreen = ({ navigation }) => {
+  const dispatch = useDispatch()
   const userStore = useSelector(state => state.user)
+  let imageObj = userStore.userImage
   const [selectedImage, setSelectedImage] = useState(userStore.userImage.imagePath)
   const [user, setUser] = useState({
     displayName: '',
@@ -25,7 +28,6 @@ const EditProfileScreen = ({ navigation }) => {
     const currentUser = auth.currentUser;
     if (currentUser) {
       const { displayName, email, userImage, firstName, lastName } = userStore;
-      const [] = displayName.split(' ');
       setUser({
         displayName,
         firstName,
@@ -44,15 +46,16 @@ const EditProfileScreen = ({ navigation }) => {
           const reference = ref(FIRE_STORAGE, '/userImages/' + userStore.userImage.imageName);
           await deleteObject(reference);
         }
-        uploadImage()
+        await uploadImage()
       }
       await updateProfile(auth.currentUser, { displayName: user.displayName, firstName: user.firstName, lastNameName: user.lastName });
       // อัปเดตข้อมูลใน Firestore ด้วยชื่อเอกสารของผู้ใช้
+
       await updateDoc(userDocRef, {
         displayName: user.displayName,
         firstName: user.firstName,
         lastName: user.lastName,
-        userImage: user.userImage
+        userImage: imageObj
       });
       navigation.pop()
       alert("แก้ไขโปรไฟล์สำเร็จ")
@@ -88,7 +91,7 @@ const EditProfileScreen = ({ navigation }) => {
     try {
       const reference = ref(FIRE_STORAGE, `/userImages/${filename}`);
       const imageUrl = await getDownloadURL(reference);
-      setUser({ ...user, userImage: { imageName: filename, imagePath: imageUrl } })
+      imageObj = { imageName: filename, imagePath: imageUrl }
     } catch (error) {
       console.error('Error fetching image:', error);
     }

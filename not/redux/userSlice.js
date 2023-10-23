@@ -15,7 +15,7 @@ const initialState = {
 }
 export const userSlice = createSlice({
   name: 'user',
-  initialState, 
+  initialState,
   reducers: {
     saveUserData: (state, action) => {
       return action.payload;
@@ -29,6 +29,9 @@ export const userSlice = createSlice({
     addFollowed: (state, action) => {
       state.followed = action.payload
     },
+    updateUserImage: (state, action) => {
+      state.userImage = action.payload
+    },
     resetToinitialState: (state, action) => {
       return initialState
     }
@@ -37,5 +40,5 @@ export const userSlice = createSlice({
 
 
 
-export const { saveUserData, updateUserDisplayName, updateFollowed, addFollowed, resetToinitialState } = userSlice.actions
+export const { saveUserData, updateUserImage, updateUserDisplayName, updateFollowed, addFollowed, resetToinitialState } = userSlice.actions
 export default userSlice.reducer
