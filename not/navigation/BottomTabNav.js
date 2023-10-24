@@ -53,7 +53,13 @@ const BottomTabNav = ({ route, navigation }) => {
         },
       })}
     >
-      <MenuTab.Screen name="MainHome" component={HomeNav} options={{ headerShown: false, title: "หน้าหลัก" }} />
+      <MenuTab.Screen name="MainHome" component={HomeNav} options={{ headerShown: false, title: "หน้าหลัก" }} 
+      listeners={({ navigation }) => ({
+        tabPress: (e) => {
+          navigation.navigate('MainHome', { screen: 'Home' });
+        },
+      })}
+      />
 
 
       <MenuTab.Screen name="SearchScreen" component={SearchBarTabNav}
@@ -90,7 +96,12 @@ const BottomTabNav = ({ route, navigation }) => {
         headerStyle: { backgroundColor: "white" },
         headerTitleStyle:{fontWeight:"bold"},
         title: "โปรไฟล์"
-      }} />
+      }} 
+      listeners={({ navigation }) => ({
+        tabPress: (e) => {
+          navigation.navigate('Profile', { screen: 'UserProfile' });
+        },
+      })} />
 
 
     </MenuTab.Navigator>
