@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TextInput, Image, ScrollView, View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import { useSelector } from 'react-redux';
+import DropShadow from "react-native-drop-shadow";
 const SearchUser = ({ navigation }) => {
     const allUser = useSelector(state => state.allUser)
     const storeUser = useSelector(state => state.user)
@@ -15,14 +16,20 @@ const SearchUser = ({ navigation }) => {
 
 
     return (
-        <ScrollView style={{ backgroundColor: "#2F2C2C", }}>
+        <ScrollView style={{ backgroundColor: "white", }}>
             <View style={styles.container}>
+            <View style={{ shadowColor: '#000',
+    shadowOffset: { width: 0.5, height: 0.5},
+    shadowOpacity: 0.3,
+    shadowRadius: 2.5, 
+    elevation:10}}>
                 <View>
                     <TextInput style={styles.textInput} placeholder='ค้นหาผู้ใช้' onChangeText={(text) => {
                         searchUser(text)
                     }} />
                 </View>
-                <View style={{ height: "50%" }}>
+                </View>
+                <View style={{ height: "50%",backgroundColor:'#edebeb' }}>
                     {userList.map(user => (
                         <TouchableOpacity key={user.userId} onPress={() => user.userId == storeUser.userId ? navigation.navigate('Profile') : navigation.navigate('ViewUser', { user: user })}>
                             <View style={styles.user}>
@@ -32,6 +39,7 @@ const SearchUser = ({ navigation }) => {
                                 </Text>
                             </View>
                         </TouchableOpacity>
+                        // </DropShadow>
                     ))
                     }
                 </View>
@@ -44,15 +52,13 @@ const SearchUser = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#2F2C2C",
+        backgroundColor: '#edebeb',
         padding: 20,
 
     },
     textInput: {
         marginBottom: 15,
         textAlign: "center",
-        borderWidth: 1,
-        borderColor: "black",
         borderRadius: 100,
         padding: 10,
         width: "100%",
@@ -60,7 +66,7 @@ const styles = StyleSheet.create({
     },
     user: {
         padding: 10,
-        backgroundColor: "#fff",
+        backgroundColor: "#edebeb",
         flexDirection: "row",
         borderRadius: 10,
         margin: 5

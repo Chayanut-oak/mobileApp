@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop:-10,
     // justifyContent: 'center', // Align content to the top
-    backgroundColor: '#2F2C2C',
+    backgroundColor: '#edebeb',
     // padding: 10,
     // paddingTop: 0, // Add padding/margin to the top
   },

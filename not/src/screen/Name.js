@@ -133,7 +133,7 @@ const Name = ({ navigation }) => {
               <LinearGradient
                 colors={['#DD2572', '#F02E5D']}
                 style={styles.TouchableOpacity} >
-                <Text style={styles.Font}>CONFIRM</Text>
+                <Text style={styles.Font}>ยืนยัน</Text>
               </LinearGradient>
             </TouchableOpacity>
           </View>
@@ -153,11 +153,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#2F2C2C',
     paddingTop: 50,
-    width: 600,
-    height: 600,
-    borderRadius: 600 / 2,
-    marginRight: 100,
-    marginLeft: -100,
+    width: 700,
+    height: 700,
+    borderRadius: 800 / 2,
+    marginRight: 130,
+    marginLeft: -130,
+    top:10,
+
   },
   imageContainer: {
     alignItems: 'center',
@@ -166,14 +168,15 @@ const styles = StyleSheet.create({
     position: 'relative', // Add this to enable absolute positioning
   },
   image: {
-    width: 175,
-    height: 175,
+    marginTop: 100,
+    width: 200,
+    height: 200,
     borderRadius: 100
   },
   imagemini: {
     position: 'absolute',
-    top: -45,
-    width: 60,
+    top: -47,
+    width: 70,
     left: 25,
     height: 60,
   },
@@ -194,14 +197,15 @@ const styles = StyleSheet.create({
     fontSize: 20
   },
   TouchableOpacity: {
+    marginTop: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    width: 150,
-    height: 40,
+    width: 200,
+    height: 60,
     backgroundColor: '#fff',
     borderRadius: 50,
   }, Font: {
-    fontSize: 15,
+    fontSize: 18,
     fontWeight: 'bold',
     color: "white"
   },

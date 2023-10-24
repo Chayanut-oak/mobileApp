@@ -21,7 +21,7 @@ const HomeNav = ({ navigation }) => {
       <HomeNavigate.Screen name="Home" component={Home} options={{
         title: "หน้าหลัก",
         headerTitleStyle: { fontWeight: "bold" },
-        headerStyle: { backgroundColor: "#E27E8A" }, headerRight: () => (
+        headerStyle: { backgroundColor: "white" }, headerRight: () => (
           <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
           </HeaderButtons>)
       }
@@ -29,16 +29,16 @@ const HomeNav = ({ navigation }) => {
 
       <HomeNavigate.Screen name="mealCategories" component={Food} options={
         ({ route }) => ({
-          title: route.params.Category, headerStyle: { backgroundColor: "#E27E8A" },
+          title: route.params.Category, headerStyle: { backgroundColor: "white" },
           headerTitleStyle: { fontWeight: "bold" },
         })} />
-      <HomeNavigate.Screen name="mealDetail" component={MealDetail} options={{ title: "", headerStyle: { backgroundColor: "#E27E8A" } }} />
+      <HomeNavigate.Screen name="mealDetail" component={MealDetail} options={{ title: "", headerStyle: { backgroundColor: "white" } }} />
       <HomeNavigate.Screen name="mealReview" component={Review} options={{
         title: "ความคิดเห็น",
         headerTitleStyle: { fontWeight: "bold" },
-        headerStyle: { backgroundColor: "#E27E8A" }
+        headerStyle: { backgroundColor: "white" }
       }} />
-      <HomeNavigate.Screen name="ViewUser" component={ViewUser} options={{ title: "", headerStyle: { backgroundColor: "#E27E8A" } }} />
+      <HomeNavigate.Screen name="ViewUser" component={ViewUser} options={{ title: "", headerStyle: { backgroundColor: "white" } }} />
     </HomeNavigate.Navigator>
   )
 }

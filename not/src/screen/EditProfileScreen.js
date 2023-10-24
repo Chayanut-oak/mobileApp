@@ -7,6 +7,7 @@ import { doc, updateDoc } from 'firebase/firestore';
 import { useDispatch, useSelector } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
 import { updateUserImage } from '../../redux/userSlice';
+import { LinearGradient } from 'expo-linear-gradient';
 // ตัวแปรที่เก็บอ้างอิงไปยังเอกสารของผู้ใช้ใน Firestore
 
 const auth = FIREBASE_AUTH;
@@ -120,27 +121,26 @@ const EditProfileScreen = ({ navigation }) => {
       <TextInput
 
         style={styles.textbox}
-        placeholder="Displayname"
-        value={user.displayName}
+        placeholder="ใส่ชื่อใหม่ของคุณที่นี่"
         onChangeText={(text) => setUser({ ...user, displayName: text })}
       />
       <TextInput
         style={styles.textbox}
         placeholder="ชื่อจริง"
-        value={user.firstName}
         onChangeText={(text) => setUser({ ...user, firstName: text })}
       />
       <TextInput
         style={styles.textbox}
         placeholder="นามสกุล"
-        value={user.lastName}
         onChangeText={(text) => setUser({ ...user, lastName: text })}
       />
-      <Button
-        color="#DD2572"
-        title="บันทึกข้อมูล"
-        onPress={handleUpdateProfile}
-      />
+      <TouchableOpacity onPress={handleUpdateProfile}>
+          <LinearGradient
+            colors={['#F02E5D','#DD2572']}
+            style={styles.TouchableOpacity} >
+            <Text style={styles.Font}>บันทึกข้อมูล</Text>
+          </LinearGradient>
+        </TouchableOpacity>
     </View>
   );
 };
@@ -150,23 +150,38 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center', // Align content to the top
-    backgroundColor: '#2F2C2C',
+    backgroundColor: '#edebeb',
   },
   textbox: {
-    width: 300,
+    width: 340,
     height: 40,
     borderWidth: 1,
     borderColor: '#ccc',
     marginBottom: 20,
     paddingLeft: 10,
-    borderRadius: 10,
+    borderRadius: 20,
     backgroundColor: 'white',
   },
   image: {
     width: 150,
     height: 150,
-    marginBottom: 20,
+    marginBottom: 40,
     borderRadius: 100
+  },
+  TouchableOpacity: {
+    borderColor: 'rgba(0,0,0,0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 200,
+    height: 60,
+    backgroundColor: '#fff',
+    borderRadius: 50,
+    marginTop: 20,
+  },
+  Font: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: "white"
   },
 
 });

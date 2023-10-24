@@ -239,13 +239,18 @@ const Filter = (props, { route }) => {
 
 
     return (
-        <ScrollView style={{ backgroundColor: '#2F2C2C' }}>
+        <ScrollView style={{ backgroundColor: '#edebeb' }}>
             <View style={styles.container}>
+            <View style={{ shadowColor: '#000',
+    shadowOffset: { width: 0.5, height: 0.5},
+    shadowOpacity: 0.3,
+    shadowRadius: 2.5, 
+    elevation:10}}>
                 {props.filter == 'filter' ? <View>
                     <TextInput style={styles.textInput} placeholder='ค้นหาเมนูอาหาร' onChangeText={(text) => {
                         setTexSeacrh(text)
                     }} />
-                </View> : null}
+                </View> : null}</View>
 
 
                 {props.New == 'New' ? <TouchableOpacity onPress={() => pickImage()}>
@@ -253,10 +258,14 @@ const Filter = (props, { route }) => {
                         <Image style={{ width: '100%', height: '100%', resizeMode: 'contain', borderRadius: 20 }} source={{ uri: cookStore.mealImage.imagePath }} ></Image>
                     </View>
                 </TouchableOpacity> : null}
+                <View style={{ shadowColor: '#000',
+    shadowOffset: { width: 0.5, height: 0.5},
+    shadowOpacity: 0.3,
+    shadowRadius: 2.5, 
+    elevation:10}}>
 
                 {props.New == 'New' ? <View style={{ flexDirection: 'row' }}>
-
-                    <Text style={{ color: 'white', flex: 1, alignSelf: 'center' }}>ชื่อเมนู:</Text>
+                    <Text style={{ color: 'black', flex: 1, alignSelf: 'center',fontWeight:'bold',fontSize:16,bottom:5 }}>ชื่อเมนู:</Text>
                     <TextInput
                         style={styles.input2}
                         placeholder="Name"
@@ -264,7 +273,7 @@ const Filter = (props, { route }) => {
                         onChangeText={(text) => newMealName(text)}
                     />
 
-                </View> : null}
+                </View> : null}</View>
                 {selectPairs.map((pair, pairIndex) => (
                     <View key={pairIndex} style={styles.row} >
                         {pair.map((item, itemIndex) => (
@@ -292,7 +301,7 @@ const Filter = (props, { route }) => {
                 }} />
                 <View style={styles.buttonContainer}>
 
-                    <Text style={{ color: '#F3F3F3', margin: 5 }}>หมวดหมู่</Text>
+                    <Text style={{ color: 'black', margin: 5 ,fontWeight:'bold',fontSize: 18}}>หมวดหมู่</Text>
                     {categoryPairs.map((pair, pairIndex) => (
                         <View key={pairIndex} style={styles.row} >
                             {pair.map((item, itemIndex) => (
@@ -319,7 +328,7 @@ const Filter = (props, { route }) => {
                         </LinearGradient>
                     </TouchableOpacity> : null}
 
-                    <Text style={{ color: '#F3F3F3', margin: 5 }}>วัถุดิบหลัก</Text>
+                    <Text style={{ color: 'black', margin: 5 ,fontWeight:'bold',fontSize: 18}}>วัตถุดิบหลัก</Text>
                     {mainIngredientPairs.map((pair, pairIndex) => (
                         <View key={pairIndex} style={styles.row} >
                             {pair.map((item, itemIndex) => (
@@ -347,7 +356,7 @@ const Filter = (props, { route }) => {
                             <Text style={{ color: '#F3F3F3' }}>+</Text>
                         </LinearGradient>
                     </TouchableOpacity> : null}
-                    <Text style={{ color: '#F3F3F3', margin: 5 }}>ผักและผลไม้</Text>
+                    <Text style={{ color: 'black', margin: 5 ,fontWeight:'bold',fontSize: 18}}>ผักและผลไม้</Text>
                     {veggiePairs.map((pair, pairIndex) => (
                         <View key={pairIndex} style={styles.row} >
                             {pair.map((item, itemIndex) => (
@@ -372,7 +381,7 @@ const Filter = (props, { route }) => {
                             <Text style={{ color: '#F3F3F3' }}>+</Text>
                         </LinearGradient>
                     </TouchableOpacity> : null}
-                    <Text style={{ color: '#F3F3F3', margin: 5 }}>เครื่องปรุง</Text>
+                    <Text style={{ color: 'black', margin: 5 ,fontWeight:'bold',fontSize: 18}}>เครื่องปรุง</Text>
                     {seasoningPairs.map((pair, pairIndex) => (
                         <View key={pairIndex} style={styles.row} >
                             {pair.map((item, itemIndex) => (
@@ -452,7 +461,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-start', // Align content to the top
         height: "100%",
-        backgroundColor: '#2F2C2C',
+        backgroundColor: '#edebeb',
         padding: 20,
     },
     buttonContainer: {
@@ -515,8 +524,6 @@ const styles = StyleSheet.create({
     }, textInput: {
         marginBottom: 15,
         textAlign: "center",
-        borderWidth: 1,
-        borderColor: "black",
         borderRadius: 100,
         padding: 10,
         width: "100%",

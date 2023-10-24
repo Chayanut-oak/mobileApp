@@ -38,10 +38,12 @@ const Category = ({ navigation }) => {
           return (
             <View style={{ alignItems: 'center', }}>
               <TouchableOpacity onPress={() => navigation.navigate('mealCategories', { Category: item.ingredientName, categoryId: item.ingredientId })} style={{ alignItems: 'center', }}>
+                
                 <Image
-                  style={{ flex: 1, width: 100, height: 100, margin: 5, borderRadius: 100, resizeMode: 'contain', }}
+                  style={{ flex: 1, width: 100, height:100, margin: 5, borderRadius: 100, resizeMode: 'contain', overflow: 'hidden' }}
                   source={{ uri: item.image.imagePath }}
-                /><Text style={{ fontSize: 15, fontWeight: "bold", color: "#D1D1D1" }}>{item.ingredientName}</Text>
+                />
+                <Text style={{ fontSize: 15, fontWeight: "bold", color: "black" }}>{item.ingredientName}</Text>
               </TouchableOpacity>
             </View>
           )

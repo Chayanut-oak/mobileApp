@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   image: {
     width: 320,
     height: 170,
-    marginTop:50,
+    marginTop:150,
     marginBottom: 50,
   }, inputField: {
     flex: 1,
@@ -146,12 +146,11 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   imageBackground: {
-    width: 349, // ความกว้างเต็มหน้าจอ
-    height: 183, // ความสูงเต็มหน้าจอ
+    width: 500, // ความกว้างเต็มหน้าจอ
+    height: 250, // ความสูงเต็มหน้าจอ
     position: 'absolute', // ตั้งค่ารูปภาพให้เป็นพื้นหลัง
     zIndex: -1,  // ความสูงเต็มหน้าจอ
-    bottom: -112,
-    right: 60,
+    bottom: -280,
   },
 });
 

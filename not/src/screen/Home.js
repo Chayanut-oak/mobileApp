@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 const Home = ({ navigation }) => {
 
   return (
-    <ScrollView style={{ backgroundColor: '#2F2C2C', }}>
+    <ScrollView style={{ backgroundColor: '#edebeb', }}>
       <View style={styles.container}>
        
         <Category navigation={navigation} />
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center', // Align content to the top
-    backgroundColor: '#2F2C2C',
+    backgroundColor: '#edebeb',
     padding: 10,
   },
   search: {

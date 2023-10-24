@@ -62,7 +62,7 @@ const MealDetail = ({ navigation, route }) => {
   }
 
   return (
-    <ScrollView style={{ backgroundColor: '#2F2C2C' }}>
+    <ScrollView style={{ backgroundColor: '#edebeb' }}>
       <View style={styles.container}>
         <View style={styles.imageContainer}>
           <Image
@@ -147,7 +147,7 @@ export default MealDetail;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#2F2C2C",
+    backgroundColor: "#edebeb",
     padding: 20,
 
   },
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   mealName: {
-    color: "#fff",
+    color: "black",
     fontSize: 26,
     fontWeight: "bold",
     marginTop: 10,
@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   stepsHeader: {
-    color: "#fff",
+    color: "black",
     fontSize: 26,
     fontWeight: "bold",
     marginTop: 10,

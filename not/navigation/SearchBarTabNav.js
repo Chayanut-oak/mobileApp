@@ -7,12 +7,12 @@ const TopTab = createMaterialTopTabNavigator()
 const SearchBarTabNav = () => {
   return (
     <TopTab.Navigator screenOptions={{
-      tabBarStyle: { backgroundColor: "#2F2C2C", height: "auto" },
+      tabBarStyle: { backgroundColor: "#edebeb", height: "auto" },
       tabBarActiveTintColor: '#DD2572',
-      tabBarInactiveTintColor:"white",
+      tabBarInactiveTintColor:"black",
       tabBarLabelStyle: { fontSize: 15, fontWeight: "bold" },
       tabBarIndicatorStyle: {
-        borderBottomColor: '#505050',
+        borderBottomColor: '#DD2572',
         borderBottomWidth: 4,
       },
     }}

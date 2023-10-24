@@ -3,25 +3,42 @@ import React from 'react';
 import { FIREBASE_AUTH } from '../../Firebaseconfig'
 import { useDispatch } from 'react-redux'
 import { resetToinitialState } from '../../redux/userSlice'
+import { LinearGradient } from 'expo-linear-gradient';
 
 const SettingScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
   return (
     <View style={styles.container}>
+      <View style={{ shadowColor: '#000',
+    shadowOffset: { width: 0.5, height: 0.5},
+    shadowOpacity: 0.3,
+    shadowRadius: 2.5, 
+    elevation:10}}>
         <TouchableOpacity onPress={() => { navigation.navigate('EditProfileScreen')}}>
-      <View style={styles.buttoncontainer}>
+        <LinearGradient
+            colors={['#F02E5D','#DD2572']}
+            style={styles.TouchableOpacity} >
         <Text style={styles.textstyle}>แก้ไขโปรไฟล์</Text>
-      </View></TouchableOpacity>
+        </LinearGradient></TouchableOpacity></View>
+      <View style={{ shadowColor: '#000',
+    shadowOffset: { width: 0.5, height: 0.5},
+    shadowOpacity: 0.3,
+    shadowRadius: 2.5, 
+    elevation:10}}>
       <TouchableOpacity onPress={() => { navigation.navigate('ChangePasswordScreen')}}>
-      <View style={styles.buttoncontainer}>
+      <LinearGradient
+            colors={['#F02E5D','#DD2572']}
+            style={styles.TouchableOpacity} >
       <Text style={styles.textstyle}>เปลี่ยนรหัสผ่าน</Text>
-      </View></TouchableOpacity>
+      </LinearGradient></TouchableOpacity></View>
       <TouchableOpacity onPress={() => {
               dispatch(resetToinitialState())
               FIREBASE_AUTH.signOut()}}>
-      <View style={styles.buttoncontainer}>
+      <LinearGradient
+            colors={['#F02E5D','#DD2572']}
+            style={styles.TouchableOpacity} >
       <Text style={styles.textstyle}>ออกจากระบบ</Text>
-      </View></TouchableOpacity>
+      </LinearGradient></TouchableOpacity>
     </View>
   );
 };
@@ -33,17 +50,22 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#2F2C2C',
+    backgroundColor: '#edebeb',
   },
-  buttoncontainer: {
-    backgroundColor: '#E51C7C', // สีพื้นหลังขอบตัวปุ่ม
-    padding: 13, // เพิ่มระยะขอบของกรอบ
-    width: 340,
-    top: 30,
-    borderRadius: 40,
+  TouchableOpacity: {
+    borderColor: 'rgba(0,0,0,0.2)',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 20, // เพิ่มระยะห่างระหว่างปุ่ม
+    width: 350,
+    height: 60,
+    backgroundColor: '#fff',
+    borderRadius: 50,
+    marginTop: 20,
+  },
+  Font: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: "white"
   },
   textstyle:{
     color: 'white',

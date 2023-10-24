@@ -25,7 +25,7 @@ const BottomTabNav = ({ route, navigation }) => {
       screenOptions={({ route }) => ({
         tabBarActiveTintColor: 'white', // Change the color for active tab
         tabBarInactiveTintColor: 'black', // Change the color for inactive tabs
-        tabBarStyle: { height: 50 },
+        tabBarStyle: { height: 88 },
         tabBarBackground: () => (
           <LinearGradient
             colors={['#F02E5D','#DD2572']} // สีที่คุณต้องการใช้ใน gradient
@@ -52,16 +52,16 @@ const BottomTabNav = ({ route, navigation }) => {
       <MenuTab.Screen name="MainHome" component={HomeNav} options={{ headerShown: false, title: "หน้าหลัก" }} />
 
       <MenuTab.Screen name="SearchScreen" component={SearchBarTabNav} options={{
-        headerStyle: { backgroundColor: "#E27E8A" },
+        headerStyle: { backgroundColor: "white" },
         headerTitleStyle:{fontWeight:"bold"},
         title: "ค้นหา"
       }} />
       <MenuTab.Screen name="New" component={CookingNav} initialParams={{ customProp: 'Another custom prop' }} options={{
-        headerStyle: { backgroundColor: "#E27E8A" }, headerShown: false,
+        headerStyle: { backgroundColor: "white" }, headerShown: false,
         title: "เพิ่มเมนู"
       }} />
       <MenuTab.Screen name={"Profile"} component={ProfileNav} options={{
-        headerStyle: { backgroundColor: "#E27E8A" },
+        headerStyle: { backgroundColor: "white" },
         headerTitleStyle:{fontWeight:"bold"},
         title: "โปรไฟล์"
       }} />

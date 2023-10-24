@@ -3,6 +3,7 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import MealDetail from '../screen/MealDetail';
+
 const FoodList = ({ navigation }) => {
   const storeMeal = useSelector((state) => state.meal)
   const shuffle = (array) => {
@@ -35,12 +36,18 @@ const FoodList = ({ navigation }) => {
         <View key={pairIndex} style={styles.row}>
           {pair.map((item, itemIndex) => (
             <TouchableOpacity key={itemIndex} style={styles.item} onPress={() => { navigation.navigate("mealDetail", { mealId: item.mealId }) }}>
+            <View style={{ shadowColor: '#000',
+    shadowOffset: { width: 0.5, height: 0.5},
+    shadowOpacity: 0.3,
+    shadowRadius: 2.5, 
+    elevation:10}}>
               <Image
                 style={styles.image}
                 source={item.mealImage.imagePath ? { uri: item.mealImage.imagePath } : require("../../picture/image.png")}
               />
-              <Text style={{ fontSize: 15, fontWeight: "bold", color: "white" }}>{item.mealName}</Text>
-              <Text style={{ fontSize: 15, fontWeight: "bold", color: "#DD2572" }}>   {item.createdBy.displayName}</Text>
+</View>
+              <Text style={{ marginTop:15,fontSize: 18, fontWeight: "bold", color: "black" }}>{item.mealName}</Text>
+              <Text style={{ fontSize: 18, fontWeight: "bold", color: "#DD2572" }}>   {item.createdBy.displayName}</Text>
               
             </TouchableOpacity>
             
@@ -62,6 +69,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   item: {
+    elevation: 10,
 
   },
   image: {

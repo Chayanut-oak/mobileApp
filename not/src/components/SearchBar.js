@@ -11,6 +11,7 @@ const SearchBar = ({ navigation }) => {
         <Text>         </Text>
       </View>
     </TouchableOpacity>
+    
   )
 }
 
@@ -23,7 +24,8 @@ const styles = StyleSheet.create({
     padding: 10, // Add padding around the text
     borderRadius: 20,
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    backgroundColor: 'white',
   },
   searchText: {
     fontSize: 16,

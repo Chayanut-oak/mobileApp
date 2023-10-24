@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, Alert, StyleSheet,TouchableOpacity } from 'react-native';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../../Firebaseconfig';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const auth = FIREBASE_AUTH;
 
@@ -25,11 +26,13 @@ const ChangePasswordScreen = ({ navigation }) => {
         value={email}
         onChangeText={(text) => setEmail(text)}
       />
-      <Button
-       color="#DD2572"
-        title="เปลี่ยนรหัสผ่าน"
-        onPress={changePassword}
-      />
+      <TouchableOpacity onPress={changePassword}>
+          <LinearGradient
+            colors={['#F02E5D','#DD2572']}
+            style={styles.TouchableOpacity} >
+            <Text style={styles.Font}>เปลี่ยนรหัสผ่าน</Text>
+          </LinearGradient>
+        </TouchableOpacity>
     </View>
   );
 };
@@ -39,17 +42,33 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#2F2C2C',
+    backgroundColor: '#edebeb',
   },
   input: {
-    width: 300,
-    height: 40,
+    width: 340,
+    height: 50,
     borderWidth: 1,
     borderColor: '#ccc',
     marginBottom: 20,
     paddingLeft: 10,
-    borderRadius: 10,
+    borderRadius: 20,
     backgroundColor: 'white',
+    fontSize: 16
+  },
+  TouchableOpacity: {
+    borderColor: 'rgba(0,0,0,0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 200,
+    height: 60,
+    backgroundColor: '#fff',
+    borderRadius: 50,
+    marginTop: 20,
+  },
+  Font: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: "white"
   },
 });
 

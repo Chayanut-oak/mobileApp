@@ -24,10 +24,16 @@ const Recommend = ({ navigation }) => {
   }
 
   return (
-    <View style={{ marginTop: 10, marginBottom: -10 }}>
-      <Text style={{ textAlign: "left", color: '#C5C5C5', fontSize: 16, fontWeight: "bold" }}>Recommend</Text>
+    <View style={{ marginTop: 10, marginBottom: -10, }}>
+      <Text style={{ textAlign: "left", color: 'black', fontSize: 25, fontWeight: "bold",marginTop:10,marginLeft:15 }}>Recommend</Text>
       <View style={{ alignItems: "center", width: "100%" }}>
-        <TouchableOpacity style={{ marginTop: 10 }} onPress={() => { navigation.navigate("mealDetail", { mealId: recommend.mealId }) }} >
+        <TouchableOpacity style={{ marginTop: 10, }} onPress={() => { navigation.navigate("mealDetail", { mealId: recommend.mealId }) }} >
+        
+        <View style={{ shadowColor: '#000',
+    shadowOffset: { width: 0.5, height: 0.5},
+    shadowOpacity: 0.3,
+    shadowRadius: 2.5, 
+    elevation:10}}>
           <Image
             style={{
               width: 300,
@@ -37,9 +43,10 @@ const Recommend = ({ navigation }) => {
             }}
             source={recommend.mealImage.imagePath ? { uri: recommend.mealImage.imagePath } : require("../../picture/image.png")}
           />
+          </View>
           <View style={{ flexDirection: 'row' }}>
             <View style={{ flex: 4 }}>
-              <Text style={{ textAlign: "left", fontSize: 22, fontWeight: "bold", color: "white" }}>{recommend.mealName}</Text>
+              <Text style={{ textAlign: "left", fontSize: 22, fontWeight: "bold", color: "black" }}>{recommend.mealName}</Text>
               <Text style={{ textAlign: "left", fontSize: 22, fontWeight: "bold", color: "#DD2572" }}>   {recommend.createdBy?.displayName}</Text>
             </View>
             <View style={{
@@ -48,7 +55,7 @@ const Recommend = ({ navigation }) => {
               flex: 1,
               marginTop: 10
             }}>
-              <Text style={{ color: "white", fontSize: 20, fontWeight: "bold", marginRight: 10 }}>
+              <Text style={{ color: "black", fontSize: 20, fontWeight: "bold", marginRight: 10 }}>
                 {recommend.like}
               </Text>
               <Image style={{

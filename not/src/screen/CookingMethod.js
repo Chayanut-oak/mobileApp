@@ -148,7 +148,7 @@ const CookingMethod = () => {
   return (
 
     <View style={styles.container}>
-      <Text style={{ color: 'white' }}>ขั้นตอนการทำ</Text>
+      <Text style={{ color: 'black',fontWeight: 'bold',fontSize:18 }}>ขั้นตอนการทำ</Text>
       <View style={styles.stepCard2}>
         <View style={styles.stepDetail2}>
           <TextInput style={styles.stepText} placeholder='แนบ Youtube' onEndEditing={handleUpdateLink} onChangeText={setLink} >
@@ -159,7 +159,7 @@ const CookingMethod = () => {
       <FlatList
         data={cookingMethod}
         renderItem={({ item, index }) => (
-          <View key={index} style={{ alignItems: "flex-end", }}>
+          <View key={index} style={{ alignItems: "flex-end", color: 'white'}}>
             {item.stepImage.stepImagePath != null ? <TouchableOpacity onPress={() => { newImage(index) }} style={{ alignSelf: 'center' }}>
               <View style={{ width: 300, height: 200 }}>
                 <Image style={{ width: '100%', height: '100%', resizeMode: 'contain', borderRadius: 20 }} source={{ uri: item.stepImage.stepImagePath }}></Image>
@@ -170,7 +170,7 @@ const CookingMethod = () => {
             <View style={styles.stepCard}>
 
               <LinearGradient style={styles.stepNo} colors={['#DD2572', '#F02E5D']}>
-                <Text>
+                <Text style={{color: 'white'}}>
                   {index + 1}
                 </Text>
               </LinearGradient>
@@ -183,7 +183,7 @@ const CookingMethod = () => {
               <TouchableOpacity onPress={() => handleRemoveItem(index)}>
                 <LinearGradient style={styles.stepNo2} colors={['#DD2572', '#F02E5D']}>
                   <Text>
-                    <Entypo name="minus" size={24} color="black" />
+                    <Entypo name="minus" size={24} color="white" />
                   </Text>
                 </LinearGradient>
               </TouchableOpacity>
@@ -205,13 +205,19 @@ const CookingMethod = () => {
         <TouchableOpacity onPress={() => { selectedImage != null ? uploadImage() : handleSetStep() }}>
           <LinearGradient style={styles.stepNo1} colors={['#DD2572', '#F02E5D']}>
             <Text>
-              <MaterialIcons name="add" size={24} color="black" />
+              <MaterialIcons name="add" size={24} color="white" />
             </Text>
           </LinearGradient>
         </TouchableOpacity>
         <View style={styles.stepDetail1}>
+        <View style={{ shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3, // ลดความเข้มของเงา
+    shadowRadius: 4, // ปรับรัศมีของเงา
+    backgroundColor: 'transparent',
+    elevation:10}}>
           <TextInput style={styles.stepText} placeholder='เพิ่มขั้นตอนการปรุง' value={detail} onChangeText={setDetail} onEndEditing={() => setCurrentDetail(detail)}>
-          </TextInput>
+          </TextInput></View>
         </View>
         <TouchableOpacity onPress={() => pickImage()}>
           <Image
@@ -239,7 +245,8 @@ const styles = StyleSheet.create({
   stepText: {
     fontSize: 16,
     marginTop: 5,
-    textAlign: 'center'
+    textAlign: 'center',
+    top: 5
   },
   stepCard: {
     display: "flex",
@@ -326,15 +333,15 @@ const styles = StyleSheet.create({
   }, container: {
     flex: 1,
     justifyContent: 'flex-start', // Align content to the top
-    backgroundColor: '#2F2C2C',
+    backgroundColor: '#edebeb',
     padding: 20,
     paddingTop: 50,
     height: "100%"
   }, imagemini: {
     position: 'absolute',
-    top: -20,
-    width: 40,
+    top: 0,
+    width: 50,
     left: -40,
-    height: 40,
+    height: 50,
   },
 })
