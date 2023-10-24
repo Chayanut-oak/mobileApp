@@ -2,21 +2,34 @@
 import { StyleSheet, Text, Image, View, TouchableOpacity, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import { collection, doc, setDoc, updateDoc, increment, arrayRemove, arrayUnion } from 'firebase/firestore';
+import { collection, doc, setDoc, updateDoc, increment, arrayRemove, arrayUnion, deleteDoc } from 'firebase/firestore';
 import { FIRE_STORE } from '../../Firebaseconfig'
 import { Feather } from '@expo/vector-icons';
 import { saveFollow } from '../../redux/followSlice';
 import { resetData } from '../../redux/cookingMethodSlice';
+import { getAuth } from 'firebase/auth';
 const Profile = ({ navigation }) => {
+  const auth = getAuth()
   const dispatch = useDispatch()
   const [tab, setTab] = useState(true)
   const meals = useSelector((state) => state.meal);
   const storeUser = useSelector((state) => state.user)
   const cookStore = useSelector((state) => state.cook)
+  const storeAllUser = useSelector((state) => state.allUser)
   const [user, setUser] = useState(null)
   const mapFav = storeUser.favoriteMeals.map(mealId => {
     return meals.find(meal => meal.mealId === mealId)
-  })
+  }).filter(meal => meal !== undefined);
+
+  const delFav = async (mealId) => {
+    for (let i = 0; i < storeAllUser.length; i++) {
+      await updateDoc(doc(FIRE_STORE, "users", storeAllUser[i].userId), {
+        favoriteMeals: arrayRemove(mealId)
+      });
+    }
+    await deleteDoc(doc(FIRE_STORE, "meals", mealId));
+  }
+
   const mapOwn = meals.filter(meal => meal.createdBy.userId == storeUser.userId)
   const addFavorite = (mealId) => {
     const collectUserRef = collection(FIRE_STORE, "users")
@@ -47,10 +60,10 @@ const Profile = ({ navigation }) => {
   const savefollow = async () => {
     dispatch(saveFollow(storeUser))
   }
-  const setEditMeal = async (mealID)=>{
-    const getMeal = meals.filter((item,index) => item.mealId == mealID)
-    dispatch(resetData({createdBy: getMeal[0].createdBy.userId, like: getMeal[0].like, mealId: mealID, mealImage: getMeal[0].mealImage, mealName: getMeal[0].mealName, mealYoutube: getMeal[0].mealYoutube, reviews: getMeal[0].reviews, steps: getMeal[0].steps, tags: getMeal[0].tags}))
-   
+  const setEditMeal = async (mealID) => {
+    const getMeal = meals.filter((item, index) => item.mealId == mealID)
+    dispatch(resetData({ createdBy: getMeal[0].createdBy.userId, like: getMeal[0].like, mealId: mealID, mealImage: getMeal[0].mealImage, mealName: getMeal[0].mealName, mealYoutube: getMeal[0].mealYoutube, reviews: getMeal[0].reviews, steps: getMeal[0].steps, tags: getMeal[0].tags }))
+
   }
 
   return (
@@ -131,10 +144,16 @@ const Profile = ({ navigation }) => {
                       <Text style={{ left: 15,marginTop: 15, color: "black", fontSize: 18, fontWeight: "bold" }}>{item.like}</Text>
                     </View>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.shareIconContainer} onPress={() => {navigation.navigate("New"),setEditMeal(item.mealId) }}>
-          
+
+                  <TouchableOpacity style={styles.shareIconContainer} onPress={() => { navigation.navigate("New"), setEditMeal(item.mealId) }}>
+
                     <Feather name="edit" size={24} color="black" />
-                  </TouchableOpacity><View style={styles.textContainer}>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.delIconContainer} onPress={() => { delFav(item.mealId) }}>
+                    <Feather name="trash-2" size={24} color="black" />
+                  </TouchableOpacity>
+                  <View style={styles.textContainer}>
+
                     <Text style={styles.mealName}>{item.mealName}</Text>
                   </View>
                 </View>
@@ -246,6 +265,12 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 70,
     left: 330, // Position at the right
+    backgroundColor: "transparent",
+  },
+  delIconContainer: {
+    position: "absolute",
+    top: 40,
+    left: 270, // Position at the right
     backgroundColor: "transparent",
   },
   shareIcon: {

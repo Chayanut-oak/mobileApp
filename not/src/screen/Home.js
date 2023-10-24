@@ -8,8 +8,10 @@ import Category from '../components/Category';
 import Recommend from '../components/Recommend';
 import FoodList from '../components/FoodList';
 import SearchBar from '../components/SearchBar';
-import { useSelector } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
+import { resetData } from '../../redux/cookingMethodSlice';
 const Home = ({ navigation }) => {
+  const dispatch = useDispatch()
 
   return (
     <ScrollView style={{ backgroundColor: '#edebeb', }}>

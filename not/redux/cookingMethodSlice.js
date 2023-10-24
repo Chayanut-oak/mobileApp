@@ -56,7 +56,9 @@ const cookingMethodSlice = createSlice({
     resetData: (state, action) => {
       return action.payload
     },
-    
+    resetState: (state, action) => {
+      return initialState
+    },
   }
 })
 
@@ -66,7 +68,7 @@ export const { updateMethodData } = cookingMethodSlice.actions
 export const { updateImageData } = cookingMethodSlice.actions
 export const { updateImagePathData } = cookingMethodSlice.actions
 export const { saveLink } = cookingMethodSlice.actions
-export const { resetData } = cookingMethodSlice.actions
+export const { resetData,resetState } = cookingMethodSlice.actions
 export const { saveMethodImageData,saveMethodTagsData,saveMethodMealNameData,delMethodTagsData } = cookingMethodSlice.actions
 export default cookingMethodSlice.reducer
 

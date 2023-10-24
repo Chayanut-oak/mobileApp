@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from '../src/screen/Home';
 import { Entypo } from '@expo/vector-icons';
@@ -17,9 +17,13 @@ import Notification from '../src/screen/Notification'
 import CookingNav from './CookingNav';
 import ProfileNav from './ProfileNav';
 import SearchBarTabNav from './SearchBarTabNav'
+import { resetData } from '../redux/cookingMethodSlice';
+import { useDispatch } from 'react-redux';
 const MenuTab = createBottomTabNavigator();
 const BottomTabNav = ({ route, navigation }) => {
   const auth = getAuth();
+  const dispatch = useDispatch()
+
   return (
     <MenuTab.Navigator
       screenOptions={({ route }) => ({
@@ -51,12 +55,34 @@ const BottomTabNav = ({ route, navigation }) => {
     >
       <MenuTab.Screen name="MainHome" component={HomeNav} options={{ headerShown: false, title: "หน้าหลัก" }} />
 
-      <MenuTab.Screen name="SearchScreen" component={SearchBarTabNav} options={{
-        headerStyle: { backgroundColor: "white" },
-        headerTitleStyle:{fontWeight:"bold"},
-        title: "ค้นหา"
-      }} />
-      <MenuTab.Screen name="New" component={CookingNav} initialParams={{ customProp: 'Another custom prop' }} options={{
+
+      <MenuTab.Screen name="SearchScreen" component={SearchBarTabNav}
+        options={{
+          title: "ค้นหา",
+          tabBarLabel:'สรุปที่ชื่นชอบ',
+          headerTitleAlign: 'left',
+          headerShown: true,
+          headerStyle: { backgroundColor: "white" },
+          headerTitleStyle:{fontWeight:"bold"},
+          tabBarIcon: ({ color, size, focused }) => <Ionicons name='search-outline' size={size} color={color} />
+        }}
+        listeners={( ) => ({
+          tabPress: (e) => {dispatch(resetData({
+            createdBy: '',
+            like: 0,
+            mealId:'',
+            mealImage: {},
+            mealName: '',
+            mealYoutube: '',
+            reviews: [],
+            steps: [],
+            tags: [],
+          }))
+     
+          },
+        })} 
+      />
+   <MenuTab.Screen name="New" component={CookingNav} initialParams={{ customProp: 'Another custom prop' }} options={{
         headerStyle: { backgroundColor: "white" }, headerShown: false,
         title: "เพิ่มเมนู"
       }} />

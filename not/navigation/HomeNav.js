@@ -11,6 +11,7 @@ import MealDetail from '../src/screen/MealDetail'
 import Review from '../src/screen/Review'
 import { useDispatch } from 'react-redux'
 import { saveUserData, resetToinitialState } from '../redux/userSlice'
+import { resetData } from '../redux/cookingMethodSlice'
 import SearchBarTabNav from './SearchBarTabNav'
 import ViewUser from '../src/screen/ViewUser'
 const HomeNav = ({ navigation }) => {
